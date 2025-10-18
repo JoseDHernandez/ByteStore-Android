@@ -1,0 +1,5 @@
+<resources>
+    <declare-styleable name="TopBarView">
+        <attr name="titleText" format="string" />
+    </declare-styleable>
+</resources>
