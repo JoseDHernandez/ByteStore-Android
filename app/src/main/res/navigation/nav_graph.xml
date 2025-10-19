@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     app:startDestination="@id/splashFragment">
 
+    <!-- Splash fragment -->
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.example.bytestore.ui.splash.SplashFragment"
@@ -16,6 +17,7 @@
             app:popUpToInclusive="true" />
     </fragment>
 
+    <!-- Main fragment -->
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.bytestore.ui.main.MainFragment"
@@ -27,6 +29,7 @@
             app:destination="@id/registerFragment"/>
     </fragment>
 
+    <!-- Login fragment -->
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.bytestore.ui.account.LoginFragment"
@@ -36,8 +39,12 @@
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment"
             />
+        <action
+            android:id="@+id/action_loginFragment_to_profileFragment"
+            app:destination="@id/profileFragment"/>
     </fragment>
 
+    <!-- Register fragment -->
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.bytestore.ui.account.RegisterFragment"
@@ -49,5 +56,25 @@
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment"/>
+        <action
+            android:id="@+id/action_registerFragment_to_profileFragment"
+            app:destination="@id/profileFragment"/>
     </fragment>
+
+    <!-- Profile fragment -->
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.bytestore.ui.account.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/action_profileFragment_to_mainFragment"
+            app:destination="@id/mainFragment"/>
+    </fragment>
+
+    <!-- Acciones globales -->
+    <action
+        android:id="@+id/action_global_loginFragment"
+        app:destination="@id/loginFragment"/>
+
 </navigation>

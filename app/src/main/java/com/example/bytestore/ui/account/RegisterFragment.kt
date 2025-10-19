@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.bytestore.databinding.FragmentRegisterBinding
-import com.example.bytestore.ui.viewmodel.RegisterViewModel
-import com.example.bytestore.ui.viewmodel.UserInput
+import com.example.bytestore.ui.viewmodel.AccountViewModel
+import com.example.bytestore.ui.viewmodel.UserRegisterInput
 import com.example.bytestore.utils.Resource
 import com.google.android.material.snackbar.Snackbar
 import com.example.bytestore.R
@@ -19,7 +19,7 @@ import com.example.bytestore.ui.viewmodel.AppViewModelFactory
 class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: RegisterViewModel by viewModels {
+    private val viewModel: AccountViewModel by viewModels {
         AppViewModelFactory(requireContext())
     }
 
@@ -45,7 +45,7 @@ class RegisterFragment : Fragment() {
         //Click en el boton de registro
         binding.buttonSingUp.setOnClickListener {
             //obtener los datos
-            val request = UserInput(
+            val request = UserRegisterInput(
                 name = binding.inputName.text.toString(),
                 email = binding.inputEmail.text.toString(),
                 password = binding.inputPassword.text.toString(),
@@ -55,7 +55,7 @@ class RegisterFragment : Fragment() {
             viewModel.registerUser(request) //enviar al viewmodel los datos
         }
     //registro
-        viewModel.registerState.observe(viewLifecycleOwner) { state ->
+        viewModel.accountState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 //Cuando inicia
                 is Resource.Idle -> Unit

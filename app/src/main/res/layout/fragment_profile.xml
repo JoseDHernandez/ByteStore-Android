@@ -40,7 +40,7 @@
                 android:id="@+id/accountId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="0199f3f6-5920-72b0-8934-6b9396917341"
+                android:text=""
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -64,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="José David Hernández Hortúa"
+                android:text=""
                 android:textSize="16sp" />
 
             <TextView
@@ -81,7 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="jose@example.com"
+                android:text=""
                 android:textSize="16sp" />
 
             <TextView
@@ -98,7 +98,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="Cll 123 # 45 - 67, Bogotá, Colombia"
+                android:text=""
                 android:textSize="16sp" />
         </LinearLayout>
 
@@ -120,7 +120,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginBottom="10dp"
                 android:clickable="true"
                 android:gravity="center_vertical">
@@ -137,6 +137,7 @@
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:contentDescription="@null"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_chevron_right"
@@ -146,7 +147,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginBottom="10dp"
                 android:clickable="true"
                 android:gravity="center_vertical">
@@ -163,6 +164,7 @@
                     android:layout_weight="1" />
 
                 <ImageView
+                    android:contentDescription="@null"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_chevron_right" />

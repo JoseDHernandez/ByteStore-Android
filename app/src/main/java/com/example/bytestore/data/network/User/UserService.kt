@@ -1,6 +1,7 @@
 package com.example.bytestore.data.network.User
 
 import com.example.bytestore.core.ApiClient
+import com.example.bytestore.data.model.user.UserLoginRequest
 import com.example.bytestore.data.model.user.UserModel
 import com.example.bytestore.data.model.user.UserRegisterRequest
 import kotlinx.coroutines.Dispatchers
@@ -20,5 +21,15 @@ class UserService {
             null
         }
 
+    }
+
+    suspend fun loginUser(credentials: UserLoginRequest): UserModel?=withContext(Dispatchers.IO) {
+        try {
+            val response: Response<UserModel> = Api.create(UserApiService::class.java).loginUser(credentials)
+            if (response.isSuccessful) response.body() else null
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 }

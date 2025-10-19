@@ -52,6 +52,15 @@ class UserPreferences(private val context: Context) {
             )
         }.first()
     }
+    suspend fun isUserLoggedIn(): Boolean {
+        val token = getToken()
+        return !token.isNullOrEmpty()
+    }
+
+    suspend fun getUserRole(): String? {
+        val data = getUser()
+        return data["role"]
+    }
 
     suspend fun clearData() {
         context.dataStore.edit { it.clear() }

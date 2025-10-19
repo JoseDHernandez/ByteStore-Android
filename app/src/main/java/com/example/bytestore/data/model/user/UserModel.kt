@@ -10,3 +10,9 @@ data class UserModel(
     val role: String,
     val token: String
 )
+
+//Formato de petición de login
+data class UserLoginRequest(
+    val email: String,
+    val password: String
+)

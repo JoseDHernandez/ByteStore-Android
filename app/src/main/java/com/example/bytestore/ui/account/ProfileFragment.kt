@@ -5,13 +5,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.example.bytestore.R
+import androidx.navigation.fragment.findNavController
 import com.example.bytestore.databinding.FragmentProfileBinding
+import com.example.bytestore.ui.ProtectedFragment
+import com.example.bytestore.ui.viewmodel.AccountViewModel
+import com.example.bytestore.ui.viewmodel.AppViewModelFactory
+import com.example.bytestore.utils.SessionManager
+import kotlinx.coroutines.launch
 
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : ProtectedFragment() {
+
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: AccountViewModel by viewModels {
+        AppViewModelFactory(requireContext())
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -23,7 +35,22 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //boton de regreso
+        binding.topBar.setOnBackClickListener {
+            findNavController().navigateUp()
+        }
         //logica
+        //viewModel.getUserData()
+        viewModel.userData.observe(viewLifecycleOwner){user->
+            if(user!=null){
+                binding.accountId.text= user.id
+                binding.accountName.text=user.name
+                binding.accountEmail.text=user.email
+                binding.accountAddress.text=user.physicalAddress
+            }else{
+                findNavController().navigate(R.id.action_profileFragment_to_mainFragment)
+            }
+        }
     }
 
 
