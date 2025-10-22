@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -51,7 +52,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    //datastore
     implementation("androidx.datastore:datastore-preferences:1.1.7")
+    //glide
+    implementation("com.github.bumptech.glide:glide:5.0.5")
+    ksp("com.github.bumptech.glide:ksp:5.0.5")
 //Nota: no cambiar las versiones, alguna da error
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.0")

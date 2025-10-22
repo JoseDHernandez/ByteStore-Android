@@ -27,6 +27,8 @@
             app:destination="@id/loginFragment"/>
         <action android:id="@+id/action_mainFragment_to_registerFragment"
             app:destination="@id/registerFragment"/>
+        <action android:id="@+id/action_mainFragment_to_productsFragment"
+            app:destination="@id/productsFragment"/>
     </fragment>
 
     <!-- Login fragment -->
@@ -42,6 +44,10 @@
         <action
             android:id="@+id/action_loginFragment_to_profileFragment"
             app:destination="@id/profileFragment"/>
+        <action
+            android:id="@+id/action_loginFragment_to_productsFragment"
+            app:destination="@id/productsFragment"
+            />
     </fragment>
 
     <!-- Register fragment -->
@@ -57,6 +63,10 @@
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment"/>
         <action
+            android:id="@+id/action_registerFragment_to_productsFragment"
+            app:destination="@id/productsFragment"
+            />
+        <action
             android:id="@+id/action_registerFragment_to_profileFragment"
             app:destination="@id/profileFragment"/>
     </fragment>
@@ -70,6 +80,16 @@
         <action
             android:id="@+id/action_profileFragment_to_mainFragment"
             app:destination="@id/mainFragment"/>
+    </fragment>
+
+    <!-- Products fragment -->
+
+    <fragment
+        android:id="@+id/productsFragment"
+        android:name="com.example.bytestore.ui.product.ProductsFragment"
+        android:label="Products"
+        tools:layout="@layout/fragment_products">
+
     </fragment>
 
     <!-- Acciones globales -->

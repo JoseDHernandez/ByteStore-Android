@@ -30,6 +30,10 @@ class MainFragment : Fragment() {
         binding.buttonSignUp.setOnClickListener {
             findNavController().navigate(R.id.action_mainFragment_to_registerFragment)
         }
+        //skip
+        binding.skipSignIn.setOnClickListener {
+            findNavController().navigate(R.id.action_mainFragment_to_productsFragment)
+        }
     }
 
     override fun onDestroyView() {

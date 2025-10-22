@@ -3,7 +3,7 @@
 
     <!-- Boton base -->
     <style name="Widget.ByteStore.ButtonBase" parent="Widget.AppCompat.Button">
-        <item name="android:fontFamily">@font/inter_semibold </item>
+        <item name="android:fontFamily">@font/inter_semibold</item>
         <item name="android:textSize">18sp</item>
         <item name="android:letterSpacing">0.02</item>
         <item name="android:textAllCaps">false</item>
@@ -84,6 +84,12 @@
         <item name="android:paddingStart">8dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="Widget.ByteStore.RatingBar" parent="Widget.AppCompat.RatingBar">
+        <item name="android:progressDrawable">@drawable/rating_stars</item>
+        <item name="minHeight">48dp</item>
+        <item name="maxHeight">48dp</item>
     </style>
 
 </resources>

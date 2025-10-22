@@ -15,6 +15,7 @@ data class ProductModel (
     val id:Int,
     val name: String,
     val description:String,
+    val price: Float,
     val discount: Float,
     val stock: Int,
     val image: String,
