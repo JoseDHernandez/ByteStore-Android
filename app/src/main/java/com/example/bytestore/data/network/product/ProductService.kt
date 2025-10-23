@@ -1,4 +1,4 @@
-package com.example.bytestore.data.network.Product
+package com.example.bytestore.data.network.product
 
 import com.example.bytestore.core.ApiClient
 import com.example.bytestore.data.model.product.ListProductsModels

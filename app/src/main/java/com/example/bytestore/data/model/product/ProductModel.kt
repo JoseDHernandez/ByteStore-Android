@@ -7,21 +7,22 @@ data class ListProductsModels(
     val total: Int,
     val pages: Int,
     val first: Int,
-    val next: Int,
-    val prev: Int,
-    val data: List<ProductModel>
+    val next: Int? = null,
+    val prev: Int? = null,
+    val data: List<ProductModel> = emptyList()
 )
-data class ProductModel (
-    val id:Int,
+
+data class ProductModel(
+    val id: Int,
     val name: String,
-    val description:String,
+    val description: String,
     val price: Float,
     val discount: Float,
     val stock: Int,
     val image: String,
     val model: String,
     @SerializedName("ram_capacity") val ramCapacity: Int,
-    @SerializedName("disk_capacity") val  diskCapacity: Int,
+    @SerializedName("disk_capacity") val diskCapacity: Int,
     val qualification: Float,
     val brand: String,
     val processor: ProcessorModel,
@@ -29,8 +30,8 @@ data class ProductModel (
     val display: DisplayModel
 )
 
-data class ProcessorModel (
-    val id: Int?=null,
+data class ProcessorModel(
+    val id: Int? = null,
     val brand: String,
     val family: String,
     val model: String,
@@ -38,14 +39,14 @@ data class ProcessorModel (
     val speed: String
 )
 
-data class OperatingSystemModel (
-    val id: Int?=null,
+data class OperatingSystemModel(
+    val id: Int? = null,
     val system: String,
     val distribution: String
 )
 
-data class DisplayModel (
-    val id: Int?=null,
+data class DisplayModel(
+    val id: Int? = null,
     val size: Float,
     val resolution: String,
     val graphics: String,

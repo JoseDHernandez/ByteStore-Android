@@ -3,10 +3,10 @@
     android:id="@+id/spinner_item_text"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="12dp"
-    android:paddingHorizontal="16dp"
-    android:textColor="@color/black"
-    android:textSize="16sp"
-    android:fontFamily="@font/inter"
     android:background="@drawable/spinner_item_background"
-    android:includeFontPadding="false"/>
+    android:fontFamily="@font/inter"
+    android:includeFontPadding="false"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="12dp"
+    android:textColor="@color/black"
+    android:textSize="16sp" />

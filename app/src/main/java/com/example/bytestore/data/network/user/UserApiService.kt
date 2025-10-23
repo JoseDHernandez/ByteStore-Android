@@ -1,10 +1,11 @@
-package com.example.bytestore.data.network.User
+package com.example.bytestore.data.network.user
 import com.example.bytestore.data.model.user.UserLoginRequest
 import com.example.bytestore.data.model.user.UserModel
 import com.example.bytestore.data.model.user.UserRegisterRequest
 import retrofit2.Response
-import retrofit2.http.POST
 import retrofit2.http.Body
+import retrofit2.http.POST
+
 //Endpoints de la API de usuarios
 interface UserApiService {
     //Registro

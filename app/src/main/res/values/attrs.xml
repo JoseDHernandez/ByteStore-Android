@@ -1,5 +1,10 @@
 <resources>
+    <!-- Atributos boton superior de navegación -->
     <declare-styleable name="TopBarView">
         <attr name="titleText" format="string" />
+    </declare-styleable>
+    <!-- Atributos boton inferior de navegación -->
+    <declare-styleable name="BottonNav">
+        <attr name="actualFragment" format="integer" />
     </declare-styleable>
 </resources>

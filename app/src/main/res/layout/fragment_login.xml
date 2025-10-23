@@ -3,138 +3,131 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
     android:orientation="vertical"
     android:paddingHorizontal="16dp"
     android:paddingTop="6dp"
-    tools:context=".ui.account.LoginFragment"
-    android:gravity="center">
+    tools:context=".ui.account.LoginFragment">
 
-  <ImageView
-      android:contentDescription="@null"
-      android:id="@+id/appLogo"
-      android:layout_width="180dp"
-      android:layout_height="180dp"
-      android:src="@drawable/logo"
-      />
-  <TextView
-      android:id="@+id/textView1"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:labelFor="@id/appLogo"
-      android:text="@string/app_name"
-      android:textColor="@color/green"
-      android:textSize="30sp"
-      android:fontFamily="@font/inter_bold"
-      />
-  <TextView
-      android:id="@+id/textView2"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textSize="18sp"
-      android:text="La tecnología a tu alcance"
-     />
-  <View
-      android:layout_width="match_parent"
-      android:layout_height="50dp"
-      />
-  <TextView
-      android:id="@+id/inputEmailLabel"
-      style="@style/Widget.ByteStore.InputLabel"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:text="Correo electrónico"
-      android:labelFor="@id/inputEmail"/>
-  <EditText
-      android:id="@+id/inputEmail"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      style="@style/Widget.ByteStore.Input"
-      android:inputType="textEmailAddress"
-      android:autofillHints="emailAddress"
-      />
-  <TextView
-      android:id="@+id/inputEmailMessage"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:text=""
-      android:layout_marginTop="3dp"
-      android:textColor="@color/red"
-      />
-  <View
-      android:layout_width="match_parent"
-      android:layout_height="16dp"
-      />
-  <TextView
-      android:id="@+id/inputPasswordLabel"
-      style="@style/Widget.ByteStore.InputLabel"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:labelFor="@id/inputPassword"
-      android:text="Contraseña"/>
-  <EditText
-      android:id="@+id/inputPassword"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:inputType="textVisiblePassword"
-      style="@style/Widget.ByteStore.Input"
-      android:autofillHints="password"/>
-  <TextView
-      android:id="@+id/inputPasswordMessage"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:text=""
-      android:layout_marginTop="3dp"
-      android:textColor="@color/red"
-      />
-  <View
-      android:layout_width="match_parent"
-      android:layout_height="16dp"
-      />
+    <ImageView
+        android:id="@+id/appLogo"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:contentDescription="@null"
+        android:src="@drawable/logo" />
 
-  <CheckBox
-      style="@style/Widget.ByteStore.CheckBox"
-      android:id="@+id/rememberPassword"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:text="Recordarme"/>
-  <View
-      android:layout_width="match_parent"
-      android:layout_height="30dp"
-      />
-  <Button
-      android:id="@+id/buttonSignIn"
-      style="@style/Widget.ByteStore.Button.Primary"
-      android:text="Iniciar sesión"/>
-  <View
-      android:layout_width="match_parent"
-      android:layout_height="25dp"
-      />
-  <View
-      android:layout_width="match_parent"
-      android:layout_height="2dp"
-      android:background="@color/lite_gray"/>
-  <View
-      android:layout_width="match_parent"
-      android:layout_height="25dp"
-      />
-  <Button
-      android:id="@+id/buttonSignUp"
-      style="@style/Widget.ByteStore.Button.PrimaryOutline"
-      android:text="Registrase"/>
-  <View
-      android:layout_width="match_parent"
-      android:layout_height="10dp"
-      />
-  <TextView
-      android:id="@+id/skipSignIn"
-      android:fontFamily="@font/inter"
-      android:layout_width="wrap_content"
-      android:layout_height="48dp"
-      android:gravity="center_vertical"
-      android:text="Continuar sin iniciar sesión"
-      android:textSize="16sp"
-      android:clickable="true"
-      />
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter_bold"
+        android:labelFor="@id/appLogo"
+        android:text="@string/app_name"
+        android:textColor="@color/green"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="La tecnología a tu alcance"
+        android:textSize="18sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:id="@+id/inputEmailLabel"
+        style="@style/Widget.ByteStore.InputLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:labelFor="@id/inputEmail"
+        android:text="Correo electrónico" />
+
+    <EditText
+        android:id="@+id/inputEmail"
+        style="@style/Widget.ByteStore.Input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="emailAddress"
+        android:inputType="textEmailAddress" />
+
+    <TextView
+        android:id="@+id/inputEmailMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:text=""
+        android:textColor="@color/red" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
+
+    <TextView
+        android:id="@+id/inputPasswordLabel"
+        style="@style/Widget.ByteStore.InputLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:labelFor="@id/inputPassword"
+        android:text="Contraseña" />
+
+    <EditText
+        android:id="@+id/inputPassword"
+        style="@style/Widget.ByteStore.Input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints="password"
+        android:inputType="textVisiblePassword" />
+
+    <TextView
+        android:id="@+id/inputPasswordMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:text=""
+        android:textColor="@color/red" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
+
+    <Button
+        android:id="@+id/buttonSignIn"
+        style="@style/Widget.ByteStore.Button.Primary"
+        android:text="Iniciar sesión" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/lite_gray" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
+
+    <Button
+        android:id="@+id/buttonSignUp"
+        style="@style/Widget.ByteStore.Button.PrimaryOutline"
+        android:text="Registrase" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+    <TextView
+        android:id="@+id/skipSignIn"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:clickable="true"
+        android:fontFamily="@font/inter"
+        android:gravity="center_vertical"
+        android:text="Continuar sin iniciar sesión"
+        android:textSize="16sp" />
 
 </LinearLayout>

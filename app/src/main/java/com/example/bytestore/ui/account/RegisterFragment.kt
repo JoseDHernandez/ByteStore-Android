@@ -1,25 +1,25 @@
 package com.example.bytestore.ui.account
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.bytestore.R
 import com.example.bytestore.databinding.FragmentRegisterBinding
-import com.example.bytestore.ui.viewmodel.AccountViewModel
-import com.example.bytestore.ui.viewmodel.UserRegisterInput
+import com.example.bytestore.ui.viewmodel.AppViewModelFactory
+import com.example.bytestore.ui.viewmodel.userViewModel.AuthViewModel
+import com.example.bytestore.ui.viewmodel.userViewModel.UserRegisterInput
 import com.example.bytestore.utils.Resource
 import com.google.android.material.snackbar.Snackbar
-import com.example.bytestore.R
-import com.example.bytestore.ui.viewmodel.AppViewModelFactory
 
 
 class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: AccountViewModel by viewModels {
+    private val viewModel: AuthViewModel by viewModels {
         AppViewModelFactory(requireContext())
     }
 
@@ -54,8 +54,8 @@ class RegisterFragment : Fragment() {
             )
             viewModel.registerUser(request) //enviar al viewmodel los datos
         }
-    //registro
-        viewModel.accountState.observe(viewLifecycleOwner) { state ->
+        //registro
+        viewModel.authState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 //Cuando inicia
                 is Resource.Idle -> Unit
@@ -77,13 +77,17 @@ class RegisterFragment : Fragment() {
                     binding.buttonSingUp.text = "Registrarse"
                     //datos
                     val user = state.data
-                    Snackbar.make(binding.root, "Usuario registrado correctamente", Snackbar.LENGTH_LONG).show()
+                    Snackbar.make(
+                        binding.root,
+                        "Usuario registrado correctamente",
+                        Snackbar.LENGTH_LONG
+                    ).show()
                     //TODO: pendiente almacenar datos en local y token
                     println("Usuario registrado: ${user.name}")
                 }
                 //cuando da error
                 is Resource.Error -> {
-                    binding.buttonSingUp.isEnabled=true
+                    binding.buttonSingUp.isEnabled = true
                     binding.buttonSingUp.text = "Registrarse"
                     Snackbar.make(binding.root, state.message, Snackbar.LENGTH_LONG).show()
                     //mostrar error
@@ -91,7 +95,8 @@ class RegisterFragment : Fragment() {
             }
         }
     }
-//limpiar errores
+
+    //limpiar errores
     private fun clearErrors() {
         binding.inputNameMessage.text = ""
         binding.inputEmailMessage.text = ""
@@ -99,7 +104,8 @@ class RegisterFragment : Fragment() {
         binding.inputPasswordConfirmMessage.text = ""
         binding.inputAddressMessage.text = ""
     }
-//validaciones
+
+    //validaciones
     private fun showValidationErrors(errors: Map<String, String>) {
         clearErrors()
         errors["name"]?.let { binding.inputNameMessage.text = it }

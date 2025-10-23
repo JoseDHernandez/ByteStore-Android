@@ -4,178 +4,204 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.account.RegisterFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".ui.account.RegisterFragment">
 
     <com.example.bytestore.ui.components.TopBarView
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:titleText="Registro" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
         android:maxWidth="488dp"
         android:paddingHorizontal="16dp"
-        android:clipToPadding="false"
         android:paddingTop="30dp">
-      <LinearLayout
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="vertical"
-          android:gravity="center"
-          >
-          <TextView
-              android:id="@+id/inputNameLabel"
-              style="@style/Widget.ByteStore.InputLabel"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:labelFor="@id/inputName"
-              android:text="Nombre completo"/>
-          <EditText
-              android:id="@+id/inputName"
-              style="@style/Widget.ByteStore.Input"
-              android:inputType="text"
-              android:autofillHints="name"/>
-          <TextView
-              android:id="@+id/inputNameMessage"
-              android:layout_marginTop="3dp"
-              android:text=""
-              android:textColor="@color/red"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"/>
-          <View
-              android:layout_width="wrap_content"
-              android:layout_height="30dp"/>
-          <TextView
-              android:id="@+id/inputEmailLabel"
-              style="@style/Widget.ByteStore.InputLabel"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:labelFor="@id/inputEmail"
-              android:text="Correo electrónico"/>
-          <EditText
-              android:id="@+id/inputEmail"
-              android:autofillHints="emailAddress"
-              style="@style/Widget.ByteStore.Input"
-              android:inputType="textEmailAddress"/>
-          <TextView
-              android:id="@+id/inputEmailMessage"
-              android:layout_marginTop="3dp"
-              android:text=""
-              android:textColor="@color/red"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"/>
-          <View
-              android:layout_width="wrap_content"
-              android:layout_height="30dp"/>
-          <TextView
-              android:id="@+id/inputPasswordLabel"
-              style="@style/Widget.ByteStore.InputLabel"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:labelFor="@id/inputPassword"
-              android:text="Contraseña"/>
-          <EditText
-              android:id="@+id/inputPassword"
-              android:autofillHints="password"
-              style="@style/Widget.ByteStore.Input"
-              android:inputType="textVisiblePassword"/>
-          <TextView
-              android:id="@+id/inputPasswordMessage"
-              android:layout_marginTop="3dp"
-              android:text=""
-              android:textColor="@color/red"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"/>
-          <TextView
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="La contraseña debe contener:\n  • 8 a 20 caracteres\n  • mayúsculas (A-Z)\n  • minúsculas (a-z)\n  • números (0-9)\n  • caracteres especiales (!#%$?)"/>
-          <View
-              android:layout_width="wrap_content"
-              android:layout_height="30dp"/>
-          <TextView
-              android:id="@+id/inputPasswordConfirmLabel"
-              style="@style/Widget.ByteStore.InputLabel"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:labelFor="@id/inputPasswordConfirm"
-              android:text="Confirmar contraseña"/>
-          <EditText
-              android:id="@+id/inputPasswordConfirm"
-              android:autofillHints="password"
-              style="@style/Widget.ByteStore.Input"
-              android:inputType="textVisiblePassword"/>
-          <TextView
-              android:id="@+id/inputPasswordConfirmMessage"
-              android:layout_marginTop="3dp"
-              android:text=""
-              android:textColor="@color/red"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"/>
-          <View
-              android:layout_width="wrap_content"
-              android:layout_height="30dp"/>
-          <TextView
-              android:id="@+id/inputAddressLabel"
-              style="@style/Widget.ByteStore.InputLabel"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:labelFor="@id/inputAddress"
-              android:text="Dirección de entrega"/>
-          <EditText
-              android:id="@+id/inputAddress"
-              android:autofillHints="postalAddress"
-              style="@style/Widget.ByteStore.Input"
-              android:inputType="text"/>
-          <TextView
-              android:id="@+id/inputAddressMessage"
-              android:layout_marginTop="3dp"
-              android:text=""
-              android:textColor="@color/red"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"/>
-          <View
-              android:layout_width="wrap_content"
-              android:layout_height="30dp"/>
-          <Button
-              android:id="@+id/buttonSingUp"
-              style="@style/Widget.ByteStore.Button.Primary"
-              android:text="Registarse"/>
-          <View
-              android:layout_width="match_parent"
-              android:layout_height="30dp"/>
-          <TextView
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:text="¿Ya tienes una cuenta?"
-              android:layout_marginBottom="10dp"/>
-          <Button
-              android:id="@+id/buttonSignIn"
-              android:text="Iniciar sesión"
-              style="@style/Widget.ByteStore.Button.SecondaryOutline"
 
-              android:layout_height="wrap_content"/>
-          <View
-              android:layout_width="match_parent"
-              android:layout_height="30dp"
-              />
-          <TextView
-              android:id="@+id/skip_sign_in"
-              android:fontFamily="@font/inter"
-              android:layout_width="match_parent"
-              android:textAlignment="center"
-              android:layout_height="48dp"
-              android:text="Continuar sin iniciar sesión"
-              android:textSize="16sp"
-              android:clickable="true"
-              />
-          <View
-              android:layout_width="match_parent"
-              android:layout_height="30dp"
-              />
-      </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/inputNameLabel"
+                style="@style/Widget.ByteStore.InputLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/inputName"
+                android:text="Nombre completo" />
+
+            <EditText
+                android:id="@+id/inputName"
+                style="@style/Widget.ByteStore.Input"
+                android:autofillHints="name"
+                android:inputType="text" />
+
+            <TextView
+                android:id="@+id/inputNameMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text=""
+                android:textColor="@color/red" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="30dp" />
+
+            <TextView
+                android:id="@+id/inputEmailLabel"
+                style="@style/Widget.ByteStore.InputLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/inputEmail"
+                android:text="Correo electrónico" />
+
+            <EditText
+                android:id="@+id/inputEmail"
+                style="@style/Widget.ByteStore.Input"
+                android:autofillHints="emailAddress"
+                android:inputType="textEmailAddress" />
+
+            <TextView
+                android:id="@+id/inputEmailMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text=""
+                android:textColor="@color/red" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="30dp" />
+
+            <TextView
+                android:id="@+id/inputPasswordLabel"
+                style="@style/Widget.ByteStore.InputLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/inputPassword"
+                android:text="Contraseña" />
+
+            <EditText
+                android:id="@+id/inputPassword"
+                style="@style/Widget.ByteStore.Input"
+                android:autofillHints="password"
+                android:inputType="textVisiblePassword" />
+
+            <TextView
+                android:id="@+id/inputPasswordMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text=""
+                android:textColor="@color/red" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="La contraseña debe contener:\n  • 8 a 20 caracteres\n  • mayúsculas (A-Z)\n  • minúsculas (a-z)\n  • números (0-9)\n  • caracteres especiales (!#%$?)" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="30dp" />
+
+            <TextView
+                android:id="@+id/inputPasswordConfirmLabel"
+                style="@style/Widget.ByteStore.InputLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/inputPasswordConfirm"
+                android:text="Confirmar contraseña" />
+
+            <EditText
+                android:id="@+id/inputPasswordConfirm"
+                style="@style/Widget.ByteStore.Input"
+                android:autofillHints="password"
+                android:inputType="textVisiblePassword" />
+
+            <TextView
+                android:id="@+id/inputPasswordConfirmMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text=""
+                android:textColor="@color/red" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="30dp" />
+
+            <TextView
+                android:id="@+id/inputAddressLabel"
+                style="@style/Widget.ByteStore.InputLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@id/inputAddress"
+                android:text="Dirección de entrega" />
+
+            <EditText
+                android:id="@+id/inputAddress"
+                style="@style/Widget.ByteStore.Input"
+                android:autofillHints="postalAddress"
+                android:inputType="text" />
+
+            <TextView
+                android:id="@+id/inputAddressMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text=""
+                android:textColor="@color/red" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="30dp" />
+
+            <Button
+                android:id="@+id/buttonSingUp"
+                style="@style/Widget.ByteStore.Button.Primary"
+                android:text="Registarse" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:text="¿Ya tienes una cuenta?" />
+
+            <Button
+                android:id="@+id/buttonSignIn"
+                style="@style/Widget.ByteStore.Button.SecondaryOutline"
+                android:layout_height="wrap_content"
+
+                android:text="Iniciar sesión" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
+
+            <TextView
+                android:id="@+id/skip_sign_in"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:fontFamily="@font/inter"
+                android:text="Continuar sin iniciar sesión"
+                android:textAlignment="center"
+                android:textSize="16sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
+        </LinearLayout>
     </ScrollView>
 
 </LinearLayout>

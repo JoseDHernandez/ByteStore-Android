@@ -1,7 +1,6 @@
-package com.example.bytestore.data.network.Product
+package com.example.bytestore.data.network.product
 
 import com.example.bytestore.data.model.product.ListProductsModels
-import com.example.bytestore.data.model.product.ProductModel
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

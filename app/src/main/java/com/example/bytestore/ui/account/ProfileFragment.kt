@@ -1,20 +1,16 @@
 package com.example.bytestore.ui.account
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
-import com.example.bytestore.R
 import androidx.navigation.fragment.findNavController
+import com.example.bytestore.R
 import com.example.bytestore.databinding.FragmentProfileBinding
 import com.example.bytestore.ui.ProtectedFragment
-import com.example.bytestore.ui.viewmodel.AccountViewModel
 import com.example.bytestore.ui.viewmodel.AppViewModelFactory
-import com.example.bytestore.utils.SessionManager
-import kotlinx.coroutines.launch
+import com.example.bytestore.ui.viewmodel.userViewModel.AccountViewModel
 
 
 class ProfileFragment : ProtectedFragment() {
@@ -24,6 +20,7 @@ class ProfileFragment : ProtectedFragment() {
     private val viewModel: AccountViewModel by viewModels {
         AppViewModelFactory(requireContext())
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,13 +38,13 @@ class ProfileFragment : ProtectedFragment() {
         }
         //logica
         //viewModel.getUserData()
-        viewModel.userData.observe(viewLifecycleOwner){user->
-            if(user!=null){
-                binding.accountId.text= user.id
-                binding.accountName.text=user.name
-                binding.accountEmail.text=user.email
-                binding.accountAddress.text=user.physicalAddress
-            }else{
+        viewModel.userData.observe(viewLifecycleOwner) { user ->
+            if (user != null) {
+                binding.accountId.text = user.id
+                binding.accountName.text = user.name
+                binding.accountEmail.text = user.email
+                binding.accountAddress.text = user.physicalAddress
+            } else {
                 findNavController().navigate(R.id.action_profileFragment_to_mainFragment)
             }
         }

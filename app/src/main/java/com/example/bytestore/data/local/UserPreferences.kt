@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.map
 
 
 val Context.dataStore by preferencesDataStore(name = "user_prefs")
+
 class UserPreferences(private val context: Context) {
     companion object {
         private val USER_ID = stringPreferencesKey("user_id")
@@ -52,6 +53,7 @@ class UserPreferences(private val context: Context) {
             )
         }.first()
     }
+
     suspend fun isUserLoggedIn(): Boolean {
         val token = getToken()
         return !token.isNullOrEmpty()

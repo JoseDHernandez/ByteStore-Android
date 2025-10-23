@@ -4,7 +4,8 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.bytestore.data.repository.UserRepository
-import com.example.bytestore.ui.account.RegisterFragment
+import com.example.bytestore.ui.viewmodel.userViewModel.AccountViewModel
+import com.example.bytestore.ui.viewmodel.userViewModel.AuthViewModel
 
 class AppViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     //se sobreescribe el viewmodel (modelClass)
@@ -16,7 +17,11 @@ class AppViewModelFactory(private val context: Context) : ViewModelProvider.Fact
 
         //selección del fragment
         return when {
-            //viewmodel de account: (registro, login)
+            //viewmodel de auth: (registro, login)
+            modelClass.isAssignableFrom(AuthViewModel::class.java) -> {
+                AuthViewModel(userRepository) as T
+            }
+            //viewmodel de account (logout, getdata, updateuser)
             modelClass.isAssignableFrom(AccountViewModel::class.java) -> {
                 AccountViewModel(userRepository) as T
             }

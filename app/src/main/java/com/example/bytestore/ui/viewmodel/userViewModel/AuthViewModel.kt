@@ -1,6 +1,8 @@
-package com.example.bytestore.ui.viewmodel
+package com.example.bytestore.ui.viewmodel.userViewModel
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bytestore.data.model.user.UserLoginRequest
 import com.example.bytestore.data.model.user.UserModel
@@ -19,23 +21,17 @@ data class UserRegisterInput(
     val address: String
 )
 
-class AccountViewModel(private val repository: UserRepository) : ViewModel() {
+class AuthViewModel(private val repository: UserRepository) : ViewModel() {
     //regex
     private val passwordRegex =
         Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#\$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{8,20}$")
     private val emailRegex = Regex("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")
 
-    //livedata (usuario)
-    private val _userData = MutableLiveData<UserModel?>()
-    val userData: LiveData<UserModel?> get() = _userData
 
     //livedata (peticiones)
-    private val _accountState = MutableLiveData<Resource<UserModel>>(Resource.Idle)
-    val accountState: LiveData<Resource<UserModel>> get() = _accountState
+    private val _authState = MutableLiveData<Resource<UserModel>>(Resource.Idle)
+    val authState: LiveData<Resource<UserModel>> get() = _authState
 
-    init {
-        getUserData()
-    }
 
     //funcion de registro
     fun registerUser(userRegisterInput: UserRegisterInput) = viewModelScope.launch(Dispatchers.IO) {
@@ -87,29 +83,21 @@ class AccountViewModel(private val repository: UserRepository) : ViewModel() {
 
         //retornar errores si existen
         if (errors.isNotEmpty()) {
-            _accountState.postValue(Resource.ValidationError(errors))
+            _authState.postValue(Resource.ValidationError(errors))
             return@launch
         }
 
-        try {
-            //paso de userInput a UserRegisterRequest
-            val request = UserRegisterRequest(
-                name = userRegisterInput.name,
-                email = userRegisterInput.email,
-                password = userRegisterInput.password,
-                physicalAddress = userRegisterInput.address
-            )
+        //paso de userInput a UserRegisterRequest
+        val request = UserRegisterRequest(
+            name = userRegisterInput.name,
+            email = userRegisterInput.email,
+            password = userRegisterInput.password,
+            physicalAddress = userRegisterInput.address
+        )
 
-            val response = repository.registerUser(request)
-            if (response != null) {
-                _accountState.postValue(Resource.Success(response))
-            } else {
-                _accountState.postValue(Resource.Error("No se pudo registrar el usuario"))
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            _accountState.postValue(Resource.Error("Error: ${e.message}"))
-        }
+        val response = repository.registerUser(request)
+
+        _authState.postValue(response)
     }
 
     //login
@@ -134,28 +122,16 @@ class AccountViewModel(private val repository: UserRepository) : ViewModel() {
                 errors["password"] = "Debe incluir mayúscula, minúscula, número y carácter especial"
         }
         if (errors.isNotEmpty()) {
-            _accountState.postValue(Resource.ValidationError(errors))
+            _authState.postValue(Resource.ValidationError(errors))
             return@launch
         }
-
-        try {
-            val request = UserLoginRequest(email, password)
-            val response = repository.loginUser(request)
-            if (response != null) {
-                _accountState.postValue(Resource.Success(response))
-            } else {
-                _accountState.postValue((Resource.Error("Credenciales invalidas")))
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            _accountState.postValue(Resource.Error("Error: ${e.message}"))
-        }
+        //crear request
+        val request = UserLoginRequest(email, password)
+        //petición
+        val response = repository.loginUser(request)
+        _authState.postValue(response)
     }
+//TODO: Pendiente de validar usuario almacenado en local
 
-    //datos de la cuenta
-    fun getUserData() = viewModelScope.launch {
-        val data = repository.getUserData()
-        _userData.postValue(data)
-    }
 }
 
