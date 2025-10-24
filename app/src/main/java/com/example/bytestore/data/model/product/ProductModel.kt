@@ -3,7 +3,7 @@ package com.example.bytestore.data.model.product
 
 import com.google.gson.annotations.SerializedName
 
-data class ListProductsModels(
+data class ListProductsModel(
     val total: Int,
     val pages: Int,
     val first: Int,

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation
+    android:id="@+id/nav_graph_host"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     app:startDestination="@id/splashFragment">
@@ -94,7 +96,20 @@
         android:name="com.example.bytestore.ui.product.ProductsFragment"
         android:label="Products"
         tools:layout="@layout/fragment_products">
+        <action
+            android:id="@+id/action_productsFragment_to_productFragment"
+            app:destination="@id/productFragment" />
+    </fragment>
 
+    <!-- Product fragment -->
+    <fragment
+        android:id="@+id/productFragment"
+        android:name="com.example.bytestore.ui.product.ProductFragment"
+        android:label="Product"
+        tools:layout="@layout/fragment_product">
+        <argument
+            android:name="productId"
+            app:argType="integer" />
     </fragment>
 
     <!-- Acciones globales -->

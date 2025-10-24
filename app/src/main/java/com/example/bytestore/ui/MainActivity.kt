@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import com.example.bytestore.R
 import com.example.bytestore.databinding.ActivityMainBinding
@@ -30,6 +31,8 @@ class MainActivity : AppCompatActivity() {
 
         val navController = navHostFragment.navController
         navController.addOnDestinationChangedListener { _, destination, _ ->
+
+            //mostar navbar
             when (destination.id) {
                 R.id.loginFragment,
                 R.id.registerFragment,
@@ -38,6 +41,8 @@ class MainActivity : AppCompatActivity() {
 
                 else -> binding.navbar.visibility = View.VISIBLE
             }
+            //establer icono activo
+            setActiveIndex(destination)
         }
         //eventos de logout y navegación desde BottonNavView
         binding.navbar.onLogoutSelected = {
@@ -66,5 +71,31 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    /*
+    Establcer en la barra de navegacion el item activo segun el fragment
+    * 0 = productos
+    * 1 = ordenes
+    * 2 = carrito
+    * 3 = opciones
+    * */
+    private fun setActiveIndex(fragment: NavDestination) {
+        val id = fragment.id
+        val actualFragment = when (id) {
+            //productos
+            R.id.productFragment, R.id.productsFragment -> {
+                0
+            }
+
+            R.id.profileFragment -> {
+                3
+            }
+
+            else -> {
+                0
+            }
+        }
+        binding.navbar.setActiveItem(actualFragment)
     }
 }

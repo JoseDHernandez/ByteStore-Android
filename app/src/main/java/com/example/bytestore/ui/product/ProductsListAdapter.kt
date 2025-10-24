@@ -14,7 +14,7 @@ import com.example.bytestore.databinding.ItemProductCardBinding
 import java.text.NumberFormat
 import java.util.Locale
 
-class ProductsListAdapter :
+class ProductsListAdapter (private val onItemClick: (ProductModel)->Unit):
     ListAdapter<ProductModel, ProductsListAdapter.ProductViewHolder>(ProductDiff()) {
 
 
@@ -52,6 +52,11 @@ class ProductsListAdapter :
                 .fitCenter()
                 .diskCacheStrategy(DiskCacheStrategy.ALL) //cache (miniatura y original)
                 .into(binding.image) //ubicación
+
+            //onClick
+            binding.root.setOnClickListener {
+                onItemClick(product)
+            }
         }
 
     }

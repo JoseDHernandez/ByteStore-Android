@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
@@ -19,7 +20,7 @@ android {
     }
 
     buildFeatures {
-        viewBinding=true
+        viewBinding = true
     }
 
     buildTypes {
@@ -43,7 +44,6 @@ android {
 dependencies {
 
 
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -57,7 +57,7 @@ dependencies {
     //glide
     implementation("com.github.bumptech.glide:glide:5.0.5")
     ksp("com.github.bumptech.glide:ksp:5.0.5")
-//Nota: no cambiar las versiones, alguna da error
+    //Nota: no cambiar las versiones, alguna da error
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.8.0")

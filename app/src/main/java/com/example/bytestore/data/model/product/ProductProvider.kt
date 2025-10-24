@@ -1,12 +1,10 @@
 package com.example.bytestore.data.model.product
 
-import androidx.collection.emptyObjectList
-
 object ProductProvider {
-    var products: ListProductsModels? = null
+    var products: ListProductsModel? = null
 
     //retornar los productos almacenados
-    fun getFetchProducts(): ListProductsModels? {
+    fun getFetchProducts(): ListProductsModel? {
         return products
     }
 

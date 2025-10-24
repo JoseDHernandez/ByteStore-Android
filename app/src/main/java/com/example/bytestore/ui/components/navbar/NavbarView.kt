@@ -45,21 +45,23 @@ class NavbarView @JvmOverloads constructor(
     }
 
 
-    private fun setActiveItem(index: Int) {
-        val items = listOf(
-            binding.activeProducts,
-            binding.activeOrders,
-            binding.activeCart,
-            binding.activeOptions
-        )
-        items.forEach { item ->
-            item.visibility = INVISIBLE
+    fun setActiveItem(index: Int) {
+        if (index >= 0 && index <= 3) {
+            val items = listOf(
+                binding.activeProducts,
+                binding.activeOrders,
+                binding.activeCart,
+                binding.activeOptions
+            )
+            items.forEach { item ->
+                item.visibility = INVISIBLE
+            }
+            val i = if (index <= items.size) index else 0
+            items.getOrNull(i)?.apply {
+                visibility = VISIBLE
+            }
+            activeIndex = i
         }
-        val i = if (index <= items.size) index else 0
-        items.getOrNull(i)?.apply {
-            visibility = VISIBLE
-        }
-        activeIndex = i
     }
 
 }

@@ -4,7 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.bytestore.data.model.product.ListProductsModels
+import com.example.bytestore.data.model.product.ListProductsModel
+import com.example.bytestore.data.model.product.ProductModel
 import com.example.bytestore.data.repository.ProductRepository
 import com.example.bytestore.utils.Resource
 import kotlinx.coroutines.Dispatchers
@@ -15,9 +16,14 @@ class ProductViewModel : ViewModel() {
     private val repository = ProductRepository()
 
     // Estado de productos con Resource
-    private val _productState =
-        MutableLiveData<Resource<ListProductsModels>>(Resource.Idle) //Camba el contenido: como un useState de react (postValue, setValue)
-    val productState: LiveData<Resource<ListProductsModels>> get() = _productState //Es al que se observa desde el Fragment
+    private val _productsState =
+        MutableLiveData<Resource<ListProductsModel>>(Resource.Idle) //Camba el contenido: como un useState de react (postValue, setValue)
+    val productsState: LiveData<Resource<ListProductsModel>> get() = _productsState //Es al que se observa desde el Fragment
+
+    //producto
+    private val _productState = MutableLiveData<Resource<ProductModel>>(Resource.Idle)
+    val productState: LiveData<Resource<ProductModel>> get()=_productState
+
 
     fun getProducts(
         page: Int? = 1,
@@ -28,7 +34,7 @@ class ProductViewModel : ViewModel() {
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             //Empieza la carga
-            _productState.postValue(Resource.Loading)
+            _productsState.postValue(Resource.Loading)
             try {
                 //petición
                 val response = repository.getProducts(page, limit, search, sort, order)
@@ -37,16 +43,34 @@ class ProductViewModel : ViewModel() {
                     if (response.data.isEmpty()) {
                         val message =
                             if (search?.isNotEmpty() == true) "No se contraron productos con los terminos:\n${search}" else "No se contraron productos"
-                        _productState.postValue(Resource.Error(message))
+                        _productsState.postValue(Resource.Error(message))
                     } else {
-                        _productState.postValue(Resource.Success(response))
+                        _productsState.postValue(Resource.Success(response))
                     }
                 } else {
-                    _productState.postValue(Resource.Error("Error al obtener productos"))
+                    _productsState.postValue(Resource.Error("Error al obtener productos"))
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                _productState.postValue(Resource.Error("Error: ${e.message}"))
+                _productsState.postValue(Resource.Error("Error: ${e.message}"))
+            }
+        }
+    }
+
+    fun getProduct(id:Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            _productState.postValue(Resource.Loading)
+            try {
+                val response = repository.getProduct(id)
+
+                if(response!=null){
+                    _productState.postValue(Resource.Success(response))
+                }else{
+                    _productState.postValue(Resource.Error("Producto no encontrado"))
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _productsState.postValue(Resource.Error("Error: ${e.message}"))
             }
         }
     }

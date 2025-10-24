@@ -1,6 +1,7 @@
 package com.example.bytestore.ui.product
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,13 +39,20 @@ class ProductsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         //boton de regreso
         binding.topBar.setOnBackClickListener {
             findNavController().navigateUp()
         }
 
         //Listadapater de prodcutos
-        productAdapter = ProductsListAdapter()
+        productAdapter = ProductsListAdapter{ product->
+            //Callback del onClick
+            Log.d("ProductsFragment","Click: ${product.id}")
+
+            val action = ProductsFragmentDirections.actionProductsFragmentToProductFragment(product.id)
+            findNavController().navigate(action)
+        }
         //configuracion del recycleview
         binding.productsRecyclerView.adapter = productAdapter
         val layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
@@ -66,7 +74,7 @@ class ProductsFragment : Fragment() {
     }
 
     private fun observeLiveData() {
-        viewModel.productState.observe(viewLifecycleOwner) { state ->
+        viewModel.productsState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is Resource.Idle -> Unit
                 is Resource.Success -> {

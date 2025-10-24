@@ -27,18 +27,11 @@
 
     <RatingBar
         android:id="@+id/score"
-        android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:layout_gravity="center"
-        android:isIndicator="true"
-        android:numStars="5"
-        android:progressDrawable="@drawable/rating_stars"
-        android:progressTint="@color/yellow"
+        style="@style/Widget.ByteStore.RatingBar"
         android:rating="5"
         android:scaleX="1.1"
-        android:scaleY="1.1"
-        android:secondaryProgressTint="@null"
-        android:stepSize="0.5" />
+        android:scaleY="1.1" />
 
     <TextView
         android:id="@+id/price"
