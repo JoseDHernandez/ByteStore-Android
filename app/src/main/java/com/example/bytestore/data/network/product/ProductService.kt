@@ -8,7 +8,7 @@ import kotlinx.coroutines.withContext
 import retrofit2.Response
 
 class ProductService {
-    private val Api = ApiClient.retrofit() //Solicito el helper de retrofit
+    private val api = ApiClient.retrofit() //Solicito el helper de retrofit
 
     // ===== Nota ====
     // getProducts y getProduct no retornar Resourse<ListProductsModel>
@@ -28,7 +28,7 @@ class ProductService {
         try {
             val response: Response<ListProductsModel> =
                 //petición basada en la establecida en el ApiModel
-                Api.create(ProductApiService::class.java).getProducts(
+                api.create(ProductApiService::class.java).getProducts(
                     page = page,
                     limit = limit,
                     search = search,
@@ -44,7 +44,7 @@ class ProductService {
 
     suspend fun getProduct(id:String): ProductModel? = withContext(Dispatchers.IO) {
         try {
-            val response: Response<ProductModel> = Api.create(ProductApiService::class.java).getProduct(id)
+            val response: Response<ProductModel> = api.create(ProductApiService::class.java).getProduct(id)
             if (response.isSuccessful) response.body() else null
         } catch (e: Exception) {
             e.printStackTrace()

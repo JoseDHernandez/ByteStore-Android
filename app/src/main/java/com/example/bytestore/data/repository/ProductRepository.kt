@@ -7,7 +7,7 @@ import com.example.bytestore.data.model.product.ProductProvider
 import com.example.bytestore.data.network.product.ProductService
 
 class ProductRepository {
-    private val Api = ProductService() //Obtengo el servicio de productos
+    private val productService by lazy {ProductService()  }  //Obtengo el servicio de productos
 
     //obtener productos
     suspend fun getProducts(
@@ -21,7 +21,7 @@ class ProductRepository {
             return cached
         }
         //lanzo la peticion y obtengo los datos
-        val response: ListProductsModel? = Api.getProducts(
+        val response: ListProductsModel? = productService.getProducts(
             page = page, limit = limit, search = search, sort = sort, order = order
         )
         //Almaceno en el provider (almacenamiento local: cache)
@@ -51,7 +51,7 @@ class ProductRepository {
         val cachedProduct = ProductProvider.findProductById(id)
         if (cachedProduct != null) return cachedProduct
         //petición
-        val response: ProductModel? = Api.getProduct(id.toString())
+        val response: ProductModel? = productService.getProduct(id.toString())
         return response
     }
 }

@@ -34,8 +34,11 @@ class SessionManager(private val context: Context) {
             false
         }
     }
-
     //obtener token
+    suspend fun getToken(): String? {
+        return repository.getUserToken()
+    }
+    //validar estado de la sesión
     suspend fun isLoggedIn(): Boolean {
         return !repository.getUserToken().isNullOrEmpty()
     }

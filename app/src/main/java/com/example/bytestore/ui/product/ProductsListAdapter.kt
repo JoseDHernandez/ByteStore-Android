@@ -1,5 +1,6 @@
 package com.example.bytestore.ui.product
 
+import android.annotation.SuppressLint
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -33,6 +34,7 @@ class ProductsListAdapter (private val onItemClick: (ProductModel)->Unit):
 
     inner class ProductViewHolder(private val binding: ItemProductCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(product: ProductModel) {
             //formater
             val formatter = NumberFormat.getNumberInstance(Locale("es", "CO"))

@@ -9,12 +9,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class UserService {
-    private val Api = ApiClient.retrofit()
+    private val api = ApiClient.retrofit().create(UserApiService::class.java)
 
     suspend fun registerUser(user: UserRegisterRequest): Resource<UserModel> =
         withContext(Dispatchers.IO) {
             try {
-                val response = Api.create(UserApiService::class.java).registerUser(user)
+                val response = api.registerUser(user)
 
                 if (response.isSuccessful) {
                     val body = response.body()
@@ -39,7 +39,7 @@ class UserService {
     suspend fun loginUser(credentials: UserLoginRequest): Resource<UserModel> =
         withContext(Dispatchers.IO) {
             try {
-                val response = Api.create(UserApiService::class.java).loginUser(credentials)
+                val response = api.loginUser(credentials)
 
                 if (response.isSuccessful) {
                     val body = response.body()
@@ -49,21 +49,14 @@ class UserService {
                         Resource.Error("Cuerpo sin datos.")
                     }
                 } else {
-                    //mensajes de error
-                    val errors = mutableMapOf<String, String>()
                     val errorMessage = response.errorBody()?.string() ?: "Error desconocido"
                     //validacion de los codigos de estado
-                    val responseCode = response.code()
-                    if (responseCode == 401) {
-                        errors["password"] = "Contraseña invalida"
+                    when (response.code()) {
+                        401 -> return@withContext Resource.ValidationError(mapOf("password" to "Contraseña invalida"))
+                        404 -> return@withContext Resource.ValidationError(mapOf("email" to "Usuario no encontrado"))
+                        else -> return@withContext Resource.Error("Error ${response.code()}: $errorMessage")
                     }
-                    if (responseCode == 404) {
-                        errors["email"] = "Usuario no encontrado"
-                    }
-                    if (errors.isNotEmpty()) {
-                        Resource.ValidationError(errors)
-                    }
-                    Resource.Error("Error ${response.code()}: $errorMessage")
+
                 }
 
             } catch (e: Exception) {

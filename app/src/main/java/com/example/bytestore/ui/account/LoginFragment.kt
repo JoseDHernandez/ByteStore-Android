@@ -33,6 +33,10 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //saltar ingreso
+        binding.skipSignIn.setOnClickListener {
+            findNavController().navigate(R.id.action_global_productsFragment)
+        }
         //ir al registro
         binding.buttonSignUp.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
@@ -49,7 +53,7 @@ class LoginFragment : Fragment() {
                 is Resource.Idle -> Unit
                 is Resource.Loading -> {
                     binding.buttonSignIn.isEnabled = false
-
+                    clearErrors()
                 }
 
                 is Resource.Success -> {
@@ -59,6 +63,7 @@ class LoginFragment : Fragment() {
 
                 is Resource.ValidationError -> {
                     binding.buttonSignIn.isEnabled = true
+                    showErrors(state.errors)
 
                 }
 
@@ -68,6 +73,17 @@ class LoginFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun clearErrors() {
+        binding.inputEmailMessage.text = ""
+        binding.inputPasswordMessage.text = ""
+    }
+
+    private fun showErrors(errors: Map<String, String>) {
+        clearErrors()
+        errors["email"]?.let { binding.inputEmailMessage.text = it }
+        errors["password"]?.let { binding.inputPasswordMessage.text = it }
     }
 
     override fun onDestroyView() {

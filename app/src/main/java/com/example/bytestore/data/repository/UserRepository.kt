@@ -9,12 +9,12 @@ import com.example.bytestore.data.network.user.UserService
 import com.example.bytestore.utils.Resource
 
 class UserRepository(private val context: Context) {
-    private val Api = UserService()
+    private val userService by lazy { UserService() }
     private val prefs = UserPreferences(context) //datastorage
 
     //registro
     suspend fun registerUser(user: UserRegisterRequest): Resource<UserModel> {
-        val response = Api.registerUser(user)
+        val response = userService.registerUser(user)
         //Almacenar en local
         saveUser(response)
         return response
@@ -22,7 +22,8 @@ class UserRepository(private val context: Context) {
 
     //inicio de sesión
     suspend fun loginUser(credentials: UserLoginRequest): Resource<UserModel> {
-        val response = Api.loginUser(credentials)
+        val response = userService.loginUser(credentials)
+
         //obtener los datos almacenados y limpiarlos si es otro usuario
         val currentUser = prefs.getUser()
         if (currentUser["email"] != credentials.email) prefs.clearData()

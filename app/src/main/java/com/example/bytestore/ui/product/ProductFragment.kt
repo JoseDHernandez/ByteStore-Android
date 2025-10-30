@@ -7,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.bytestore.R
+import com.example.bytestore.data.model.product.ProductModel
 import com.example.bytestore.databinding.FragmentProductBinding
 import com.example.bytestore.ui.viewmodel.ProductViewModel
 import com.example.bytestore.utils.Resource
@@ -18,7 +20,7 @@ import java.util.Locale
 
 class ProductFragment : Fragment() {
     //formater
-    val formatter = NumberFormat.getNumberInstance(Locale("es", "CO"))
+    val formatter: NumberFormat = NumberFormat.getNumberInstance(Locale("es", "CO"))
     //argumentos
     private val args: ProductFragmentArgs by navArgs()
     //unidades a comprar
@@ -26,8 +28,10 @@ class ProductFragment : Fragment() {
     private val maxUnits = 1
     private var _binding: FragmentProductBinding? = null
     private val binding get() = _binding!!
-
     private val viewModel: ProductViewModel by viewModels()
+
+    //datos del producto
+    private lateinit var product: ProductModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +44,9 @@ class ProductFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.topBar.setOnBackClickListener {
+            findNavController().navigate(R.id.action_global_productsFragment)
+        }
         //obtener id del producto
         val productId = args.productId
         viewModel.getProduct(productId)
@@ -63,7 +70,7 @@ class ProductFragment : Fragment() {
             when (state) {
                 is Resource.Success -> {
                     //variables del producto
-                    val product = state.data
+                    product = state.data
                     val url = product.image.replace("localhost", "10.0.2.2")
                     val countScore = 10
                     //asignacion de la información
