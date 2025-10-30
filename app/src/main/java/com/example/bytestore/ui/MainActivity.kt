@@ -49,7 +49,9 @@ class MainActivity : AppCompatActivity() {
             accountViewModel.logout()
         }
         binding.navbar.onItemSelected = { destinationId ->
-            navController.navigate(destinationId)
+            if (navController.currentDestination?.id != destinationId) {
+                navController.navigate(destinationId)
+            }
         }
 
         //observador del estado de logout

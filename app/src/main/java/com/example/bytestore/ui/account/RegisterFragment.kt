@@ -34,6 +34,10 @@ class RegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //saltar registro
+        binding.skipSignIn.setOnClickListener {
+            findNavController().navigate(R.id.action_registerFragment_to_productsFragment)
+        }
         //Barra de regreso
         binding.topBar.setOnBackClickListener {
             findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
