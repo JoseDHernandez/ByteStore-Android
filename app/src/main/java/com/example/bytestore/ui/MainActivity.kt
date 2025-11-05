@@ -89,11 +89,9 @@ class MainActivity : AppCompatActivity() {
             R.id.productFragment, R.id.productsFragment -> {
                 0
             }
-
             R.id.profileFragment -> {
                 3
             }
-
             else -> {
                 0
             }

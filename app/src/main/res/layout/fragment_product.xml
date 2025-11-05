@@ -14,6 +14,7 @@
         app:titleText="Producto" />
 
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
@@ -216,13 +217,14 @@
                 android:layout_marginBottom="50dp"
                 android:text="Añadir al carrito" />
             <!-- Descripción -->
+            <!-- caracteristicas -->
             <TextView
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/lorem_ipsum"
                 android:textSize="16sp" />
-            <!-- caracteristicas -->
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -712,6 +714,16 @@
                 android:fontFamily="@font/inter_bold"
                 android:text="Productos similares"
                 android:textSize="25sp" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/similarProductsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:clipToPadding="false"
+                tools:listitem="@layout/item_product_card"
+                android:orientation="horizontal"
+
+                />
         </LinearLayout>
 
     </ScrollView>

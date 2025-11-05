@@ -18,7 +18,6 @@ import java.util.Locale
 class ProductsListAdapter (private val onItemClick: (ProductModel)->Unit):
     ListAdapter<ProductModel, ProductsListAdapter.ProductViewHolder>(ProductDiff()) {
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val binding =
             ItemProductCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)

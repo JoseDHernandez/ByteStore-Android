@@ -29,6 +29,8 @@ class NavbarView @JvmOverloads constructor(
         binding.itemProducts.setOnClickListener {
            onItemSelected?.invoke(R.id.action_global_productsFragment)
         }
+
+        binding.itemCart
         binding.itemOptions.setOnClickListener {
             val bottomSheet = OptionsBottomSheet()
             bottomSheet.onOptionSelected = { option ->

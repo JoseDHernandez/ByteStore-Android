@@ -22,9 +22,13 @@ class ProductViewModel : ViewModel() {
 
     //producto
     private val _productState = MutableLiveData<Resource<ProductModel>>(Resource.Idle)
-    val productState: LiveData<Resource<ProductModel>> get()=_productState
+    val productState: LiveData<Resource<ProductModel>> get() = _productState
 
+    //productos similares
+    private val _similarProductsState = MutableLiveData<Resource<List<ProductModel>>>(Resource.Idle)
+    val similarProductsState: LiveData<Resource<List<ProductModel>>> get() = _similarProductsState
 
+    //obtener todos los productos
     fun getProducts(
         page: Int? = 1,
         limit: Int? = 16,
@@ -57,16 +61,35 @@ class ProductViewModel : ViewModel() {
         }
     }
 
-    fun getProduct(id:Int){
+    //obtener producto por id
+    fun getProduct(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             _productState.postValue(Resource.Loading)
             try {
                 val response = repository.getProduct(id)
 
-                if(response!=null){
+                if (response != null) {
                     _productState.postValue(Resource.Success(response))
-                }else{
+                } else {
                     _productState.postValue(Resource.Error("Producto no encontrado"))
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _productsState.postValue(Resource.Error("Error: ${e.message}"))
+            }
+        }
+    }
+
+    //obtener productos similares según el id de un producto
+    fun getSimilarProducts(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _similarProductsState.postValue(Resource.Loading)
+            try {
+                val response = repository.getSimilarProducts(id)
+                if (response != null) {
+                    _similarProductsState.postValue(Resource.Success(response))
+                } else {
+                    _similarProductsState.postValue(Resource.Error("Error al obtener productos similares"))
                 }
             } catch (e: Exception) {
                 e.printStackTrace()

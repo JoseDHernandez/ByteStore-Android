@@ -2,17 +2,19 @@ package com.example.bytestore.ui.product
 
 import android.graphics.Paint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.bytestore.R
 import com.example.bytestore.data.model.product.ProductModel
 import com.example.bytestore.databinding.FragmentProductBinding
+import com.example.bytestore.ui.components.HorizontalSpaceItemDecoration
 import com.example.bytestore.ui.viewmodel.ProductViewModel
 import com.example.bytestore.utils.Resource
 import java.text.NumberFormat
@@ -21,8 +23,10 @@ import java.util.Locale
 class ProductFragment : Fragment() {
     //formater
     val formatter: NumberFormat = NumberFormat.getNumberInstance(Locale("es", "CO"))
+
     //argumentos
     private val args: ProductFragmentArgs by navArgs()
+
     //unidades a comprar
     private var buyUnits = 0
     private val maxUnits = 1
@@ -32,6 +36,12 @@ class ProductFragment : Fragment() {
 
     //datos del producto
     private lateinit var product: ProductModel
+
+    // adapter de productos similares
+    val productsAdapter = ProductsListAdapter { product ->
+        //consultar el producto seleccionado
+        getAllData(product.id)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,11 +55,10 @@ class ProductFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.topBar.setOnBackClickListener {
-            findNavController().navigate(R.id.action_global_productsFragment)
+            findNavController().navigateUp()
         }
-        //obtener id del producto
-        val productId = args.productId
-        viewModel.getProduct(productId)
+        //obtener id del producto de los argumentos/parametros
+        getAllData(args.productId)
         //pintar datos
         setProductLiveData()
 
@@ -60,10 +69,36 @@ class ProductFragment : Fragment() {
         binding.buttonAddCart.setOnClickListener {
             //TODO: logica del carrito
         }
+
+        //productos similares
+        binding.similarProductsRecyclerView.apply {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = productsAdapter
+        }
+        //espaciado (reautilizado del grid de todos los productos)
+        binding.similarProductsRecyclerView.addItemDecoration(
+            HorizontalSpaceItemDecoration(
+                resources.getDimensionPixelSize(R.dimen.grid_spacing)
+            )
+        )
+        setSimilarProductsLiveData()
     }
-    private fun shopUnits(){
+
+    private fun shopUnits() {
 
     }
+
+    //solicitar informacion de producto
+    private fun getAllData(id: Int) {
+        if (id < 0) {
+            findNavController().navigate(R.id.action_productFragment_to_productsFragment)
+        }
+        viewModel.getProduct(id)
+        viewModel.getSimilarProducts(id)
+        binding.scrollView.smoothScrollTo(0,0)
+    }
+
     //Datos del producto
     private fun setProductLiveData() {
         viewModel.productState.observe(viewLifecycleOwner) { state ->
@@ -84,7 +119,8 @@ class ProductFragment : Fragment() {
                     binding.price.text = "$${formatter.format(product.price)}"
                     binding.discountPrice.text =
                         "$${formatter.format(product.price - (product.price * product.discount) / 100)}"
-                    binding.discountPrice.paintFlags = binding.discountPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                    binding.discountPrice.paintFlags =
+                        binding.discountPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                     binding.discount.text = "-${product.discount}%"
                     binding.score.rating = product.qualification
                     //TODO: Pendite obtener cantidad de reseñas
@@ -125,6 +161,24 @@ class ProductFragment : Fragment() {
                 is Resource.ValidationError -> Unit
                 is Resource.Error -> Unit
             }
+        }
+    }
+
+    //Productos similares
+    private fun setSimilarProductsLiveData() {
+        viewModel.similarProductsState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is Resource.Idle -> Unit
+                is Resource.Error -> Unit
+                is Resource.Loading -> Unit
+                is Resource.Success -> {
+                    productsAdapter.submitList(state.data)
+
+                }
+
+                is Resource.ValidationError -> Unit
+            }
+
         }
     }
 

@@ -107,6 +107,9 @@
         android:name="com.example.bytestore.ui.product.ProductFragment"
         android:label="Product"
         tools:layout="@layout/fragment_product">
+        <action
+            android:id="@+id/action_productFragment_to_productsFragment"
+            app:destination="@id/productsFragment"/>
         <argument
             android:name="productId"
             app:argType="integer" />
@@ -125,5 +128,6 @@
     <action
         android:id="@+id/action_global_profileFragment"
         app:destination="@id/profileFragment" />
+
 
 </navigation>

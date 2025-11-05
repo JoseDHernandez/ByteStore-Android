@@ -51,4 +51,14 @@ class ProductService {
             null
         }
     }
+    //obtener productos similares
+    suspend fun getSimilarProducts(id:Int): List<ProductModel>? = withContext(Dispatchers.IO){
+        try {
+            val response: Response<List<ProductModel>> = api.getSimilarProducts(id)
+            if (response.isSuccessful) response.body() else null
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
 }

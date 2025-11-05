@@ -7,7 +7,7 @@ import com.example.bytestore.data.model.product.ProductProvider
 import com.example.bytestore.data.network.product.ProductService
 
 class ProductRepository {
-    private val productService by lazy {ProductService()  }  //Obtengo el servicio de productos
+    private val productService by lazy { ProductService() }  //Obtengo el servicio de productos
 
     //obtener productos
     suspend fun getProducts(
@@ -52,6 +52,13 @@ class ProductRepository {
         if (cachedProduct != null) return cachedProduct
         //petición
         val response: ProductModel? = productService.getProduct(id.toString())
+        return response
+    }
+
+    //obtener productos similares
+    suspend fun getSimilarProducts(id: Int): List<ProductModel>? {
+        //TODO: pendiente cache
+        val response: List<ProductModel>? = productService.getSimilarProducts(id)
         return response
     }
 }
