@@ -10,7 +10,7 @@ import com.example.bytestore.R
 import com.example.bytestore.databinding.FragmentProfileBinding
 import com.example.bytestore.ui.ProtectedFragment
 import com.example.bytestore.ui.viewmodel.AppViewModelFactory
-import com.example.bytestore.ui.viewmodel.userViewModel.AccountViewModel
+import com.example.bytestore.ui.viewmodel.userViewModels.AccountViewModel
 
 
 class ProfileFragment : ProtectedFragment() {

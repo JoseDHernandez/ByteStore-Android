@@ -2,6 +2,7 @@ package com.example.bytestore.data.network.product
 
 import android.R
 import com.example.bytestore.data.model.product.ListProductsModel
+import com.example.bytestore.data.model.product.ProductFilters
 import com.example.bytestore.data.model.product.ProductModel
 import retrofit2.Response
 import retrofit2.http.GET
@@ -24,4 +25,7 @@ interface ProductApiService {
     //obtener productos similares
     @GET("/products/{id}/similar")
     suspend fun getSimilarProducts(@Path("id")id: Int): Response<List<ProductModel>>
+    //filtros
+    @GET("/products/filters")
+    suspend fun getProductFilters(): Response<ProductFilters>
 }

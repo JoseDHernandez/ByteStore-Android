@@ -13,6 +13,8 @@
 
 
             <item
+                android:width="48dp"
+                android:height="48dp"
                 android:gravity="center"
                 android:drawable="@drawable/ic_check"/>
         </layer-list>

@@ -1,4 +1,4 @@
-package com.example.bytestore.ui.viewmodel.userViewModel
+package com.example.bytestore.ui.viewmodel.userViewModels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

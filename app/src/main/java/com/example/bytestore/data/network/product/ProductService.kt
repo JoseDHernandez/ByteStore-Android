@@ -2,6 +2,7 @@ package com.example.bytestore.data.network.product
 
 import com.example.bytestore.core.ApiClient
 import com.example.bytestore.data.model.product.ListProductsModel
+import com.example.bytestore.data.model.product.ProductFilters
 import com.example.bytestore.data.model.product.ProductModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -55,6 +56,16 @@ class ProductService {
     suspend fun getSimilarProducts(id:Int): List<ProductModel>? = withContext(Dispatchers.IO){
         try {
             val response: Response<List<ProductModel>> = api.getSimilarProducts(id)
+            if (response.isSuccessful) response.body() else null
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+    //obtener filtros
+    suspend fun getProductFilters(): ProductFilters? = withContext(Dispatchers.IO){
+        try {
+            val response: Response<ProductFilters> = api.getProductFilters()
             if (response.isSuccessful) response.body() else null
         } catch (e: Exception) {
             e.printStackTrace()

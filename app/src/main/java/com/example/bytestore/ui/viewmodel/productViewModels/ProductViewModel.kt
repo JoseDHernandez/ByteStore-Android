@@ -1,10 +1,11 @@
-package com.example.bytestore.ui.viewmodel
+package com.example.bytestore.ui.viewmodel.productViewModels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bytestore.data.model.product.ListProductsModel
+import com.example.bytestore.data.model.product.ProductFilters
 import com.example.bytestore.data.model.product.ProductModel
 import com.example.bytestore.data.repository.ProductRepository
 import com.example.bytestore.utils.Resource
@@ -27,6 +28,8 @@ class ProductViewModel : ViewModel() {
     //productos similares
     private val _similarProductsState = MutableLiveData<Resource<List<ProductModel>>>(Resource.Idle)
     val similarProductsState: LiveData<Resource<List<ProductModel>>> get() = _similarProductsState
+
+
 
     //obtener todos los productos
     fun getProducts(
@@ -93,8 +96,9 @@ class ProductViewModel : ViewModel() {
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                _productsState.postValue(Resource.Error("Error: ${e.message}"))
+                _similarProductsState.postValue(Resource.Error("Error: ${e.message}"))
             }
         }
     }
+
 }

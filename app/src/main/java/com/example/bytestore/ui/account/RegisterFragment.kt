@@ -10,8 +10,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.bytestore.R
 import com.example.bytestore.databinding.FragmentRegisterBinding
 import com.example.bytestore.ui.viewmodel.AppViewModelFactory
-import com.example.bytestore.ui.viewmodel.userViewModel.AuthViewModel
-import com.example.bytestore.ui.viewmodel.userViewModel.UserRegisterInput
+import com.example.bytestore.ui.viewmodel.userViewModels.AuthViewModel
+import com.example.bytestore.ui.viewmodel.userViewModels.UserRegisterInput
 import com.example.bytestore.utils.Resource
 import com.google.android.material.snackbar.Snackbar
 

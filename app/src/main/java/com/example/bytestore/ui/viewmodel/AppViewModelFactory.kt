@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.bytestore.data.repository.UserRepository
-import com.example.bytestore.ui.viewmodel.userViewModel.AccountViewModel
-import com.example.bytestore.ui.viewmodel.userViewModel.AuthViewModel
+import com.example.bytestore.ui.viewmodel.userViewModels.AccountViewModel
+import com.example.bytestore.ui.viewmodel.userViewModels.AuthViewModel
 
 class AppViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
     //se sobreescribe el viewmodel (modelClass)

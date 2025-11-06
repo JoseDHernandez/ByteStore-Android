@@ -11,7 +11,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.example.bytestore.R
 import com.example.bytestore.databinding.ActivityMainBinding
 import com.example.bytestore.ui.viewmodel.AppViewModelFactory
-import com.example.bytestore.ui.viewmodel.userViewModel.AccountViewModel
+import com.example.bytestore.ui.viewmodel.userViewModels.AccountViewModel
 import com.example.bytestore.utils.Resource
 
 class MainActivity : AppCompatActivity() {

@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.bytestore.R
 import com.example.bytestore.databinding.FragmentLoginBinding
 import com.example.bytestore.ui.viewmodel.AppViewModelFactory
-import com.example.bytestore.ui.viewmodel.userViewModel.AuthViewModel
+import com.example.bytestore.ui.viewmodel.userViewModels.AuthViewModel
 import com.example.bytestore.utils.Resource
 
 

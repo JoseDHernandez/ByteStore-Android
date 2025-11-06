@@ -15,7 +15,7 @@ import com.example.bytestore.R
 import com.example.bytestore.data.model.product.ProductModel
 import com.example.bytestore.databinding.FragmentProductBinding
 import com.example.bytestore.ui.components.HorizontalSpaceItemDecoration
-import com.example.bytestore.ui.viewmodel.ProductViewModel
+import com.example.bytestore.ui.viewmodel.productViewModels.ProductViewModel
 import com.example.bytestore.utils.Resource
 import java.text.NumberFormat
 import java.util.Locale

@@ -52,3 +52,13 @@ data class DisplayModel(
     val graphics: String,
     val brand: String
 )
+
+data class ProductFilters(
+    val brands: List<ProductFilterItem>,
+    val processors: List<ProductFilterItem>,
+    val displays: List<ProductFilterItem>
+)
+
+data class ProductFilterItem(
+    val name: String
+)

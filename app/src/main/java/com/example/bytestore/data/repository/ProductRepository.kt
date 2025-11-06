@@ -2,6 +2,7 @@ package com.example.bytestore.data.repository
 
 import android.util.Log
 import com.example.bytestore.data.model.product.ListProductsModel
+import com.example.bytestore.data.model.product.ProductFilters
 import com.example.bytestore.data.model.product.ProductModel
 import com.example.bytestore.data.model.product.ProductProvider
 import com.example.bytestore.data.network.product.ProductService
@@ -59,6 +60,12 @@ class ProductRepository {
     suspend fun getSimilarProducts(id: Int): List<ProductModel>? {
         //TODO: pendiente cache
         val response: List<ProductModel>? = productService.getSimilarProducts(id)
+        return response
+    }
+    //obtener filtros
+    suspend fun getProductFilters(): ProductFilters?{
+        //TODO: pendiente cache
+        val response: ProductFilters?= productService.getProductFilters()
         return response
     }
 }
