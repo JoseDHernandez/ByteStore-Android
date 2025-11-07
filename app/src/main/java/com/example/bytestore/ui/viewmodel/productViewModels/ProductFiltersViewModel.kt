@@ -27,6 +27,15 @@ class ProductFiltersViewModel : ViewModel() {
     private val _selectedDisplays = MutableLiveData<Set<String>>(emptySet())
     val selectedDisplays: LiveData<Set<String>> = _selectedDisplays
 
+    private val _selectedOrder = MutableLiveData<String>("Ordernar por")
+    val selectedOrder: LiveData<String> = _selectedOrder
+    //Opciones de filtros
+    val orderOptions = listOf(
+        "Ordernar por",
+        "Relevancia",
+        "Precio: menor a mayor",
+        "Precio: mayor a menor"
+    )
     //obtener filtros
     fun getProductFilters() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -74,6 +83,25 @@ class ProductFiltersViewModel : ViewModel() {
         _selectedBrands.value = emptySet()
         _selectedProcessors.value = emptySet()
         _selectedDisplays.value = emptySet()
+        _selectedOrder.value= "Ordernar por"
     }
 
+    //seccion del orden
+    fun setSelectedOrder(order: String) {
+        _selectedOrder.value = order
+    }
+
+    //pasar selección (string) a los parametros de la API
+    fun getSelectedOrder(): Map<String, String> {
+       val order = _selectedOrder.value
+        if (!order.isNullOrEmpty() && orderOptions.contains(order) && orderOptions.indexOf(order) != 0) {
+            val sortType = if (order == "Relevancia") "order_review" else "order_price"
+            val orderType = if (order.contains("menor a mayor")) "ASC" else "DESC"
+            return mapOf(
+                "sort" to sortType,
+                "order" to orderType
+            )
+        }
+        return emptyMap()
+    }
 }

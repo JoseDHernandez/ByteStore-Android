@@ -1,5 +1,6 @@
 package com.example.bytestore.ui.viewmodel.productViewModels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,11 +31,9 @@ class ProductViewModel : ViewModel() {
     val similarProductsState: LiveData<Resource<List<ProductModel>>> get() = _similarProductsState
 
 
-
     //obtener todos los productos
     fun getProducts(
         page: Int? = 1,
-        limit: Int? = 16,
         search: String? = null,
         sort: String? = null,
         order: String? = null
@@ -43,8 +42,15 @@ class ProductViewModel : ViewModel() {
             //Empieza la carga
             _productsState.postValue(Resource.Loading)
             try {
+                //validar buqueda
+                val query = if (search != null) {
+                    val q = search.trim()
+                    val searchRegex = Regex("^[0-9A-Za-zÁÉÍÓÚáéíóúÑñ,]{2,300}$")
+                    if (searchRegex.matches(q)) q else null
+                } else null
+                Log.d("ProductViewModel", "Page: $page, Sort: $sort, Order: $order.\nQuery: $query")
                 //petición
-                val response = repository.getProducts(page, limit, search, sort, order)
+                val response = repository.getProducts(page, 16, query, sort, order)
                 //retorno de los datos
                 if (response != null) {
                     if (response.data.isEmpty()) {

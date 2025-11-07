@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.activityViewModels
 import com.example.bytestore.R
@@ -16,7 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class FiltersBottomSheet(
-    private val onApply: (selectedBrands: List<String>, selectedProcessors: List<String>, selectedDisplays: List<String>, selectedOrder: String) -> Unit
+    private val onApply: (selectedFilters: List<String>, selectedOrder: Map<String,String>) -> Unit
 ) : BottomSheetDialogFragment() {
     private var _binding: ProductFiltersBottomSheetBinding? = null
     private val binding get() = _binding!!
@@ -51,12 +52,14 @@ class FiltersBottomSheet(
         }
         //aplicar filtros
         binding.appltFilters.setOnClickListener {
+            val selectedFilters = listOfNotNull(
+                viewModel.selectedBrands.value?.toList(),
+               viewModel.selectedProcessors.value?.toList(),
+                viewModel.selectedDisplays.value?.toList()
+            ).flatten()
             onApply(
-                viewModel.selectedBrands.value?.toList() ?: emptyList(),
-                viewModel.selectedProcessors.value?.toList() ?: emptyList(),
-                viewModel.selectedDisplays.value?.toList() ?: emptyList(),
-                //TODO: pendiente pasar el tipo de ordenamiento a viewmodel
-                binding.orderSpinner.selectedItem.toString() //tipo de ordenamiento seleccionado
+                selectedFilters,
+                viewModel.getSelectedOrder()
             )
             dismiss()
         }
@@ -68,25 +71,34 @@ class FiltersBottomSheet(
     }
 
     private fun setSpinnerData() {
-        //opciones del spinner
-        val orderOptions = listOf(
-            "Ordernar por",
-            "Relevancia",
-            "Precio: menor a mayor",
-            "Precio: mayor a menor"
-        )
-
         //asignar datos y estilos al spinner
         val spinnerAdapter = ArrayAdapter(
             requireContext(),
             R.layout.spinner_item, //estilo del item
-            orderOptions
+            viewModel.orderOptions
         ).apply {
             setDropDownViewResource(R.layout.spinner_dropdown_item) //estilo del spinner
         }
         binding.orderSpinner.adapter = spinnerAdapter
-    }
+        //mantener seleccion
+        binding.orderSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                val selected = parent?.getItemAtPosition(position).toString()
+                viewModel.setSelectedOrder(selected)
+            }
 
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+        }
+        viewModel.selectedOrder.observe(viewLifecycleOwner) { order ->
+            val position = spinnerAdapter.getPosition(order)
+            if(position>=0) binding.orderSpinner.setSelection(position)
+        }
+    }
     private fun setLiveData() {
         viewModel.productFiltersState.observe(viewLifecycleOwner) { state ->
             if (state is Resource.Success) {
@@ -124,6 +136,7 @@ class FiltersBottomSheet(
                 viewModel.selectedDisplays.observe(viewLifecycleOwner) {
                     displaysAdapter.setSelectedItems(it)
                 }
+
             }
         }
     }

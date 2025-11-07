@@ -1,10 +1,23 @@
 package com.example.bytestore.ui.product
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.PorterDuff
 import android.os.Bundle
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -23,7 +36,6 @@ class ProductsFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: ProductViewModel by viewModels()
 
-
     //Paginación
     private var currentPage = 1;
     private var hasNextPage = true;
@@ -31,6 +43,27 @@ class ProductsFragment : Fragment() {
     private var isLoading = false;
     private lateinit var productAdapter: ProductsListAdapter
 
+    //Variables de busuqeda
+    private var query: String? = null
+    private var filtersQuery: String? = null
+    private var orderQuery: Map<String, String> = emptyMap()
+
+    //busqueda de voz
+    private lateinit var speechRecognizer: SpeechRecognizer
+
+    private var isListening = false //estado de la escucha (SpeechRecognizer)
+
+    //permisos de microfono
+    private val requestAudioPermission = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            searchSpeech()
+        } else {
+            Toast.makeText(requireContext(), "Permiso de micrófono denegado", Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,7 +76,6 @@ class ProductsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         //boton de regreso
         binding.topBar.setOnBackClickListener {
             findNavController().navigateUp()
@@ -52,6 +84,187 @@ class ProductsFragment : Fragment() {
         binding.filters.setOnClickListener {
             showFilters()
         }
+        //congifurar datos a la UI
+        setAdapterAndRecyclerView()
+
+        //validar permiso al microfono
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.RECORD_AUDIO
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            searchSpeech()
+        } else {
+            //solicitar permiso
+            requestAudioPermission.launch(Manifest.permission.RECORD_AUDIO)
+        }
+        //logica del boton de busqueda
+        searchButtonLogic()
+    }
+
+    //busqueda por voz
+    @SuppressLint("ClickableViewAccessibility")
+    private fun searchSpeech() {
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(requireContext())
+        //Configuración
+        val speechIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            )
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, "es")
+            putExtra(RecognizerIntent.EXTRA_PROMPT, "Hablar ahora")
+            putExtra(RecognizerIntent.EXTRA_MAX_RESULTS,3)// 3 coincidencias
+        }
+        //listener
+        speechRecognizer.setRecognitionListener(object : android.speech.RecognitionListener {
+            //Resultado de analisis de voz
+            override fun onResults(results: Bundle?) {
+                val spokenText = results
+                    ?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                    ?.firstOrNull()
+                    ?.lowercase()
+                    ?.trim()
+                    ?.replace(Regex("[^0-9a-záéíóúñ\\s]"), "")
+                    ?: ""
+                //filtrado de texto
+                val filterSpokenText = spokenText.split(Regex("\\s+"))
+                    .filter { it.length > 1 } //eliminar caracteres solos
+                    .filter { it.isNotBlank() } //eliminar vacios
+                    .distinct() // eliminar palabras repetidas
+                    .joinToString(" ")
+                //consumir texto filtrado
+                binding.searchInput.setText(filterSpokenText)
+                performSearch(filterSpokenText)
+                stopListeningSafely()
+                //ocultar menu
+                binding.speechOptions.visibility = View.GONE
+            }
+
+            //error de voz
+            override fun onError(error: Int) {
+                when (error) {
+                    SpeechRecognizer.ERROR_NO_MATCH,
+                    SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> {
+                        Toast.makeText(requireContext(), "No se detectó voz, intenta de nuevo", Toast.LENGTH_SHORT).show()
+                    }
+                    else -> {
+                        Toast.makeText(requireContext(), "Error al reconocer voz ($error)", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                stopListeningSafely()
+            }
+
+            //otros metodos del RecognitionListener
+            override fun onReadyForSpeech(params: Bundle?) {}
+            override fun onBeginningOfSpeech() {}
+            override fun onRmsChanged(rmsdB: Float) {}
+            override fun onBufferReceived(buffer: ByteArray?) {}
+            override fun onEndOfSpeech() {}
+            override fun onPartialResults(partialResults: Bundle?) {}
+            override fun onEvent(eventType: Int, params: Bundle?) {}
+        })
+        //mostrar menu de hablar
+        binding.voiceButton.setOnClickListener {
+            binding.speechOptions.visibility = View.VISIBLE
+        }
+        //boton de hablar
+        binding.speechTextRec.setOnTouchListener { v,event ->
+            when(event.action){
+                //al mantener presionado
+                MotionEvent.ACTION_DOWN -> {
+                    if (!isListening) {
+                        isListening = true
+                        //cambiar boton
+                        binding.speechTextRec.setBackgroundResource(R.drawable.btn_green_outline_selector)
+                        binding.speechTextRec.setColorFilter(
+                            ContextCompat.getColor(requireContext(), R.color.dark_green),
+                            PorterDuff.Mode.SRC_IN
+                        )
+                        //escuchar
+                        speechRecognizer.startListening(speechIntent)
+                        Toast.makeText(requireContext(), "Escuchando...", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                //al levantar o cancelar
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL-> {
+                    v.performClick()
+                    if(isListening){
+                        stopListeningSafely()
+                    }
+                }
+            }
+            true
+        }
+        //cancelar y ocultar menu de hablar
+        binding.speechTextClose.setOnClickListener {
+            binding.speechOptions.visibility = View.GONE
+            stopListeningSafely()
+        }
+    }
+    //detener escucha
+    private fun stopListeningSafely() {
+        if (isListening) {
+            try {
+                speechRecognizer.stopListening()
+            } catch (_: Exception) {}
+            finally {
+                isListening = false
+                //restaurar boton
+                binding.speechTextRec.setBackgroundResource(R.drawable.btn_green_filled_selector)
+                binding.speechTextRec.setColorFilter(
+                    ContextCompat.getColor(requireContext(), R.color.white),
+                    PorterDuff.Mode.SRC_IN
+                )
+            }
+        }
+    }
+    //logica del boton de buscar
+    private fun searchButtonLogic() {
+        //detectar boton enter
+        binding.searchInput.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+                (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)
+            ) {
+                val query = binding.searchInput.text.toString().trim()
+
+                if (query.length in 2..300) {
+                    performSearch(query)
+                } else {
+                    Toast.makeText(requireContext(), "Busqueda vacia", Toast.LENGTH_SHORT).show()
+                }
+                true
+            } else {
+                false
+            }
+        }
+        //boton busqueda
+        binding.searchButton.setOnClickListener {
+            performSearch(binding.searchInput.text.toString().trim())
+        }
+    }
+
+    private fun performSearch(search: String) {
+        query = null
+        val searchText = search.trim()
+        val searchRegex = Regex("^[0-9A-Za-zÁÉÍÓÚáéíóúÑñ\\s]{2,300}$")
+        if (searchRegex.matches(searchText)) {
+            //establcer valores
+            query = searchText
+            search()
+            //subir scroll
+            binding.productsRecyclerView.scrollTo(0, 0)
+        } else {
+            Toast.makeText(
+                requireContext(),
+                "Terminos de busqueda invalidos",
+                Toast.LENGTH_SHORT
+            ).show()
+            viewModel.getProducts(1, null)
+        }
+    }
+
+    private fun setAdapterAndRecyclerView() {
         //Listadapater de prodcutos
         productAdapter = ProductsListAdapter { product ->
             //Callback del onClick
@@ -79,16 +292,9 @@ class ProductsFragment : Fragment() {
         observeLiveData()
         //solicitar productos
         viewModel.getProducts()
-        //boton de audio
-        binding.voiceButton.setOnClickListener {
-            //TODO: Pendiente busuqeda por voz
-        }
-        //boton busqueda
-        binding.searchButton.setOnClickListener {
-            search()
-        }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun observeLiveData() {
         viewModel.productsState.observe(viewLifecycleOwner) { state ->
             when (state) {
@@ -173,22 +379,29 @@ class ProductsFragment : Fragment() {
     //filtros
     private fun showFilters() {
         val sheet =
-            FiltersBottomSheet { selectedBrands, selectedProcessors, selectedDisplays, selectedOrder ->
+            FiltersBottomSheet { selectedFilters, selectedOrder ->
                 //busuqeda con filtros
-                Log.d(
-                    "ProductsFragment",
-                    "Brands: $selectedBrands, Processors: $selectedProcessors, Displays: $selectedDisplays, Order: $selectedOrder"
-                )
-                //TODO: Pendiente desarrollar la logica de la busuqeda con filtros
+                filtersQuery = selectedFilters.joinToString(" ")
+                orderQuery = selectedOrder
+                search()
             }
         sheet.show(parentFragmentManager, "FiltersBottomSheet")
     }
+
     //aplicar filtros/busqueda
-    private fun search(){
-        //TODO: pendiente logica de busuqeda con filtros
+    private fun search() {
+        //unir texto de busqueda con filtros
+        val fullQuery = ((query ?: "") + (filtersQuery ?: "")).lowercase().split("\\s+".toRegex())
+            .filter { it.isNotBlank() }.distinct().joinToString(",")
+        currentPage = 1
+        viewModel.getProducts(currentPage, fullQuery, orderQuery["sort"], orderQuery["order"])
     }
+
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
+        if (::speechRecognizer.isInitialized) {
+            speechRecognizer.destroy()
+        }
     }
 }
