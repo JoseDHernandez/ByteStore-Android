@@ -11,6 +11,7 @@ import com.example.bytestore.databinding.FragmentProfileBinding
 import com.example.bytestore.ui.ProtectedFragment
 import com.example.bytestore.ui.viewmodel.AppViewModelFactory
 import com.example.bytestore.ui.viewmodel.userViewModels.AccountViewModel
+import com.example.bytestore.utils.topBar
 
 
 class ProfileFragment : ProtectedFragment() {
@@ -32,10 +33,7 @@ class ProfileFragment : ProtectedFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //boton de regreso
-        binding.topBar.setOnBackClickListener {
-            findNavController().navigateUp()
-        }
+        topBar().setTitle("Cuenta")
         //logica
         //viewModel.getUserData()
         viewModel.userData.observe(viewLifecycleOwner) { user ->

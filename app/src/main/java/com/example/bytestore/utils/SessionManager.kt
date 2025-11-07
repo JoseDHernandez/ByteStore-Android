@@ -3,10 +3,26 @@ package com.example.bytestore.utils
 import android.content.Context
 import com.example.bytestore.data.model.user.UserModel
 import com.example.bytestore.data.repository.UserRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 
 class SessionManager(private val context: Context) {
     private val repository = UserRepository(context)
+
+    @Volatile
+    private var cachedToken: String? = null
+
+    init {
+        // Cache del token en memoria
+        CoroutineScope(Dispatchers.IO).launch {
+            userTokenFlow.collect { token ->
+                cachedToken = token
+            }
+        }
+    }
 
     //validar el acceso de la cuenta
     suspend fun checkAccess(requiredRole: String? = null): Boolean {
@@ -20,26 +36,16 @@ class SessionManager(private val context: Context) {
     }
 
     //obtener usuario
-    suspend fun getCurrentUser(): UserModel? {
-        return repository.getUserData()
-    }
+    suspend fun getCurrentUser(): UserModel? = repository.getUserData()
 
-    //cerrar sesion
-    suspend fun logout(): Boolean {
-        return try {
-            repository.logout()
-            true
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
-        }
-    }
     //obtener token
     suspend fun getToken(): String? {
-        return repository.getUserToken()
+        return cachedToken ?: repository.getUserToken().also {
+            cachedToken = it
+        }
     }
     //validar estado de la sesión
-    suspend fun isLoggedIn(): Boolean {
-        return !repository.getUserToken().isNullOrEmpty()
-    }
+    val userTokenFlow: Flow<String?> = repository.userTokenFlow
+    val isLoggedInFlow: Flow<Boolean> = repository.isLoggedInFlow
+
 }

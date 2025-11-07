@@ -1,10 +1,15 @@
 package com.example.bytestore.ui.components
 
+import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
+import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.setViewTreeLifecycleOwner
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.example.bytestore.R
 import com.example.bytestore.databinding.ViewTopBarBinding
@@ -19,13 +24,13 @@ class TopBarView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
     private val binding = ViewTopBarBinding.inflate(LayoutInflater.from(context), this, true)
-    private val sessionManager = SessionManager(context)
+    private var customBackAction: (() -> Unit)? = null
+    private var navController: NavController? = null
 
     init {
-        val attributes = context.obtainStyledAttributes(attrs, R.styleable.TopBarView)
-        binding.viewTitle.text = attributes.getString(R.styleable.TopBarView_titleText) ?: "Volver"
-        attributes.recycle()
-        checkLoginStatus()
+        binding.buttonBack.setOnClickListener {
+            customBackAction?.invoke() ?: runDefaultBackAction()
+        }
     }
 
     //Establer titulo
@@ -33,24 +38,34 @@ class TopBarView @JvmOverloads constructor(
         binding.viewTitle.text = title
     }
 
-    //ocultar iniciar sesión
-    private fun checkLoginStatus() {
-        CoroutineScope(Dispatchers.Main).launch {
-            val loggedIn = sessionManager.isLoggedIn()
-            if (loggedIn) {
-                binding.buttonAccount.visibility = View.GONE
-            } else {
-                binding.buttonAccount.visibility = View.VISIBLE
-                binding.buttonAccount.setOnClickListener {
-                    findNavController().navigate(R.id.action_global_loginFragment)
-                }
-            }
-        }
+    //ocultar boton de login
+    fun hideLoginButton() {
+        binding.buttonAccount.visibility = View.GONE
+    }
+
+    //callback de login
+    fun showLoginButton(onClick: () -> Unit) {
+        binding.buttonAccount.visibility = View.VISIBLE
+        binding.buttonAccount.setOnClickListener { onClick() }
     }
 
     //Boton de regreso
-    fun setOnBackClickListener(action: () -> Unit) {
-        binding.buttonBack.setOnClickListener { action() }
+    fun setOnBackClickListener(action: (() -> Unit)?) {
+        customBackAction = action
+    }
+
+    fun setNavController(controller: NavController) {
+        navController = controller
+    }
+
+    private fun runDefaultBackAction() {
+        navController?.let {
+            if (!it.navigateUp()) {
+                (context as? Activity)?.onBackPressed()
+            }
+        } ?: run {
+            (context as? Activity)?.onBackPressed()
+        }
     }
 
 }

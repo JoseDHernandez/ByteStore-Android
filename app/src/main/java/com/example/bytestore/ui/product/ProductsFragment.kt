@@ -29,6 +29,7 @@ import com.example.bytestore.ui.components.GridSpacingItemDecorator
 import com.example.bytestore.ui.product.components.FiltersBottomSheet
 import com.example.bytestore.ui.viewmodel.productViewModels.ProductViewModel
 import com.example.bytestore.utils.Resource
+import com.example.bytestore.utils.topBar
 
 
 class ProductsFragment : Fragment() {
@@ -76,10 +77,7 @@ class ProductsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //boton de regreso
-        binding.topBar.setOnBackClickListener {
-            findNavController().navigateUp()
-        }
+        topBar().setTitle("Productos")
         //filtros
         binding.filters.setOnClickListener {
             showFilters()

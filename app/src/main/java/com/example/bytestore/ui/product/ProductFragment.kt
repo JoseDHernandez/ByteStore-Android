@@ -17,6 +17,7 @@ import com.example.bytestore.databinding.FragmentProductBinding
 import com.example.bytestore.ui.components.HorizontalSpaceItemDecoration
 import com.example.bytestore.ui.viewmodel.productViewModels.ProductViewModel
 import com.example.bytestore.utils.Resource
+import com.example.bytestore.utils.topBar
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -54,9 +55,7 @@ class ProductFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.topBar.setOnBackClickListener {
-            findNavController().navigateUp()
-        }
+        topBar().setTitle("Producto")
         //obtener id del producto de los argumentos/parametros
         getAllData(args.productId)
         //pintar datos

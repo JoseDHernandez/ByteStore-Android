@@ -12,6 +12,7 @@ import com.example.bytestore.R
 import com.example.bytestore.databinding.FragmentSplashBinding
 import com.example.bytestore.utils.SessionManager
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 
@@ -39,16 +40,16 @@ class SplashFragment : Fragment() {
 
     //validar cuenta local
     private suspend fun checkSession() {
-        val isLoggedIt = sessionManager.isLoggedIn()
         val navController = findNavController()
         //si exite el splash
         if (!isAdded || _binding == null) return
-        if (isLoggedIt) {
+        val loggedIn = sessionManager.isLoggedInFlow.first()
+        if (loggedIn) {
             navController.navigate(R.id.action_splashFragment_to_productsFragment)
         } else {
             navController.navigate(R.id.action_splashFragment_to_mainFragment)
-
         }
+
     }
 
     override fun onDestroyView() {

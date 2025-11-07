@@ -1,10 +1,12 @@
 package com.example.bytestore.ui.components.navbar
 
 import android.content.Context
+import android.graphics.PorterDuff
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import com.example.bytestore.R
 import com.example.bytestore.databinding.ViewBottomNavBinding
@@ -16,18 +18,14 @@ class NavbarView @JvmOverloads constructor(
 ) : FrameLayout(context, attrs, defStyleAttr) {
     var onItemSelected: ((Int) -> Unit)? = null
     var onLogoutSelected: (() -> Unit)? = null
+
     private val binding = ViewBottomNavBinding.inflate(LayoutInflater.from(context), this, true)
     private var activeIndex = 0
 
     init {
-        //obtener atributos
-        val attributes = context.obtainStyledAttributes(attrs, R.styleable.BottonNav)
-        activeIndex = attributes.getInteger(R.styleable.BottonNav_actualFragment, 0)
-        //establecer item activo
-        setActiveItem(activeIndex)
         //listeners
         binding.itemProducts.setOnClickListener {
-           onItemSelected?.invoke(R.id.action_global_productsFragment)
+            onItemSelected?.invoke(R.id.action_global_productsFragment)
         }
 
         binding.itemCart
@@ -43,10 +41,26 @@ class NavbarView @JvmOverloads constructor(
             bottomSheet.show((context as AppCompatActivity).supportFragmentManager, "optionsSheet")
         }
         //TODO: pendiente de los otros fragments
-        attributes.recycle()
     }
 
-
+    //habilita o deshabilita el boton de opciones
+    fun disableOptionsButton(state: Boolean) {
+        binding.itemOptions.isEnabled = state
+        if (!state) {
+            binding.itemOptionsIcon.setColorFilter(
+                ContextCompat.getColor(context, R.color.gray),
+                PorterDuff.Mode.SRC_IN
+            )
+            binding.itemOptionsLabel.setTextColor(resources.getColor(R.color.gray, null))
+        } else {
+            binding.itemOptionsIcon.setColorFilter(
+                ContextCompat.getColor(context, R.color.black),
+                PorterDuff.Mode.SRC_IN
+            )
+            binding.itemOptionsLabel.setTextColor(resources.getColor(R.color.black, null))
+        }
+    }
+    //indica cual item esta activo (gestionar desde el MainActivity)
     fun setActiveItem(index: Int) {
         if (index >= 0 && index <= 3) {
             val items = listOf(
@@ -58,11 +72,10 @@ class NavbarView @JvmOverloads constructor(
             items.forEach { item ->
                 item.visibility = INVISIBLE
             }
-            val i = if (index <= items.size) index else 0
-            items.getOrNull(i)?.apply {
+            items.getOrNull(index)?.apply {
                 visibility = VISIBLE
             }
-            activeIndex = i
+            activeIndex = index
         }
     }
 

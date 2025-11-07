@@ -7,6 +7,7 @@ import com.example.bytestore.data.model.user.UserModel
 import com.example.bytestore.data.model.user.UserRegisterRequest
 import com.example.bytestore.data.network.user.UserService
 import com.example.bytestore.utils.Resource
+import kotlinx.coroutines.flow.Flow
 
 class UserRepository(private val context: Context) {
     private val userService by lazy { UserService() }
@@ -78,4 +79,15 @@ class UserRepository(private val context: Context) {
 
     //cerrar sesión
     suspend fun logout() = prefs.clearData()
+
+    suspend fun isLoggedIn(): Boolean {
+        return !getUserToken().isNullOrEmpty()
+    }
+
+    //Flows
+    val userTokenFlow: Flow<String?> = prefs.userTokenFlow
+    val isLoggedInFlow: Flow<Boolean> = prefs.isUserLoggedInFlow
+
+    //obtener rol
+    suspend fun getUserRole() = prefs.getUserRole()
 }

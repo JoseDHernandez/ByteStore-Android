@@ -26,7 +26,10 @@ class UserService {
                     }
                 } else {
                     val errorMessage = response.errorBody()?.string() ?: "Error desconocido"
-                    Resource.Error("Error ${response.code()}: $errorMessage")
+                    when(response.code()){
+                        409 -> return@withContext Resource.ValidationError(mapOf("email" to "Dirección de correo ya utilizada"))
+                        else -> return@withContext Resource.Error("Error ${response.code()}: $errorMessage")
+                    }
                 }
 
             } catch (e: Exception) {

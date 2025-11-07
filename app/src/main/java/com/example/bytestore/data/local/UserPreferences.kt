@@ -3,6 +3,7 @@ package com.example.bytestore.data.local
 import android.content.Context
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
@@ -18,7 +19,11 @@ class UserPreferences(private val context: Context) {
         private val USER_ADDRESS = stringPreferencesKey("user_address")
         private val USER_TOKEN = stringPreferencesKey("user_token")
     }
+    val userTokenFlow: Flow<String?> = context.dataStore.data
+        .map { prefs -> prefs[USER_TOKEN] }
 
+    val isUserLoggedInFlow: Flow<Boolean> = userTokenFlow
+        .map { !it.isNullOrEmpty() }
     suspend fun saveUserData(
         id: String,
         name: String,
@@ -54,11 +59,6 @@ class UserPreferences(private val context: Context) {
         }.first()
     }
 
-    suspend fun isUserLoggedIn(): Boolean {
-        val token = getToken()
-        return !token.isNullOrEmpty()
-    }
-
     suspend fun getUserRole(): String? {
         val data = getUser()
         return data["role"]
@@ -67,4 +67,5 @@ class UserPreferences(private val context: Context) {
     suspend fun clearData() {
         context.dataStore.edit { it.clear() }
     }
+
 }

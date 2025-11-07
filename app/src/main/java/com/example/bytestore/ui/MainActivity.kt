@@ -6,6 +6,8 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import com.example.bytestore.R
@@ -13,6 +15,8 @@ import com.example.bytestore.databinding.ActivityMainBinding
 import com.example.bytestore.ui.viewmodel.AppViewModelFactory
 import com.example.bytestore.ui.viewmodel.userViewModels.AccountViewModel
 import com.example.bytestore.utils.Resource
+import com.example.bytestore.utils.SessionManager
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -20,16 +24,30 @@ class MainActivity : AppCompatActivity() {
         AppViewModelFactory(this)
     }
 
+    lateinit var sessionManager: SessionManager
+
+    val topBar get() = binding.topBar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //sessionManager
+        sessionManager = SessionManager(this)
         //Navegación
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 
         val navController = navHostFragment.navController
+        //pasar navcontroler al topBar
+        binding.topBar.setNavController(navController)
+        binding.topBar.setOnBackClickListener {
+            //cerrar app si no hay fragmentos en el stack
+            if (!navController.navigateUp()) {
+                finishAffinity()
+            }
+        }
         navController.addOnDestinationChangedListener { _, destination, _ ->
 
             //mostar navbar
@@ -43,6 +61,14 @@ class MainActivity : AppCompatActivity() {
             }
             //establer icono activo
             setActiveIndex(destination)
+            //mostrar topBar
+            when (destination.id) {
+                R.id.loginFragment,
+                R.id.mainFragment,
+                R.id.splashFragment -> binding.topBar.visibility = View.GONE
+
+                else -> binding.topBar.visibility = View.VISIBLE
+            }
         }
         //eventos de logout y navegación desde BottonNavView
         binding.navbar.onLogoutSelected = {
@@ -53,7 +79,20 @@ class MainActivity : AppCompatActivity() {
                 navController.navigate(destinationId)
             }
         }
-
+        //validar sesion
+        lifecycleScope.launch {
+            sessionManager.isLoggedInFlow.collect { isLogged ->
+                binding.navbar.disableOptionsButton(isLogged)
+                //topBar
+                if (isLogged) {
+                    binding.topBar.hideLoginButton()
+                } else {
+                    binding.topBar.showLoginButton {
+                        navController.navigate(R.id.action_global_loginFragment)
+                    }
+                }
+            }
+        }
         //observador del estado de logout
         accountViewModel.logoutState.observe(this) { state ->
             when (state) {
@@ -89,13 +128,18 @@ class MainActivity : AppCompatActivity() {
             R.id.productFragment, R.id.productsFragment -> {
                 0
             }
+
             R.id.profileFragment -> {
                 3
             }
+
             else -> {
                 0
             }
         }
         binding.navbar.setActiveItem(actualFragment)
     }
+
+    fun Fragment.topBar() = (requireActivity() as MainActivity).topBar
+
 }

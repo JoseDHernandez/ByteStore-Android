@@ -58,7 +58,7 @@ class LoginFragment : Fragment() {
 
                 is Resource.Success -> {
                     binding.buttonSignIn.isEnabled = true
-                    findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
+                    findNavController().navigate(R.id.action_loginFragment_to_productsFragment)
                 }
 
                 is Resource.ValidationError -> {

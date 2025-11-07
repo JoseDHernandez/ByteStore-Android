@@ -9,7 +9,7 @@ class HeaderInterceptor(private val sessionManager: SessionManager) : Intercepto
     override fun intercept(chain: Interceptor.Chain): Response {
         //obtener token
         val token = runBlocking {
-            if (sessionManager.isLoggedIn()) sessionManager.getToken() else null
+            sessionManager.getToken()
         }
         //añadir cabecera a la petición
         val request = chain.request().newBuilder()

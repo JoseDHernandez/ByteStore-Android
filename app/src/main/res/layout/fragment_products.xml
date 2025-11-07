@@ -7,15 +7,6 @@
     android:orientation="vertical"
     tools:context=".ui.product.ProductsFragment">
 
-    <com.example.bytestore.ui.components.TopBarView
-        android:id="@+id/topBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:titleText="Productos" />
-
     <!-- Barra de busqueda -->
     <LinearLayout
         android:id="@+id/inputs"
@@ -27,7 +18,7 @@
         android:paddingBottom="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topBar">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             style="@style/Widget.ByteStore.Input"

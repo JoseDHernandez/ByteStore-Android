@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -13,6 +14,7 @@ import com.example.bytestore.ui.viewmodel.AppViewModelFactory
 import com.example.bytestore.ui.viewmodel.userViewModels.AuthViewModel
 import com.example.bytestore.ui.viewmodel.userViewModels.UserRegisterInput
 import com.example.bytestore.utils.Resource
+import com.example.bytestore.utils.topBar
 import com.google.android.material.snackbar.Snackbar
 
 
@@ -34,13 +36,10 @@ class RegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        topBar().setTitle("Registro")
         //saltar registro
-        binding.skipSignIn.setOnClickListener {
+        topBar().setOnBackClickListener {
             findNavController().navigate(R.id.action_registerFragment_to_productsFragment)
-        }
-        //Barra de regreso
-        binding.topBar.setOnBackClickListener {
-            findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }
         //boton de iniciar sesión
         binding.buttonSignIn.setOnClickListener {
@@ -81,13 +80,8 @@ class RegisterFragment : Fragment() {
                     binding.buttonSingUp.text = "Registrarse"
                     //datos
                     val user = state.data
-                    Snackbar.make(
-                        binding.root,
-                        "Usuario registrado correctamente",
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                    //TODO: pendiente almacenar datos en local y token
-                    println("Usuario registrado: ${user.name}")
+                    Toast.makeText(requireContext(), "!Bienvenido¡", Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.action_registerFragment_to_productsFragment)
                 }
                 //cuando da error
                 is Resource.Error -> {
@@ -117,10 +111,13 @@ class RegisterFragment : Fragment() {
         errors["password"]?.let { binding.inputPasswordMessage.text = it }
         errors["confirmPassword"]?.let { binding.inputPasswordConfirmMessage.text = it }
         errors["address"]?.let { binding.inputAddressMessage.text = it }
+        binding.scrollView.scrollTo(0, 0)
     }
 
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
+        //restaurar el comportamiento de boton de regreso
+        topBar().setOnBackClickListener(null)
     }
 }

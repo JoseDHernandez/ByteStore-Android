@@ -51,11 +51,10 @@
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
         <action
-            android:id="@+id/action_loginFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-        <action
             android:id="@+id/action_loginFragment_to_productsFragment"
-            app:destination="@id/productsFragment" />
+            app:destination="@id/productsFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <!-- Register fragment -->
@@ -65,17 +64,13 @@
         android:label="Register"
         tools:layout="@layout/fragment_register">
         <action
-            android:id="@+id/action_registerFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
-        <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
         <action
             android:id="@+id/action_registerFragment_to_productsFragment"
-            app:destination="@id/productsFragment" />
-        <action
-            android:id="@+id/action_registerFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
+            app:destination="@id/productsFragment"
+            app:popUpTo="@id/registerFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <!-- Profile fragment -->

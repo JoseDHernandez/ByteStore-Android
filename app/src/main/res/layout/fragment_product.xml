@@ -7,12 +7,6 @@
     android:orientation="vertical"
     tools:context=".ui.product.ProductFragment">
 
-    <com.example.bytestore.ui.components.TopBarView
-        android:id="@+id/topBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:titleText="Producto" />
-
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"

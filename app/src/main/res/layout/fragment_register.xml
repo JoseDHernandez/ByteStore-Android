@@ -6,14 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ui.account.RegisterFragment">
-
-    <com.example.bytestore.ui.components.TopBarView
-        android:id="@+id/topBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:titleText="Registro" />
-
     <ScrollView
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
