@@ -32,6 +32,19 @@ class UserRepository(private val context: Context) {
         saveUser(response)
         return response
     }
+    //autenticar por jtw
+    suspend fun authJWT(): Boolean {
+        val response = userService.authJWT()
+        if(response is Resource.Success){
+            saveUser(response)
+            return true
+        }
+         return false
+    }
+
+    //=======================================
+    //        Almacenamiento local
+    //=======================================
 
     //almacenar usuario
     private suspend fun saveUser(response: Resource<UserModel>) {

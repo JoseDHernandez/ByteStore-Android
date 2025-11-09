@@ -15,7 +15,17 @@ class ProductRepository {
         page: Int?, limit: Int?, search: String?, sort: String?, order: String?
     ): ListProductsModel? {
         val cached = ProductProvider.getFetchProducts()
-        //verifico cache y que sea la misma pagina
+        //==============================
+        //      busqueda en local
+        //==============================
+        if(cached !=null && search != null) {
+            val localSearch = ProductProvider.searchProducts(search,order,sort)
+            //si la busqueda en local se puede realizar la retorno, en caso contrario sigue la solicitud normal
+            if(localSearch!=null) return localSearch
+        }
+        //==============================
+        //      verificar cache de paginación
+        //==============================
         // si ya solicte la pagina antes o si ya solicte todas las paginas
         if (cached != null && page != null && (cached.prev != null && page <= cached.prev || cached.next == null)) {
             Log.d("ProductRepository", "Retorno de cache")
@@ -27,23 +37,29 @@ class ProductRepository {
         )
         //Almaceno en el provider (almacenamiento local: cache)
         if (response != null) {
-            //validar si es una nueva pagina
-            val updateList = if (cached != null && page != 1) {
-                //almacenar en cache los datos de la nueva pagina
-                cached.copy(
-                    data = cached.data + response.data,
-                    total = response.total,
-                    pages = response.pages,
-                    next = response.next,
-                    prev = response.prev
-                )
+            //validar cache
+            if(cached != null){
+                //agregar productos que no esten en local
+                val newProducts = response.data.filter { newItem ->
+                    cached.data.none { it.id == newItem.id }
+                }
+                if (newProducts.isNotEmpty()) {
+                    val updatedCache = cached.copy(
+                        data = cached.data + newProducts,
+                        total = cached.total,
+                        pages = cached.pages,
+                        next = cached.next,
+                        prev = cached.prev
+                    )
+                    ProductProvider.products = updatedCache
+                }
+                return response
             } else {
-                response
+                ProductProvider.products = response
+              return response
             }
-            ProductProvider.products = updateList
-            return updateList
         }
-        return response //retorno los datos del body
+        return  null
     }
 
     //obtener un producto

@@ -43,7 +43,16 @@
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 tools:ignore="NestedWeights" />
-
+            <ImageView
+                android:visibility="gone"
+                android:id="@+id/clearSearchButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:contentDescription="Limpiar busqueda"
+                android:scaleType="center"
+                android:src="@drawable/ic_close"
+                app:tint="@color/black" />
             <ImageView
                 android:id="@+id/voiceButton"
                 android:layout_width="48dp"
@@ -116,6 +125,13 @@
             android:layout_height="wrap_content"
             android:text="Mensaje de error"
             android:textSize="16sp" />
+        <Button
+            android:layout_marginTop="30dp"
+            android:id="@+id/resetProductsButton"
+            style="@style/Widget.ByteStore.Button.PrimaryOutline"
+            android:text="Limpiar busqueda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
     <!-- speechText Modal-->
     <LinearLayout

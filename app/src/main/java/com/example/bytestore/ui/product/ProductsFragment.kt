@@ -18,6 +18,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -81,6 +82,10 @@ class ProductsFragment : Fragment() {
         //filtros
         binding.filters.setOnClickListener {
             showFilters()
+        }
+        //limpiar busqueda
+        binding.resetProductsButton.setOnClickListener {
+            clearSearch()
         }
         //congifurar datos a la UI
         setAdapterAndRecyclerView()
@@ -240,6 +245,20 @@ class ProductsFragment : Fragment() {
         binding.searchButton.setOnClickListener {
             performSearch(binding.searchInput.text.toString().trim())
         }
+        //limpiar busqueda
+        binding.clearSearchButton.setOnClickListener {
+            clearSearch()
+        }
+        //mostrar limpiar
+        binding.searchInput.addTextChangedListener { editable ->
+            val text = editable?.toString()?:""
+            if(text.length > 1) {
+                binding.clearSearchButton.visibility = View.VISIBLE
+            } else {
+                binding.clearSearchButton.visibility = View.GONE
+            }
+
+        }
     }
 
     private fun performSearch(search: String) {
@@ -250,8 +269,6 @@ class ProductsFragment : Fragment() {
             //establcer valores
             query = searchText
             search()
-            //subir scroll
-            binding.productsRecyclerView.scrollTo(0, 0)
         } else {
             Toast.makeText(
                 requireContext(),
@@ -299,10 +316,9 @@ class ProductsFragment : Fragment() {
                 is Resource.Idle -> Unit
                 is Resource.Success -> {
                     binding.errorLayout.visibility = View.GONE
-                    //paginas totales
-                    totalPages = state.data.pages
-
                     val result = state.data
+                    //paginas totales
+                    totalPages = result.pages
 
                     if (currentPage == 1) {
                         productAdapter.submitList(result.data)
@@ -317,24 +333,29 @@ class ProductsFragment : Fragment() {
                     hasNextPage = result.next != null && result.next > currentPage
                     isLoading = false
                     binding.progressBar.visibility = View.GONE
+                    binding.productsRecyclerView.visibility = View.VISIBLE
                 }
 
                 is Resource.Error -> {
-                    binding.errorLayout.visibility = View.VISIBLE
-                    binding.errorMessage.text = "Error en la carga de prodcutos"
+                    binding.productsRecyclerView.visibility = View.GONE
                     binding.progressBar.visibility = View.GONE
+                    binding.errorMessage.text = state.message
+                    binding.errorLayout.visibility = View.VISIBLE
                 }
 
                 is Resource.Loading -> {
+                    binding.productsRecyclerView.visibility = View.GONE
+                    binding.errorLayout.visibility = View.GONE
                     if (currentPage == 1) {
                         binding.progressBar.visibility = View.VISIBLE
                     }
-                    binding.errorLayout.visibility = View.GONE
                 }
 
                 is Resource.ValidationError -> {
-                    //
+                    //Opcion sin uso
                     binding.progressBar.visibility = View.GONE
+                    binding.errorLayout.visibility = View.GONE
+                    binding.productsRecyclerView.visibility = View.VISIBLE
                 }
             }
         }
@@ -393,8 +414,18 @@ class ProductsFragment : Fragment() {
             .filter { it.isNotBlank() }.distinct().joinToString(",")
         currentPage = 1
         viewModel.getProducts(currentPage, fullQuery, orderQuery["sort"], orderQuery["order"])
+        //subir scroll
+        binding.productsRecyclerView.scrollToPosition(0)
     }
-
+    //limpiar busuqeda
+    private fun clearSearch(){
+        query = ""
+        filtersQuery = null
+        orderQuery = emptyMap()
+        currentPage = 1
+        binding.searchInput.setText("")
+        viewModel.getProducts(currentPage)
+    }
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()

@@ -14,6 +14,7 @@ import com.example.bytestore.utils.SessionManager
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 
 
 class SplashFragment : Fragment() {
@@ -33,7 +34,6 @@ class SplashFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launch {
-            delay(3000)
             checkSession()
         }
     }
@@ -41,13 +41,23 @@ class SplashFragment : Fragment() {
     //validar cuenta local
     private suspend fun checkSession() {
         val navController = findNavController()
-        //si exite el splash
-        if (!isAdded || _binding == null) return
         val loggedIn = sessionManager.isLoggedInFlow.first()
         if (loggedIn) {
-            navController.navigate(R.id.action_splashFragment_to_productsFragment)
+            //verficiar token (maximo 10s)
+            val authResult = withTimeoutOrNull(10_000) {
+                sessionManager.authToken()
+            }
+            //cerrar sesion y enviar al login
+            if(authResult ==null || !authResult) {
+                sessionManager.logout()
+                if (isAdded) navController.navigate(R.id.action_splashFragment_to_loginFragment)
+                return
+            }
+            if(isAdded)navController.navigate(R.id.action_splashFragment_to_productsFragment)
         } else {
-            navController.navigate(R.id.action_splashFragment_to_mainFragment)
+            //retardo normal de 3s
+            delay(3000)
+            if (isAdded) navController.navigate(R.id.action_splashFragment_to_mainFragment)
         }
 
     }

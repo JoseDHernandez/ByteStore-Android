@@ -93,6 +93,13 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        lifecycleScope.launch {
+            sessionManager.userTokenFlow.collect { token->
+                if (token !=null) {
+                    ////
+                }
+            }
+        }
         //observador del estado de logout
         accountViewModel.logoutState.observe(this) { state ->
             when (state) {

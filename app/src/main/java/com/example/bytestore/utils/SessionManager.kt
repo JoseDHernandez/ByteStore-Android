@@ -48,4 +48,13 @@ class SessionManager(private val context: Context) {
     val userTokenFlow: Flow<String?> = repository.userTokenFlow
     val isLoggedInFlow: Flow<Boolean> = repository.isLoggedInFlow
 
+    //autenticar por token
+    suspend fun authToken(): Boolean {
+        if(getToken()!=null){
+            return repository.authJWT()
+        }
+        return false
+    }
+    //cerrar sesión
+    suspend fun logout() =repository.logout()
 }

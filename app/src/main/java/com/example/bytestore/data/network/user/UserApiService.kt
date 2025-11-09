@@ -14,5 +14,8 @@ interface UserApiService {
     //Login
     @POST("/users/sign-in/")
     suspend fun loginUser(@Body request: UserLoginRequest): Response<UserModel>
+    //atuh
+    @POST("/users/auth/")
+    suspend fun authJWT(): Response<UserModel>
 }
 
