@@ -44,13 +44,15 @@
                 android:inputType="text"
                 tools:ignore="NestedWeights" />
             <ImageView
-                android:visibility="gone"
+                android:visibility="visible"
                 android:id="@+id/clearSearchButton"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:clickable="true"
                 android:contentDescription="Limpiar busqueda"
-                android:scaleType="center"
+                android:scaleType="centerInside"
+                android:scaleY="1.4"
+                android:scaleX="1.4"
                 android:src="@drawable/ic_close"
                 app:tint="@color/black" />
             <ImageView
