@@ -27,7 +27,9 @@ class NavbarView @JvmOverloads constructor(
         binding.itemProducts.setOnClickListener {
             onItemSelected?.invoke(R.id.action_global_productsFragment)
         }
-
+        binding.itemOrders.setOnClickListener {
+            onItemSelected?.invoke(R.id.action_global_orderFragment)
+        }
         binding.itemCart
         binding.itemOptions.setOnClickListener {
             val bottomSheet = OptionsBottomSheet()
@@ -60,6 +62,7 @@ class NavbarView @JvmOverloads constructor(
             binding.itemOptionsLabel.setTextColor(resources.getColor(R.color.black, null))
         }
     }
+
     //indica cual item esta activo (gestionar desde el MainActivity)
     fun setActiveItem(index: Int) {
         if (index >= 0 && index <= 3) {
