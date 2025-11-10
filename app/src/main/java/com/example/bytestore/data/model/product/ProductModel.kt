@@ -1,0 +1,64 @@
+package com.example.bytestore.data.model.product
+
+
+import com.google.gson.annotations.SerializedName
+
+data class ListProductsModel(
+    val total: Int,
+    val pages: Int,
+    val first: Int,
+    val next: Int? = null,
+    val prev: Int? = null,
+    val data: List<ProductModel> = emptyList()
+)
+
+data class ProductModel(
+    val id: Int,
+    val name: String,
+    val description: String,
+    val price: Float,
+    val discount: Float,
+    val stock: Int,
+    val image: String,
+    val model: String,
+    @SerializedName("ram_capacity") val ramCapacity: Int,
+    @SerializedName("disk_capacity") val diskCapacity: Int,
+    val qualification: Float,
+    val brand: String,
+    val processor: ProcessorModel,
+    val system: OperatingSystemModel,
+    val display: DisplayModel
+)
+
+data class ProcessorModel(
+    val id: Int? = null,
+    val brand: String,
+    val family: String,
+    val model: String,
+    val cores: Int,
+    val speed: String
+)
+
+data class OperatingSystemModel(
+    val id: Int? = null,
+    val system: String,
+    val distribution: String
+)
+
+data class DisplayModel(
+    val id: Int? = null,
+    val size: Float,
+    val resolution: String,
+    val graphics: String,
+    val brand: String
+)
+
+data class ProductFilters(
+    val brands: List<ProductFilterItem>,
+    val processors: List<ProductFilterItem>,
+    val displays: List<ProductFilterItem>
+)
+
+data class ProductFilterItem(
+    val name: String
+)

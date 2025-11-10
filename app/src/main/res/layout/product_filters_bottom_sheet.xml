@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/bottom_sheet_background"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_semibold"
+            android:text="Filtros"
+            android:textSize="20sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:contentDescription="Cerrar menú"
+            android:src="@drawable/ic_close" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/lite_gray" />
+   <ScrollView
+       android:fillViewport="true"
+       android:nestedScrollingEnabled="true"
+       android:layout_width="match_parent"
+       android:layout_height="0dp"
+       android:layout_weight="1">
+       <LinearLayout
+           android:paddingBottom="50dp"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="vertical">
+
+
+           <TextView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:fontFamily="@font/inter_medium"
+               android:text="Marca principal"
+               android:layout_marginBottom="10dp"
+               android:textSize="18sp" />
+           <androidx.recyclerview.widget.RecyclerView
+               android:id="@+id/recyclerViewBrands"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+               app:spanCount="2"
+               tools:listitem="@layout/item_filter_checkbox"
+               />
+           <View
+               android:layout_width="match_parent"
+               android:layout_height="1dp"
+               android:layout_marginTop="5dp"
+               android:layout_marginBottom="10dp"
+               android:background="@color/lite_gray" />
+           <TextView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:fontFamily="@font/inter_medium"
+               android:text="Procesador"
+               android:layout_marginBottom="10dp"
+               android:textSize="18sp" />
+           <androidx.recyclerview.widget.RecyclerView
+               android:id="@+id/recyclerViewProcessors"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+               app:spanCount="2"
+               tools:listitem="@layout/item_filter_checkbox"
+               />
+           <View
+               android:layout_width="match_parent"
+               android:layout_height="1dp"
+               android:layout_marginTop="5dp"
+               android:layout_marginBottom="10dp"
+               android:background="@color/lite_gray" />
+           <TextView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:fontFamily="@font/inter_medium"
+               android:text="Gráficos"
+               android:layout_marginBottom="10dp"
+               android:textSize="18sp" />
+           <androidx.recyclerview.widget.RecyclerView
+               android:id="@+id/recyclerViewDisplays"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+               app:spanCount="2"
+               tools:listitem="@layout/item_filter_checkbox"
+               />
+           <View
+               android:layout_width="match_parent"
+               android:layout_height="1dp"
+               android:layout_marginTop="5dp"
+               android:layout_marginBottom="10dp"
+               android:background="@color/lite_gray" />
+           <TextView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:fontFamily="@font/inter_medium"
+               android:text="Ordenar por"
+               android:layout_marginBottom="10dp"
+               android:textSize="18sp" />
+           <Spinner
+               android:id="@+id/orderSpinner"
+               android:layout_width="match_parent"
+               android:layout_height="48dp"
+               android:spinnerMode="dropdown"
+               style="@style/Widget.ByteStore.Spinner"/>
+       </LinearLayout>
+   </ScrollView>
+    <LinearLayout
+        android:elevation="2dp"
+        android:paddingTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/clearFilters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.ByteStore.Button.Secondary"
+            android:text="Limpiar"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/appltFilters"
+            style="@style/Widget.ByteStore.Button.Primary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Aplicar filtros"/>
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/card_background"
+    android:clickable="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:fontFamily="@font/inter_medium"
+        android:text="Lenovo IdeaPad AMD R5 - 16GB"
+        android:textAlignment="center"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:contentDescription="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/placeholder" />
+
+    <RatingBar
+        android:id="@+id/score"
+        android:layout_height="30dp"
+        style="@style/Widget.ByteStore.RatingBar"
+        android:rating="5"
+        android:scaleX="1.1"
+        android:scaleY="1.1" />
+
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="@font/barlow_medium"
+        android:text="$ 3.333.333"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/discount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/barlow"
+        android:text="$ 4.444.444" />
+</LinearLayout>

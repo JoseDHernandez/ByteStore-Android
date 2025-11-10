@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bottomNav"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:alignmentMode="alignBounds"
+    android:background="@color/white"
+    android:columnCount="4"
+    android:elevation="4dp"
+    android:paddingHorizontal="20dp"
+    android:useDefaultMargins="false"
+    tools:context=".ui.components.navbar.NavbarView">
+
+    <LinearLayout
+        android:id="@+id/itemProducts"
+        android:contentDescription="Productos"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_columnWeight="1"
+        android:layout_marginEnd="20dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical">
+
+
+        <View
+            android:id="@+id/activeProducts"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@color/gray"
+            android:visibility="invisible" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_home" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_medium"
+                android:text="Productos"
+                android:textSize="10sp"
+                tools:ignore="SmallSp" />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/itemOrders"
+        android:contentDescription="Ordenes"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_columnWeight="1"
+        android:layout_marginEnd="20dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/activeOrders"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@color/gray"
+            android:visibility="invisible" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_package" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_medium"
+                android:text="Órdenes"
+                android:textSize="10sp"
+                tools:ignore="SmallSp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/itemCart"
+        android:contentDescription="Carrito de compras"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_columnWeight="1"
+        android:layout_marginEnd="20dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/activeCart"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@color/gray"
+            android:visibility="invisible" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_cart" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_medium"
+                android:text="Carrito"
+                android:textSize="10sp"
+                tools:ignore="SmallSp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/itemOptions"
+        android:contentDescription="Opciones"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_columnWeight="1"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/activeOptions"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@color/gray"
+            android:visibility="invisible" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/itemOptionsIcon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_menu" />
+
+            <TextView
+                android:id="@+id/itemOptionsLabel"
+                android:labelFor="@id/itemOptionsIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_medium"
+                android:text="Opciones"
+                android:textSize="10sp"
+                tools:ignore="SmallSp" />
+        </LinearLayout>
+    </LinearLayout>
+</GridLayout>

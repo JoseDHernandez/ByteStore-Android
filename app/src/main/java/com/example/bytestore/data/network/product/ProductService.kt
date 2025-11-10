@@ -1,0 +1,75 @@
+package com.example.bytestore.data.network.product
+
+import com.example.bytestore.core.ApiClient
+import com.example.bytestore.data.model.product.ListProductsModel
+import com.example.bytestore.data.model.product.ProductFilters
+import com.example.bytestore.data.model.product.ProductModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import retrofit2.Response
+
+class ProductService {
+    private val api = ApiClient.retrofit().create(ProductApiService::class.java) //Solicito el helper de retrofit
+
+    // ===== Nota ====
+    // getProducts y getProduct no retornar Resourse<ListProductsModel>
+    // o Resource<ProductModel>, ya que los caso de error son mayormente
+    // 404 0 500 y estos se pueden manejar con null. Para peticiones con
+    // codigos mas explicitos usar Resource.
+    // ===============
+
+    suspend fun getProducts(
+        page: Int?,
+        limit: Int?,
+        search: String?,
+        sort: String?,
+        order: String?
+    ): ListProductsModel? = withContext(Dispatchers.IO) {
+        //capto la respuesta en el data model/ dto
+        try {
+            val response: Response<ListProductsModel> =
+                //petición basada en la establecida en el ApiModel
+                api.getProducts(
+                    page = page,
+                    limit = limit,
+                    search = search,
+                    sort = sort,
+                    order = order
+                )
+            if (response.isSuccessful) response.body() else null //cuerpo de la respuesta
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    suspend fun getProduct(id:String): ProductModel? = withContext(Dispatchers.IO) {
+        try {
+            val response: Response<ProductModel> = api.getProduct(id)
+            if (response.isSuccessful) response.body() else null
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+    //obtener productos similares
+    suspend fun getSimilarProducts(id:Int): List<ProductModel>? = withContext(Dispatchers.IO){
+        try {
+            val response: Response<List<ProductModel>> = api.getSimilarProducts(id)
+            if (response.isSuccessful) response.body() else null
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+    //obtener filtros
+    suspend fun getProductFilters(): ProductFilters? = withContext(Dispatchers.IO){
+        try {
+            val response: Response<ProductFilters> = api.getProductFilters()
+            if (response.isSuccessful) response.body() else null
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+}

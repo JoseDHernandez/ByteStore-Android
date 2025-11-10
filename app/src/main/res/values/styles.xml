@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Boton base -->
+    <style name="Widget.ByteStore.ButtonBase" parent="Widget.AppCompat.Button">
+        <item name="android:fontFamily">@font/inter_semibold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:letterSpacing">0.02</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:backgroundTint">@null</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:animateLayoutChanges">true</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="minWidth">48dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">320dp</item>
+        <item name="android:paddingHorizontal">10dp</item>
+    </style>
+
+    <!-- Boton principal -->
+    <style name="Widget.ByteStore.Button.Primary" parent="Widget.ByteStore.ButtonBase">
+        <item name="android:background">@drawable/btn_green_filled_selector</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- Boton secundario -->
+    <style name="Widget.ByteStore.Button.Secondary" parent="Widget.ByteStore.ButtonBase">
+        <item name="android:background">@drawable/btn_blue_filled_selector</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <!-- Boton principal outline -->
+    <style name="Widget.ByteStore.Button.PrimaryOutline" parent="Widget.ByteStore.ButtonBase">
+        <item name="android:background">@drawable/btn_green_outline_selector</item>
+        <item name="android:textColor">@color/green</item>
+    </style>
+
+    <!-- Boton secundario outline -->
+    <style name="Widget.ByteStore.Button.SecondaryOutline" parent="Widget.ByteStore.ButtonBase">
+        <item name="android:background">@drawable/btn_blue_outline_selector</item>
+        <item name="android:textColor">@color/blue</item>
+    </style>
+
+    <!-- Input label -->
+    <style name="Widget.ByteStore.InputLabel" parent="Widget.AppCompat.TextView">
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:fontFamily">@font/inter_semibold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+
+    <!-- Input -->
+    <style name="Widget.ByteStore.Input" parent="Widget.AppCompat.EditText">
+        <item name="android:fontFamily">@font/inter</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="hintTextColor">@color/lite_gray</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:background">@drawable/input_background</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:maxWidth">488dp</item>
+    </style>
+
+    <!-- Checkbox -->
+    <style name="Widget.ByteStore.CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/checkbox_selector</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/inter</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- Radio button -->
+    <style name="Widget.ByteStore.RadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/radiobutton_selector</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/inter</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- Barra de calificación -->
+    <style name="Widget.ByteStore.RatingBar" parent="Widget.AppCompat.RatingBar">
+        <item name="android:progressDrawable">@drawable/rating_stars</item>
+        <item name="android:progressTint">@color/yellow</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:isIndicator">true</item>
+        <item name="android:secondaryProgressTint">@null</item>
+        <item name="android:stepSize">0.5</item>
+        <item name="android:numStars">5</item>
+    </style>
+    <!-- Spinner -->
+    <style name="Widget.ByteStore.Spinner" parent="Widget.AppCompat.Spinner">
+        <item name="android:background">@drawable/spinner_background</item>
+        <item name="android:popupBackground">@color/white</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:dropDownSelector">@drawable/spinner_item_background</item>
+    </style>
+
+    <!-- Item del spinner -->
+    <style name="Widget.ByteStore.Spinner.Item" parent="Widget.AppCompat.TextView.SpinnerItem">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/inter_medium</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <!-- Item del spinner (Dropdown) -->
+    <style name="Widget.ByteStore.Spinner.Item.DropDown" parent="Widget.AppCompat.DropDownItem.Spinner">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/inter_regular</item>
+        <item name="android:background">@drawable/spinner_item_background</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+
+</resources>

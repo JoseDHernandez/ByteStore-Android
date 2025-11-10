@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.product.ProductsFragment">
+
+    <!-- Barra de busqueda -->
+    <LinearLayout
+        android:id="@+id/inputs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            style="@style/Widget.ByteStore.Input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:clickable="false"
+            android:focusable="false"
+            android:orientation="horizontal"
+            android:padding="0dp">
+
+            <EditText
+                android:id="@+id/searchInput"
+                style="@style/Widget.ByteStore.Input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:autofillHints="@null"
+                android:background="@null"
+                android:hint="Buscar productos"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                tools:ignore="NestedWeights" />
+            <ImageView
+                android:visibility="visible"
+                android:id="@+id/clearSearchButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:contentDescription="Limpiar busqueda"
+                android:scaleType="centerInside"
+                android:scaleY="1.4"
+                android:scaleX="1.4"
+                android:src="@drawable/ic_close"
+                app:tint="@color/black" />
+            <ImageView
+                android:id="@+id/voiceButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:contentDescription="Busqueda por voz"
+                android:scaleType="center"
+                android:src="@drawable/ic_microphone"
+                app:tint="@color/gray" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/searchButton"
+            style="@style/Widget.ByteStore.Button.Primary"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:contentDescription="Buscar"
+            android:scaleType="center"
+            android:src="@drawable/ic_search"
+            app:tint="@color/white" />
+
+        <ImageView
+            android:id="@+id/filters"
+            style="@style/Widget.ByteStore.Button.Secondary"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="5dp"
+            android:clickable="true"
+            android:contentDescription="Filtros"
+            android:scaleType="center"
+            android:src="@drawable/ic_filter" />
+    </LinearLayout>
+    <!-- barra de carga -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputs" />
+
+    <!-- layout de error -->
+    <LinearLayout
+        android:id="@+id/errorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputs"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginBottom="50dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_basket" />
+
+        <TextView
+            android:id="@+id/errorMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mensaje de error"
+            android:textSize="16sp" />
+        <Button
+            android:layout_marginTop="30dp"
+            android:id="@+id/resetProductsButton"
+            style="@style/Widget.ByteStore.Button.PrimaryOutline"
+            android:text="Limpiar busqueda"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <!-- speechText Modal-->
+    <LinearLayout
+        android:id="@+id/speechOptions"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="1dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#80000000" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bottom_sheet_background"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="96dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_weight="1">
+
+            <LinearLayout
+                android:id="@+id/speechText_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_semibold"
+                    android:text="Busqueda por voz"
+                    android:textSize="20sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/speechTextClose"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:clickable="true"
+                    android:contentDescription="Cancelar busuqeda por voz"
+                    android:src="@drawable/ic_close"
+                    app:tint="@color/black" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/speechText_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Manten el botón del micrófono y menciona el nombre del producto que estás buscando, sueltalo para realizar la búsqueda."
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/speechText_1" />
+
+            <TextView
+                android:id="@+id/speechText_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Ejemplo: “Lenovo Intel i5” o “Ryzen 3 Asus”."
+                android:textColor="@color/gray"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/speechText_2" />
+            <!-- Boton de iniciar escucha -->
+            <ImageView
+                android:id="@+id/speechTextRec"
+                style="@style/Widget.ByteStore.Button.Primary"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="180dp"
+                android:layout_marginBottom="20dp"
+                android:clickable="true"
+                android:contentDescription="Inicar busqueda por voz"
+                android:scaleType="centerInside"
+                android:scaleX="1.3"
+                android:scaleY="1.3"
+                android:src="@drawable/ic_microphone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/speechText_3"
+                app:tint="@color/white" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+    <!-- grid de productos -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/productsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="90dp"
+        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inputs"
+        app:spanCount="2"
+        tools:listitem="@layout/item_product_card" />
+</androidx.constraintlayout.widget.ConstraintLayout>
