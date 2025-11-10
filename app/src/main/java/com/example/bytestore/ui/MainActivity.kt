@@ -95,8 +95,8 @@ class MainActivity : AppCompatActivity() {
         }
         lifecycleScope.launch {
             sessionManager.userTokenFlow.collect { token->
-                if (token !=null) {
-                    ////
+                if (token != null) {
+                    //
                 }
             }
         }
@@ -131,18 +131,14 @@ class MainActivity : AppCompatActivity() {
     private fun setActiveIndex(fragment: NavDestination) {
         val id = fragment.id
         val actualFragment = when (id) {
-            //productos
-            R.id.productFragment, R.id.productsFragment -> {
-                0
-            }
-
-            R.id.profileFragment -> {
-                3
-            }
-
-            else -> {
-                0
-            }
+            // productos
+            R.id.productFragment, R.id.productsFragment -> 0
+            // órdenes
+            R.id.orderFragment -> 1
+            // perfil / opciones
+            R.id.profileFragment -> 3
+            // otros (puedes ajustar cuando agregues carrito u otros)
+            else -> 0
         }
         binding.navbar.setActiveItem(actualFragment)
     }
