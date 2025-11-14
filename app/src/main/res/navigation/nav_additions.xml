@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Paste the <fragment> entries into your existing nav_graph.xml -->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_cart_additions"
+    app:startDestination="@id/cartFragment">
+
+  <fragment
+    android:id="@+id/cartFragment"
+    android:name="com.example.bytestore.ui.cart.CartFragment"
+    android:label="Carrito" >
+    <action
+      android:id="@+id/action_cart_to_checkout"
+      app:destination="@id/checkoutFragment" />
+  </fragment>
+
+  <fragment
+    android:id="@+id/checkoutFragment"
+    android:name="com.example.bytestore.ui.cart.CheckoutFragment"
+    android:label="Confirmar compra" />
+</navigation>
