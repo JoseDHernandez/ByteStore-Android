@@ -44,7 +44,7 @@
                 android:inputType="text"
                 tools:ignore="NestedWeights" />
             <ImageView
-                android:visibility="visible"
+                android:visibility="gone"
                 android:id="@+id/clearSearchButton"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
