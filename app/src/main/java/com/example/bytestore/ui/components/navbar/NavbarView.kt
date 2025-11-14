@@ -23,26 +23,36 @@ class NavbarView @JvmOverloads constructor(
     private var activeIndex = 0
 
     init {
-        //listeners
+        // Botón de productos
         binding.itemProducts.setOnClickListener {
             onItemSelected?.invoke(R.id.action_global_productsFragment)
         }
-        binding.itemOrders.setOnClickListener {
-            onItemSelected?.invoke(R.id.action_global_orderFragment)
+
+        // Botón del carrito
+        binding.itemCart.setOnClickListener {
+            onItemSelected?.invoke(R.id.cartFragment)
         }
-        binding.itemCart
+
+        // Botón de órdenes (deshabilitado por ahora)
+        binding.itemOrders.setOnClickListener {
+            // TODO: Navegar a órdenes cuando esté disponible
+            // onItemSelected?.invoke(R.id.ordersFragment)
+        }
+
+        // Botón de opciones
         binding.itemOptions.setOnClickListener {
             val bottomSheet = OptionsBottomSheet()
             bottomSheet.onOptionSelected = { option ->
                 when (option) {
                     "account" -> onItemSelected?.invoke(R.id.profileFragment)
                     "logout" -> onLogoutSelected?.invoke()
+                    "admin" -> {
+                        // TODO: Navegar a panel de administrador
+                    }
                 }
-
             }
             bottomSheet.show((context as AppCompatActivity).supportFragmentManager, "optionsSheet")
         }
-        //TODO: pendiente de los otros fragments
     }
 
     //habilita o deshabilita el boton de opciones
