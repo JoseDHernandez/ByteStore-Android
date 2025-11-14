@@ -22,7 +22,8 @@ abstract class ProtectedFragment : Fragment() {
                 if (requiredRole != null) {
                     navController.navigate(R.id.action_global_loginFragment)
                 } else {
-                    navController.navigate(R.id.action_global_productsFragment)
+                    //TODO: Cambiar redirecion a un fragmente de acceso no permito o el productos
+                    navController.navigate(R.id.action_global_loginFragment)
                 }
             }
         }
