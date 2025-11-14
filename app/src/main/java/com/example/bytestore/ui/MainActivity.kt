@@ -55,7 +55,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.loginFragment,
                 R.id.registerFragment,
                 R.id.mainFragment,
-                R.id.splashFragment -> binding.navbar.visibility = View.GONE
+                R.id.splashFragment,
+                R.id.checkoutFragment -> binding.navbar.visibility = View.GONE
 
                 else -> binding.navbar.visibility = View.VISIBLE
             }
@@ -79,24 +80,28 @@ class MainActivity : AppCompatActivity() {
                 navController.navigate(destinationId)
             }
         }
-        //validar sesion
+        //validar sesion (defensivo: isLoggedInFlow puede ser null en algunos entornos)
         lifecycleScope.launch {
-            sessionManager.isLoggedInFlow.collect { isLogged ->
-                binding.navbar.disableOptionsButton(isLogged)
-                //topBar
-                if (isLogged) {
-                    binding.topBar.hideLoginButton()
-                } else {
-                    binding.topBar.showLoginButton {
-                        navController.navigate(R.id.action_global_loginFragment)
+            val flow = sessionManager.isLoggedInFlow
+            if (flow != null) {
+                flow.collect { isLogged ->
+                    binding.navbar.disableOptionsButton(isLogged)
+                    //topBar
+                    if (isLogged) {
+                        binding.topBar.hideLoginButton()
+                    } else {
+                        binding.topBar.showLoginButton {
+                            navController.navigate(R.id.action_global_loginFragment)
+                        }
                     }
                 }
-            }
-        }
-        lifecycleScope.launch {
-            sessionManager.userTokenFlow.collect { token->
-                if (token != null) {
-                    //
+            } else {
+                // Fallback: comprobar token localmente
+                val token = sessionManager.getToken()
+                val isLogged = !token.isNullOrEmpty()
+                binding.navbar.disableOptionsButton(isLogged)
+                if (isLogged) binding.topBar.hideLoginButton() else binding.topBar.showLoginButton {
+                    navController.navigate(R.id.action_global_loginFragment)
                 }
             }
         }
@@ -131,13 +136,18 @@ class MainActivity : AppCompatActivity() {
     private fun setActiveIndex(fragment: NavDestination) {
         val id = fragment.id
         val actualFragment = when (id) {
-            // productos
+            //productos
             R.id.productFragment, R.id.productsFragment -> 0
-            // órdenes
-            R.id.orderFragment -> 1
-            // perfil / opciones
+
+            //ordenes (cuando lo implementes)
+            // R.id.ordersFragment -> 1
+
+            //carrito
+            R.id.cartFragment -> 2
+
+            //perfil/opciones
             R.id.profileFragment -> 3
-            // otros (puedes ajustar cuando agregues carrito u otros)
+
             else -> 0
         }
         binding.navbar.setActiveItem(actualFragment)
