@@ -11,6 +11,7 @@ import com.example.bytestore.databinding.FragmentProfileBinding
 import com.example.bytestore.ui.ProtectedFragment
 import com.example.bytestore.ui.viewmodel.AppViewModelFactory
 import com.example.bytestore.ui.viewmodel.userViewModels.AccountViewModel
+import com.example.bytestore.utils.Resource
 import com.example.bytestore.utils.topBar
 
 
@@ -36,8 +37,9 @@ class ProfileFragment : ProtectedFragment() {
         topBar().setTitle("Cuenta")
         //logica
         //viewModel.getUserData()
-        viewModel.userData.observe(viewLifecycleOwner) { user ->
-            if (user != null) {
+        viewModel.userData.observe(viewLifecycleOwner) { state ->
+            if (state is Resource.Success && state.data != null) {
+                val user = state.data
                 binding.accountId.text = user.id
                 binding.accountName.text = user.name
                 binding.accountEmail.text = user.email
