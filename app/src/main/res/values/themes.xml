@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Tema base personalizado -->
-    <style name="Theme.ByteStore" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.ByteStore" parent="Theme.MaterialComponents.Light.NoActionBar">
 
         <!-- Fondo y texto -->
         <item name="android:colorBackground">@color/white</item>
@@ -14,7 +14,15 @@
         <!-- Control del ripple -->
         <item name="android:colorControlHighlight">@color/lite_gray</item>
 
+        <!-- IMPORTANTE: Deshabilitar tintado automático de botones -->
+        <item name="materialButtonStyle">@style/Widget.ByteStore.Button.NoTint</item>
 
+    </style>
+
+    <!-- Estilo para evitar que MaterialComponents cambie los colores de los botones -->
+    <style name="Widget.ByteStore.Button.NoTint" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@null</item>
+        <item name="android:backgroundTint">@null</item>
     </style>
 
 </resources>
