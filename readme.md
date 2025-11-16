@@ -1,6 +1,6 @@
 # Byte Store Android
 
-Aplicación móvil desarrollada en *Kotlin, parte del ecosistema [ByteStore](https://github.com/JoseDHernandez/ByteStore). Esta app se conecta con una *API personalizada\* (contenedorizada con Docker) y complementa al cliente web existente.
+Aplicación móvil desarrollada en Kotlin, parte del ecosistema [ByteStore](https://github.com/JoseDHernandez/ByteStore). Esta app se conecta con una [API personalizada](https://github.com/JoseDHernandez/ByteStore-API/tree/main) y complementa al cliente web existente.
 
 _ByteStore Android_ es la versión móvil del proyecto ByteStore. Permite interactuar con los servicios del sistema desde dispositivos Android, compartiendo la misma lógica base que el cliente web. Actualmente, la conexión con la API, aunque ya se cuenta con una implementación inicial.
 
