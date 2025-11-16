@@ -38,7 +38,7 @@ class AccountViewModel(private val repository: UserRepository) : ViewModel() {
         try {
             repository.logout()
             _logoutState.postValue(Resource.Success(Unit))
-            _userData.postValue(null)
+            _userData.postValue(Resource.Idle)
         } catch (e: Exception) {
             _logoutState.postValue(Resource.Error("Error al cerrar sesión: ${e.message}"))
         }
