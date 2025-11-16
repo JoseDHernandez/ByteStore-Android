@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation
-    android:id="@+id/nav_graph_host"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_host"
     app:startDestination="@id/splashFragment">
 
     <!-- Splash fragment -->
@@ -21,6 +20,11 @@
             android:id="@+id/action_splashFragment_to_productsFragment"
             app:destination="@id/productsFragment"
             app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_splashFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
     </fragment>
 
