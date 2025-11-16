@@ -2,4 +2,23 @@
     <string name="app_name">Byte store</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+        <string name="price_format">$%s</string>
+    <string name="discount_percentage">-%.0f%%</string>
+    <string name="reviews_none">(Sin reseñas)</string>
+    <string name="reviews_single">(1 reseña)</string>
+    <string name="reviews_multiple">(%d reseñas)</string>
+    <string name="stock_none">Sin unidades disponibles</string>
+    <string name="stock_single">Ultima unidad disponible</string>
+    <string name="stock_multiple">%d Unidades disponibles</string>
+    <string name="storage_tb">%.0f TB</string>
+    <string name="storage_gb">%.0f GB</string>
+
+    <!-- Checkout strings -->
+    <string name="home_delivery">Envío a domicilio</string>
+    <string name="store_pickup">Recoger en tienda</string>
+    <string name="delivery_price">$16.000</string>
+    <string name="free">Gratis</string>
+    <string name="credit_card">Tarjeta de crédito / débito</string>
+    <string name="pse_transfer">Transferencia (PSE)</string>
+    <string name="cash_payment">Pago en efectivo</string>
 </resources>

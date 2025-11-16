@@ -74,10 +74,10 @@ class CartFragment : ProtectedFragment() {
         binding.recycler.adapter = adapter
         binding.recycler.setHasFixedSize(true)
 
-        //  SWIPE PARA ELIMINAR - Versión corregida
+        //  SWIPE PARA ELIMINAR
         val deleteIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_eliminate)
         val backgroundPaint = Paint().apply {
-            color = R.color.gray
+            color = ContextCompat.getColor(requireContext(), R.color.gray)
             isAntiAlias = true
         }
 
@@ -113,13 +113,10 @@ class CartFragment : ProtectedFragment() {
                 val itemView = viewHolder.itemView
                 val icon = deleteIcon
 
-                // Solo dibujar cuando se desliza hacia la izquierda
                 if (dX < 0) {
-                    // Calcular el tamaño del ícono
                     val iconSize = dpToPx(32)
                     val iconMargin = (itemView.height - iconSize) / 2
 
-                    // Dibujar fondo rojo con bordes redondeados
                     val cornerRadius = dpToPx(16).toFloat()
                     val backgroundRect = RectF(
                         itemView.right.toFloat() + dX,
@@ -129,7 +126,6 @@ class CartFragment : ProtectedFragment() {
                     )
                     c.drawRoundRect(backgroundRect, cornerRadius, cornerRadius, backgroundPaint)
 
-                    // Posicionar y dibujar el ícono
                     val iconTop = itemView.top + iconMargin
                     val iconBottom = iconTop + iconSize
                     val iconRight = itemView.right - iconMargin
@@ -150,30 +146,39 @@ class CartFragment : ProtectedFragment() {
             when (resource) {
                 is Resource.Success -> {
                     val cartState = resource.data
+                    val isEmpty = cartState.items.isEmpty()
 
                     Log.d("CartFragment", "Carrito actualizado - Items: ${cartState.items.size}")
                     cartState.items.forEachIndexed { index, item ->
                         Log.d("CartFragment", "  [$index] id=${item.id} productId=${item.productId} ${item.name} - Qty: ${item.quantity}")
                     }
 
-                    val adapter = binding.recycler.adapter as CartAdapter
-                    val previousSize = adapter.currentList?.size ?: 0
+                    // Mostrar/ocultar vistas según si hay items
+                    binding.scrollContent.isVisible = !isEmpty
+                    binding.bottomButtons.isVisible = !isEmpty
+                    binding.emptyState.isVisible = isEmpty
 
-                    adapter.submitList(cartState.items) {
-                        val newSize = cartState.items.size
-                        if (newSize > previousSize) {
-                            binding.recycler.post {
-                                binding.recycler.smoothScrollToPosition(newSize - 1)
+                    // Actualizar adapter solo si hay items
+                    if (!isEmpty) {
+                        val adapter = binding.recycler.adapter as CartAdapter
+                        val previousSize = adapter.currentList?.size ?: 0
+
+                        adapter.submitList(cartState.items) {
+                            val newSize = cartState.items.size
+                            if (newSize > previousSize) {
+                                binding.recycler.post {
+                                    binding.recycler.smoothScrollToPosition(newSize - 1)
+                                }
                             }
                         }
                     }
-
-                    // Mostrar RecyclerView si hay items
-                    binding.recycler.isVisible = cartState.items.isNotEmpty()
                 }
                 is Resource.Error -> {
                     Log.e("CartFragment", "Error al cargar carrito: ${resource.message}")
-                    binding.recycler.isVisible = false
+                    // En caso de error, mostrar estado vacío
+                    binding.scrollContent.isVisible = false
+                    binding.bottomButtons.isVisible = false
+                    binding.emptyState.isVisible = true
                 }
                 is Resource.Loading -> {
                     Log.d("CartFragment", "Cargando carrito...")
@@ -199,9 +204,17 @@ class CartFragment : ProtectedFragment() {
                 Log.e("CartFragment", "Error al volver: ${e.message}")
             }
         }
+
+        // Botón del estado vacío - ir a productos
+        binding.btnGoToProducts.setOnClickListener {
+            try {
+                findNavController().navigate(R.id.action_global_productsFragment)
+            } catch (e: Exception) {
+                Log.e("CartFragment", "Error navegando a productos: ${e.message}")
+            }
+        }
     }
 
-    // Función auxiliar para convertir dp a px
     private fun dpToPx(dp: Int): Int {
         return (dp * resources.displayMetrics.density).toInt()
     }

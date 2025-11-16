@@ -3,6 +3,7 @@ package com.example.bytestore.ui.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.bytestore.data.repository.CartRepository
 import com.example.bytestore.data.repository.UserRepository
 import com.example.bytestore.ui.viewmodel.userViewModels.AccountViewModel
 import com.example.bytestore.ui.viewmodel.userViewModels.AuthViewModel
@@ -13,7 +14,8 @@ class AppViewModelFactory(private val context: Context) : ViewModelProvider.Fact
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         //repositorio de usuario
         val userRepository = UserRepository(context)
-
+        //repositorio de carrito
+        val cartRepository = CartRepository(context)
 
         //selección del fragment
         return when {
@@ -24,6 +26,10 @@ class AppViewModelFactory(private val context: Context) : ViewModelProvider.Fact
             //viewmodel de account (logout, getdata, updateuser)
             modelClass.isAssignableFrom(AccountViewModel::class.java) -> {
                 AccountViewModel(userRepository) as T
+            }
+            //viewmodel de carrito (add, remove, checkout, etc)
+            modelClass.isAssignableFrom(CartViewModel::class.java) -> {
+                CartViewModel(cartRepository) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

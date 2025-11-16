@@ -80,28 +80,17 @@ class MainActivity : AppCompatActivity() {
                 navController.navigate(destinationId)
             }
         }
-        //validar sesion (defensivo: isLoggedInFlow puede ser null en algunos entornos)
+        //validar sesion
         lifecycleScope.launch {
-            val flow = sessionManager.isLoggedInFlow
-            if (flow != null) {
-                flow.collect { isLogged ->
-                    binding.navbar.disableOptionsButton(isLogged)
-                    //topBar
-                    if (isLogged) {
-                        binding.topBar.hideLoginButton()
-                    } else {
-                        binding.topBar.showLoginButton {
-                            navController.navigate(R.id.action_global_loginFragment)
-                        }
-                    }
-                }
-            } else {
-                // Fallback: comprobar token localmente
-                val token = sessionManager.getToken()
-                val isLogged = !token.isNullOrEmpty()
+            sessionManager.isLoggedInFlow.collect { isLogged ->
                 binding.navbar.disableOptionsButton(isLogged)
-                if (isLogged) binding.topBar.hideLoginButton() else binding.topBar.showLoginButton {
-                    navController.navigate(R.id.action_global_loginFragment)
+                //topBar
+                if (isLogged) {
+                    binding.topBar.hideLoginButton()
+                } else {
+                    binding.topBar.showLoginButton {
+                        navController.navigate(R.id.action_global_loginFragment)
+                    }
                 }
             }
         }
