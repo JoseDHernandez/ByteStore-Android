@@ -1,5 +1,6 @@
 package com.example.bytestore.data.network.user
 
+import com.example.bytestore.data.model.user.AccountModel
 import com.example.bytestore.data.model.user.ListUsersModel
 import com.example.bytestore.data.model.user.UserChangePasswordRequest
 import com.example.bytestore.data.model.user.UserChangeRoleRequest
@@ -22,15 +23,15 @@ import retrofit2.http.Query
 interface UserApiService {
     //Registro
     @POST("/users/sign-up/")
-    suspend fun registerUser(@Body request: UserRegisterRequest): Response<UserModel>
+    suspend fun registerUser(@Body request: UserRegisterRequest): Response<AccountModel>
 
     //Login
     @POST("/users/sign-in/")
-    suspend fun loginUser(@Body request: UserLoginRequest): Response<UserModel>
+    suspend fun loginUser(@Body request: UserLoginRequest): Response<AccountModel>
 
     //atuh
     @POST("/users/auth/")
-    suspend fun authJWT(): Response<UserModel>
+    suspend fun authJWT(): Response<AccountModel>
 
     //obtener usuario por id
     @GET("/users/{id}")
@@ -48,7 +49,7 @@ interface UserApiService {
     @PUT("/users/{id}/")
     suspend fun updateUser(
         @Path("id") id: String,
-        @Body request: UserUpdateRequest
+        @Body request: UserUpdateRequest?
     ): Response<UserModel>
 
     //cambiar constraseña

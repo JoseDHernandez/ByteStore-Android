@@ -1,6 +1,7 @@
 package com.example.bytestore.data.network.user
 
 import com.example.bytestore.core.ApiClient
+import com.example.bytestore.data.model.user.AccountModel
 import com.example.bytestore.data.model.user.ListUsersModel
 import com.example.bytestore.data.model.user.UserChangePasswordRequest
 import com.example.bytestore.data.model.user.UserChangeRoleRequest
@@ -9,6 +10,7 @@ import com.example.bytestore.data.model.user.UserLoginRequest
 import com.example.bytestore.data.model.user.UserModel
 import com.example.bytestore.data.model.user.UserRegisterRequest
 import com.example.bytestore.data.model.user.UserUpdateRequest
+import com.example.bytestore.data.model.user.toAccountModel
 import com.example.bytestore.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -16,7 +18,7 @@ import kotlinx.coroutines.withContext
 class UserService {
     private val api = ApiClient.retrofit().create(UserApiService::class.java)
 
-    suspend fun registerUser(user: UserRegisterRequest): Resource<UserModel> =
+    suspend fun registerUser(user: UserRegisterRequest): Resource<AccountModel> =
         withContext(Dispatchers.IO) {
             try {
                 val response = api.registerUser(user)
@@ -44,7 +46,7 @@ class UserService {
 
         }
 
-    suspend fun loginUser(credentials: UserLoginRequest): Resource<UserModel> =
+    suspend fun loginUser(credentials: UserLoginRequest): Resource<AccountModel> =
         withContext(Dispatchers.IO) {
             try {
                 val response = api.loginUser(credentials)
@@ -74,7 +76,7 @@ class UserService {
         }
 
     //autenticación por el JWT
-    suspend fun authJWT(): Resource<UserModel> = withContext(Dispatchers.IO) {
+    suspend fun authJWT(): Resource<AccountModel> = withContext(Dispatchers.IO) {
         try {
             val response = api.authJWT()
             if (response.isSuccessful) {
@@ -141,12 +143,32 @@ class UserService {
             }
         }
 
-    //actualizar usuario (cliente y admin)
-    //si el usuario es cliente el request es obligatorio
-    suspend fun updateUser(id: String, request: UserUpdateRequest): Resource<UserModel> =
+    //actualizar cuenta (cliente)
+    suspend fun updateUser(id: String, request: UserUpdateRequest): Resource<AccountModel> =
         withContext(Dispatchers.IO) {
             try {
                 val response = api.updateUser(id, request)
+                if (response.isSuccessful) {
+                    val body = response.body()
+                    if (body != null) {
+                        Resource.Success(body.toAccountModel())
+                    } else {
+                        Resource.Error("Cuerpo sin datos.")
+                    }
+                } else {
+                    Resource.Error("Error al actulizar el usuario con el id: $id")
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Resource.Error("Error de conexión: ${e.localizedMessage}")
+            }
+        }
+
+    //actualizar usuario (admin)
+    suspend fun updateUser(id: String ): Resource<UserModel> =
+        withContext(Dispatchers.IO) {
+            try {
+                val response = api.updateUser(id, null)
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {

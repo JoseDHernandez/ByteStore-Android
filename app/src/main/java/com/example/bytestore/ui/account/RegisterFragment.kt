@@ -12,7 +12,7 @@ import com.example.bytestore.R
 import com.example.bytestore.databinding.FragmentRegisterBinding
 import com.example.bytestore.ui.viewmodel.AppViewModelFactory
 import com.example.bytestore.ui.viewmodel.userViewModels.AuthViewModel
-import com.example.bytestore.ui.viewmodel.userViewModels.UserRegisterInput
+import com.example.bytestore.data.model.user.UserRegisterInputs
 import com.example.bytestore.utils.Resource
 import com.example.bytestore.utils.topBar
 import com.google.android.material.snackbar.Snackbar
@@ -48,7 +48,7 @@ class RegisterFragment : Fragment() {
         //Click en el boton de registro
         binding.buttonSingUp.setOnClickListener {
             //obtener los datos
-            val request = UserRegisterInput(
+            val request = UserRegisterInputs(
                 name = binding.inputName.text.toString(),
                 email = binding.inputEmail.text.toString(),
                 password = binding.inputPassword.text.toString(),

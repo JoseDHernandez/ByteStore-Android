@@ -161,7 +161,7 @@ class CartFragment : ProtectedFragment() {
                     // Actualizar adapter solo si hay items
                     if (!isEmpty) {
                         val adapter = binding.recycler.adapter as CartAdapter
-                        val previousSize = adapter.currentList?.size ?: 0
+                        val previousSize = adapter.currentList.size
 
                         adapter.submitList(cartState.items) {
                             val newSize = cartState.items.size

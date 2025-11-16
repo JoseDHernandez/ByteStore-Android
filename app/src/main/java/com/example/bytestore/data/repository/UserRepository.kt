@@ -2,6 +2,7 @@ package com.example.bytestore.data.repository
 
 import android.content.Context
 import com.example.bytestore.data.local.UserPreferences
+import com.example.bytestore.data.model.user.AccountModel
 import com.example.bytestore.data.model.user.ListUsersModel
 import com.example.bytestore.data.model.user.UserChangePasswordRequest
 import com.example.bytestore.data.model.user.UserChangeRoleRequest
@@ -20,7 +21,7 @@ class UserRepository(private val context: Context) {
     private val prefs = UserPreferences(context) //datastorage
 
     //registro
-    suspend fun registerUser(user: UserRegisterRequest): Resource<UserModel> {
+    suspend fun registerUser(user: UserRegisterRequest): Resource<AccountModel> {
         val response = userService.registerUser(user)
         //Almacenar en local
         saveUser(response)
@@ -28,7 +29,7 @@ class UserRepository(private val context: Context) {
     }
 
     //inicio de sesión
-    suspend fun loginUser(credentials: UserLoginRequest): Resource<UserModel> {
+    suspend fun loginUser(credentials: UserLoginRequest): Resource<AccountModel> {
         val response = userService.loginUser(credentials)
 
         //obtener los datos almacenados y limpiarlos si es otro usuario
@@ -82,21 +83,25 @@ class UserRepository(private val context: Context) {
         return response
     }
 
-    //actualizar usuario
+    //actualizar cuenta (cuenta local)
     suspend fun updateUser(
         id: String,
-        request: UserUpdateRequest,
-        isAdmin: Boolean = false, //si es administrador
-        isLoggedIn: Boolean = true //si el cambio es para la misma cuenta usada
-    ): Resource<UserModel> {
+        request: UserUpdateRequest
+    ): Resource<AccountModel> {
         val response = userService.updateUser(id, request)
-        //validar si es cliente o administrador
-        if (isAdmin && !isLoggedIn) {
-            if (response is Resource.Success) {
-                UserProvider.addUser(response.data)
-            }
-        } else {
+        if (response is Resource.Success) {
             saveUser(response)
+        }
+        return response
+    }
+
+    //actualizar usuario (admin)
+    suspend fun updateUser(
+        id: String
+    ): Resource<UserModel> {
+        val response = userService.updateUser(id)
+        if (response is Resource.Success) {
+            UserProvider.addUser(response.data)
         }
         return response
     }
@@ -116,7 +121,11 @@ class UserRepository(private val context: Context) {
     }
 
     //eliminar usuario
-    suspend fun deleteUser(id: String, request: UserDeleteRequest,isAdmin: Boolean = false): Boolean {
+    suspend fun deleteUser(
+        id: String,
+        request: UserDeleteRequest,
+        isAdmin: Boolean = false
+    ): Boolean {
         val response = userService.deleteUser(id, request)
         if (response) {
             UserProvider.removeUser(id)
@@ -129,11 +138,9 @@ class UserRepository(private val context: Context) {
     //=======================================
 
     //almacenar usuario
-    private suspend fun saveUser(response: Resource<UserModel>) {
+    private suspend fun saveUser(response: Resource<AccountModel>) {
         if (response is Resource.Success) {
             response.data.let { user ->
-                //validar que los datos no sean nulos
-                if (user.id == null || user.token == null) throw IllegalArgumentException("El id o token del usuario no deben ser nulos")
                 prefs.saveUserData(
                     id = user.id,
                     name = user.name,
@@ -150,7 +157,7 @@ class UserRepository(private val context: Context) {
     suspend fun getUserToken(): String? = prefs.getToken()
 
     //obtener datos del usuario
-    suspend fun getUserData(): UserModel? {
+    suspend fun getUserData(): AccountModel? {
         val userMap = prefs.getUser()
 
         val id = userMap["id"]
@@ -161,7 +168,7 @@ class UserRepository(private val context: Context) {
         val token = userMap["token"]
 
         return if (id != null && name != null && email != null && address != null && role != null && token != null) {
-            UserModel(
+            AccountModel(
                 id = id,
                 name = name,
                 email = email,

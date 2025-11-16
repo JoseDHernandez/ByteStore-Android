@@ -26,7 +26,7 @@ class CartService(private val context: Context) {
     suspend fun getCart(): ListCartItemsModel? = withContext(Dispatchers.IO) {
         val user = runCatching { session.getCurrentUser() }.getOrNull()
 
-        if (user == null) {
+        if (user == null ) {
             Log.e(TAG, "No se pudo obtener el usuario de la sesión")
             return@withContext null
         }

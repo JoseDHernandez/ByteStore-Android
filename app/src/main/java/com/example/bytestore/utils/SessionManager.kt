@@ -1,6 +1,7 @@
 package com.example.bytestore.utils
 
 import android.content.Context
+import com.example.bytestore.data.model.user.AccountModel
 import com.example.bytestore.data.model.user.UserModel
 import com.example.bytestore.data.repository.UserRepository
 import kotlinx.coroutines.CoroutineScope
@@ -36,7 +37,7 @@ class SessionManager(private val context: Context) {
     }
 
     //obtener usuario
-    suspend fun getCurrentUser(): UserModel? = repository.getUserData()
+    suspend fun getCurrentUser(): AccountModel? = repository.getUserData()
 
     //obtener token
     suspend fun getToken(): String? {

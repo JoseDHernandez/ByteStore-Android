@@ -2,6 +2,15 @@ package com.example.bytestore.data.model.user
 
 import com.google.gson.annotations.SerializedName
 
+data class AccountModel(
+    val id: String,
+    val name: String,
+    val email: String,
+    @SerializedName("physical_address") val physicalAddress: String,
+    val role: String,
+    val token: String
+)
+
 data class UserModel(
     val id: String?,
     val name: String,
@@ -10,6 +19,19 @@ data class UserModel(
     val role: String,
     val token: String?
 )
+
+//conversor de Usermodel a AccountModel
+fun UserModel.toAccountModel(): AccountModel {
+    return AccountModel(
+        id = this.id ?: "",
+        name = this.name,
+        email = this.email,
+        physicalAddress = this.physicalAddress,
+        role = this.role,
+        token = this.token ?: ""
+    )
+}
+
 
 //=============================================
 //             Lista de usuarios

@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.bytestore.data.model.user.AccountModel
 import com.example.bytestore.data.model.user.UserChangePasswordRequest
 import com.example.bytestore.data.model.user.UserDeleteRequest
-import com.example.bytestore.data.model.user.UserModel
 import com.example.bytestore.data.model.user.UserUpdateInputs
 import com.example.bytestore.data.model.user.UserUpdateRequest
 import com.example.bytestore.data.model.user.UserValidator
@@ -17,8 +17,8 @@ import kotlinx.coroutines.launch
 
 class AccountViewModel(private val repository: UserRepository) : ViewModel() {
     //livedata (usuario)
-    private val _userData = MutableLiveData<Resource<UserModel?>>()
-    val userData: LiveData<Resource<UserModel?>> get() = _userData
+    private val _userData = MutableLiveData<Resource<AccountModel?>>()
+    val userData: LiveData<Resource<AccountModel?>> get() = _userData
 
     private val _logoutState = MutableLiveData<Resource<Unit>>(Resource.Idle)
     val logoutState: LiveData<Resource<Unit>> get() = _logoutState
@@ -59,9 +59,8 @@ class AccountViewModel(private val repository: UserRepository) : ViewModel() {
         val request = UserUpdateRequest(data.name, data.email, data.address)
 
         try {
-            val role = repository.getUserRole() == "ADMINISTRADOR"
             val id = repository.getUserData()?.id ?: return@launch
-            val response = repository.updateUser(id, request, role, true)
+            val response = repository.updateUser(id, request )
             _userData.postValue(response)
         } catch (e: Exception) {
             _userData.postValue(Resource.Error("Error al actulizadar los datos de la cuenta"))
