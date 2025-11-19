@@ -2,7 +2,7 @@
     <string name="app_name">Byte store</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-        <string name="price_format">$%s</string>
+    <string name="price_format">$%s</string>
     <string name="discount_percentage">-%.0f%%</string>
     <string name="reviews_none">(Sin reseñas)</string>
     <string name="reviews_single">(1 reseña)</string>

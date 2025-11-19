@@ -144,6 +144,15 @@
             app:popUpToInclusive="false" />
     </fragment>
 
+    <!-- Panel de administración -->
+    <fragment
+        android:id="@+id/adminFragment"
+        android:name="com.example.bytestore.ui.admin.AdminFragment"
+        android:label="Panel de administración"
+        tools:layout="@layout/fragment_admin">
+        <!--TODO:pendiente acciones a los cruds-->
+    </fragment>
+
     <!-- Acciones globales -->
     <!-- login -->
     <action

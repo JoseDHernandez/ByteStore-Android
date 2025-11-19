@@ -135,9 +135,9 @@ class MainActivity : AppCompatActivity() {
             R.id.cartFragment -> 2
 
             //perfil/opciones
-            R.id.profileFragment -> 3
+            R.id.profileFragment ,R.id.adminFragment-> 3
 
-            else -> 0
+            else -> 3
         }
         binding.navbar.setActiveItem(actualFragment)
     }

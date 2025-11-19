@@ -45,9 +45,7 @@ class NavbarView @JvmOverloads constructor(
                 when (option) {
                     "account" -> onItemSelected?.invoke(R.id.profileFragment)
                     "logout" -> onLogoutSelected?.invoke()
-                    "admin" -> {
-                        // TODO: Navegar a panel de administrador
-                    }
+                    "admin" -> onItemSelected?.invoke(R.id.adminFragment)
                 }
             }
             bottomSheet.show((context as AppCompatActivity).supportFragmentManager, "optionsSheet")
