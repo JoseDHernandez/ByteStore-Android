@@ -1,24 +1,85 @@
 package com.example.bytestore.data.model.product
 
+import android.util.Log
+
 object ProductProvider {
-    var products: ListProductsModel? = null
 
-    //retornar los productos almacenados
+    //=====================================
+    //           Productos
+    //=====================================
+
+    //mapa de los porductos
+    private val productMap = mutableMapOf<Int, ProductModel>()
+    private var lastFetchTimeProducts: Long = 0L
+
+    //variables de paginación
+    var total = 0
+    var pages = 0
+    var next: Int? = null
+    var prev: Int? = null
+
+    //obtener todos los productos
     fun getFetchProducts(): ListProductsModel? {
-        return products
+        return if (productMap.isEmpty()) null
+        else {
+            ListProductsModel(
+                total = total,
+                pages = pages,
+                first = 1,
+                next = next,
+                prev = prev,
+                data = productMap.values.toList()
+            )
+        }
     }
 
-    //buscar en los productos almacenados si existe el producto necsitado
-    fun findProductById(id: Int): ProductModel? {
-        return products?.data?.find { it.id == id }
+    //buscar producto por id
+    fun findProductById(id: Int): ProductModel? = productMap[id]
+
+    //verificar si necesita volver a consultar los productos
+    fun needRefreshProducts(intervalMs: Long): Boolean {
+        return (System.currentTimeMillis() - lastFetchTimeProducts) > intervalMs
     }
-    //buscar en local
-    fun searchProducts(search:String,order:String?,sort:String?): ListProductsModel?{
-        //validar si tiene todos los productos en local
-        if (products == null || products?.total != products?.data?.size) return null
-        val localProducts = products!!.data
-        val terms = search.lowercase().split(" ").filter { it.isNotBlank() }
-        //filtrar los productos
+
+    //obtener productos similares
+    fun getSimilarProducts(id: Int): List<ProductModel> {
+        val product = productMap[id] ?: return emptyList()
+
+        return productMap.values
+            .filter { it.id != id }
+            .map { candidate ->
+                val relevance =
+                    (if (candidate.brand == product.brand) 3 else 0) +
+                            (if (candidate.processor.model == product.processor.model) 2 else 0) +
+                            (if (candidate.ramCapacity == product.ramCapacity) 1 else 0)
+
+                candidate to relevance
+            }
+            .filter { it.second > 0 }
+            .take(6)
+            .map { it.first }
+    }
+
+    //obtener porductos por lista de ids
+    fun getProductsByIds(ids: List<Int>): List<ProductModel> {
+        if (productMap.isEmpty()) return emptyList()
+
+        val result = ids.mapNotNull { id -> productMap[id] }
+
+//si la lista es diferente retornal vacia (lanzar peticion en el repository)
+        return if (result.size == ids.size) result else emptyList()
+    }
+
+    //buscar producto
+    fun searchProducts(search: String, order: String?, sort: String?): ListProductsModel? {
+        if (productMap.isEmpty()) return null
+
+        val localProducts = productMap.values.toMutableList()
+
+        val terms = search.lowercase()
+            .split("\\s+".toRegex())
+            .filter { it.isNotBlank() }
+
         val filtered = localProducts.filter { product ->
             terms.any { term ->
                 product.name.lowercase().contains(term) ||
@@ -28,13 +89,19 @@ object ProductProvider {
                         product.display.brand.lowercase().contains(term)
             }
         }.toMutableList()
-        //ordenar
-        val sortAndOrder = "${(order?.uppercase() ?: "REVIEW")}_${(sort?.uppercase() ?: "DESC")}"
-        when (sortAndOrder) {
+
+        // Orden y dirección
+        val key = (order?.uppercase() ?: "REVIEW")
+        val dir = (sort?.uppercase() ?: "DESC")
+
+        when ("${key}_${dir}") {
             "PRICE_ASC" -> filtered.sortBy { it.price }
             "PRICE_DESC" -> filtered.sortByDescending { it.price }
             "REVIEW_ASC" -> filtered.sortBy { it.qualification }
             "REVIEW_DESC" -> filtered.sortByDescending { it.qualification }
+            else -> {
+
+            }
         }
         return ListProductsModel(
             total = filtered.size,
@@ -46,8 +113,279 @@ object ProductProvider {
         )
     }
 
-    //limpiar productos
-    fun clear() {
-        products = null
+    //agregar producto
+    fun addProduct(product: ProductModel) {
+        if (productMap.containsKey(product.id)) return
+        Log.d("ProductProvider", "Se añadio id: ${product.id}")
+        val updated = registerSubcategories(product)
+        productMap[updated.id] = updated
+        lastFetchTimeProducts = System.currentTimeMillis()
     }
+
+    //añadir productos
+    fun addProducts(list: List<ProductModel>) {
+        list.forEach { addProduct(it) }
+    }
+
+    fun setProducts(newData: ListProductsModel) {
+        newData.data.forEach { addProduct(it) }
+        if (newData.first == 1) {
+            total = newData.total
+            pages = newData.pages
+        }
+
+        next = newData.next
+        prev = newData.prev
+    }
+
+    //remove producto
+    fun removeProduct(id: Int) {
+        productMap.remove(id)
+    }
+
+    //limpiar prodcutos
+    fun clearCachedProducts() {
+        productMap.clear()
+        total = 0
+        next = null
+        prev = null
+        pages = 0
+    }
+
+    //=====================================
+    //           Filtros
+    //=====================================
+
+    private var cachedProductFilters: ProductFilters? = null
+    private var lastFetchTimeFilters: Long = 0L
+
+    fun setFilters(productFilters: ProductFilters) {
+        cachedProductFilters = productFilters
+        lastFetchTimeFilters = System.currentTimeMillis()
+    }
+
+    fun getFilters(): ProductFilters? {
+        return cachedProductFilters
+    }
+
+    fun needRefreshFilters(intervalMs: Long): Boolean {
+        return (System.currentTimeMillis() - lastFetchTimeFilters) > intervalMs
+    }
+
+    //comprobar si los dos listas de filtros son diferentes
+    fun ProductFilters.isDifferentFrom(filters: ProductFilters): Boolean {
+        if (cachedProductFilters == null) return true
+        return filters.brands.toSet() != cachedProductFilters!!.brands.toSet() ||
+                filters.processors.toSet() != cachedProductFilters!!.processors.toSet() ||
+                filters.displays.toSet() != cachedProductFilters!!.displays.toSet()
+    }
+
+    //=====================================
+    //           subcategorias de productos
+    //=====================================
+
+    //ids temporales para las subcategorias, los ids se sincronizan con los del servidor cuando se solicitan sus cruds
+    private var tempIdCounter = -1
+
+    private fun nextTempId(): Int = tempIdCounter--
+
+    //mapas de las subcategorias
+    private val processorMap = mutableMapOf<Int, ProcessorModel>()
+    private val brandMap = mutableMapOf<Int, BrandModel>()
+    private val displayMap = mutableMapOf<Int, DisplayModel>()
+    private val osMap = mutableMapOf<Int, OperatingSystemModel>()
+
+    //registrar subcategorias
+    private fun registerSubcategories(product: ProductModel): ProductModel {
+
+        //marca
+        if (brandMap.values.any { it.name == product.brand }) {
+            brandMap.entries.first { it.value.name == product.brand }.key
+        } else {
+            val id = nextTempId()
+            brandMap[id] = BrandModel(id, product.brand)
+
+        }
+
+        //procesador
+        val processor = product.processor
+        val processorId = processor.id ?: nextTempId()
+        processorMap.putIfAbsent(
+            processorId,
+            processor.copy(id = processorId)
+        )
+
+        //display
+        val display = product.display
+        val displayId = display.id ?: nextTempId()
+        displayMap.putIfAbsent(
+            displayId,
+            display.copy(id = displayId)
+        )
+
+        //sistema
+        val os = product.system
+        val osId = os.id ?: nextTempId()
+        osMap.putIfAbsent(
+            osId,
+            os.copy(id = osId)
+        )
+
+        //producto
+        return product.copy(
+            processor = processor.copy(id = processorId),
+            display = display.copy(id = displayId),
+            system = os.copy(id = osId),
+        )
+    }
+
+    //=====================================
+    //         remover subcategorias de productos (en cascada)
+    //=====================================
+
+    //remover marca
+    fun removeBrand(id: Int) {
+        brandMap.remove(id) ?: return
+        val productRemove = productMap.values.filter { it.brand == brandMap[id]?.name }
+        productRemove.forEach { productMap.remove(it.id) }
+    }
+
+    //remover procesador
+    fun removeProcessor(id: Int) {
+        val removed = processorMap.remove(id) ?: return
+        val productsToUpdate = productMap.values.filter { it.processor.id == id }
+        productsToUpdate.forEach { productMap.remove(it.id) }
+    }
+
+    //remover display
+    fun removeDisplay(id: Int) {
+        val removed = displayMap.remove(id) ?: return
+        val productsToUpdate = productMap.values.filter { it.display.id == id }
+        productsToUpdate.forEach { productMap.remove(it.id) }
+    }
+
+    //remover sistema
+    fun removeOperatingSystem(id: Int) {
+        val removed = osMap.remove(id) ?: return
+        val productsToUpdate = productMap.values.filter { it.system.id == id }
+        productsToUpdate.forEach { productMap.remove(it.id) }
+    }
+
+    //=====================================
+    //           Asignación de id para las subcategorias
+    //=====================================
+
+    //asignar id para una marca
+    fun assignBrandId(real: BrandModel) {
+        // buscar marca registrada por nombre
+        val tempEntry = brandMap.entries.firstOrNull { it.value.name == real.name } ?: return
+
+        val tempId = tempEntry.key
+        val stored = tempEntry.value
+
+        // si los modelos son distintos, sobrescribir
+        val finalBrand = if (stored != real) real else stored.copy(id = real.id)
+
+        // limpiar id temporal
+        brandMap.remove(tempId)
+        brandMap[real.id] = finalBrand
+
+        // actualizar productos
+        productMap.values.forEach { prod ->
+            if (prod.brand == stored.name) {
+                productMap[prod.id] = prod.copy(brand = finalBrand.name)
+            }
+        }
+    }
+
+    //id para procesador
+    fun assignProcessorId(real: ProcessorModel) {
+        // buscar por coincidencia de datos
+        val tempEntry = processorMap.entries.firstOrNull {
+            it.value.family == real.family &&
+                    it.value.model == real.model
+        } ?: return
+
+        val tempId = tempEntry.key
+        val stored = tempEntry.value
+
+        val finalProcessor =
+            if (stored != real) real
+            else stored.copy(id = real.id)
+
+        processorMap.remove(tempId)
+        processorMap[real.id!!] = finalProcessor
+
+        // actualizar en productos
+        productMap.values.forEach { p ->
+            if (p.processor.model == stored.model && p.processor.family == stored.family) {
+                productMap[p.id] = p.copy(processor = finalProcessor)
+            }
+        }
+    }
+
+    //id para display
+    fun assignDisplayId(real: DisplayModel) {
+        val tempEntry = displayMap.entries.firstOrNull {
+            it.value.size == real.size &&
+                    it.value.resolution == real.resolution &&
+                    it.value.graphics == real.graphics &&
+                    it.value.brand == real.brand
+        } ?: return
+
+        val tempId = tempEntry.key
+        val stored = tempEntry.value
+
+        val finalDisplay = if (stored != real) real else stored.copy(id = real.id)
+
+        displayMap.remove(tempId)
+        displayMap[real.id!!] = finalDisplay
+
+        productMap.values.forEach { p ->
+            if (p.display.resolution == stored.resolution && p.display.brand == stored.brand && p.display.size == stored.size && p.display.graphics == stored.graphics) {
+                productMap[p.id] = p.copy(display = finalDisplay)
+            }
+        }
+    }
+
+    //id para sistema operativo
+    fun assignOsId(real: OperatingSystemModel) {
+        val tempEntry = osMap.entries.firstOrNull {
+            it.value.system == real.system &&
+                    it.value.distribution == real.distribution
+        } ?: return
+
+        val tempId = tempEntry.key
+        val stored = tempEntry.value
+
+        val finalOs = if (stored != real) real else stored.copy(id = real.id)
+
+        osMap.remove(tempId)
+        osMap[real.id!!] = finalOs
+
+        productMap.values.forEach { p ->
+            if (p.system.distribution == stored.distribution) {
+                productMap[p.id] = p.copy(system = finalOs)
+            }
+        }
+    }
+
+    //=====================================
+    //           validar si los ids de las subcategorias no son temporales
+    //=====================================
+
+    fun checkAllBrandsIds() = brandMap.keys.all { it >= 0 }
+    fun checkAllProcessorsIds() = processorMap.keys.all { it >= 0 }
+    fun checkAllDisplaysIds() = displayMap.keys.all { it >= 0 }
+    fun checkAllOSIds() = osMap.keys.all { it >= 0 }
+
+    //=====================================
+    //           obtener los mapas de las subcategorias
+    //=====================================
+
+
+    fun getProcessors() = processorMap.values.toList()
+    fun getBrands() = brandMap.values.toList()
+    fun getDisplays() = displayMap.values.toList()
+    fun getOperatingSystems() = osMap.values.toList()
 }

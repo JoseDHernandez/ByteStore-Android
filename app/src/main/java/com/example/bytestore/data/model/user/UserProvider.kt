@@ -92,7 +92,7 @@ object UserProvider {
 
         cachedUsers = cachedUsers!!.copy(
             total = newUsers.size,
-            data = current
+            data = newUsers
         )
     }
 }

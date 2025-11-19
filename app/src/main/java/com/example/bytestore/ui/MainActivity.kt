@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
         //validar sesion
         lifecycleScope.launch {
             sessionManager.isLoggedInFlow.collect { isLogged ->
-                binding.navbar.disableOptionsButton(isLogged)
+                binding.navbar.disableOptionsButtons(isLogged)
                 //topBar
                 if (isLogged) {
                     binding.topBar.hideLoginButton()

@@ -52,7 +52,10 @@ data class DisplayModel(
     val graphics: String,
     val brand: String
 )
-
+data class BrandModel (
+    val id: Int,
+    val name: String
+)
 data class ProductFilters(
     val brands: List<ProductFilterItem>,
     val processors: List<ProductFilterItem>,
@@ -61,4 +64,127 @@ data class ProductFilters(
 
 data class ProductFilterItem(
     val name: String
+)
+
+//=============================================
+//             Crear producto
+//=============================================
+
+data class ProductRegisterRequest(
+    val name: String,
+    val description: String,
+    val price: Float,
+    val discount: Float,
+    val stock: Int,
+    val image: String,
+    val model: String,
+    @SerializedName("ram_capacity") val ramCapacity: Int,
+    @SerializedName("disk_capacity") val diskCapacity: Int,
+    val qualification: Float,
+    val brand: String,
+    val processor: ProcessorModel,
+    val system: OperatingSystemModel,
+    val display: DisplayModel
+)
+
+//=============================================
+//             Actualizar producto
+//=============================================
+
+data class ProductUpdateRequest(
+    val name: String?,
+    val description: String?,
+    val price: Float?,
+    val discount: Float?,
+    val stock: Int?,
+    val image: String?,
+    val model: String?,
+    @SerializedName("ram_capacity") val ramCapacity: Int,
+    @SerializedName("disk_capacity") val diskCapacity: Int,
+    val qualification: Float?,
+    @SerializedName("brand_id") val brand: Int?,
+    @SerializedName("processor_id") val processorId: Int?,
+    @SerializedName("system_id") val systemId: Int?,
+    @SerializedName("display_id")  val displayId: Int?
+)
+
+//=============================================
+//             Respuesta del crud de imagnes
+//=============================================
+
+data class ImagenResponseModel(
+    val message:String,
+    val filepath:String
+)
+
+//=============================================
+//             Registrar marca
+//=============================================
+
+data class ProductBrandRequest(
+    val name: String
+)
+
+//=============================================
+//             Registrar display
+//=============================================
+
+data class DisplayRegisterRequest(
+    val size: Float,
+    val resolution: String,
+    val graphics: String,
+    val brand: String
+)
+
+//=============================================
+//             Actualizar display
+//=============================================
+
+data class DisplayUpdateRequest(
+    val size: Float?,
+    val resolution: String?,
+    val graphics: String?,
+    val brand: String?
+)
+
+//=============================================
+//             Registrar procesador
+//=============================================
+
+data class ProcessorRegisterRequest(
+    val brand: String,
+    val family: String,
+    val model: String,
+    val cores: Int,
+    val speed: String
+)
+
+//=============================================
+//             Actualizar procesador
+//=============================================
+
+data class ProcessorUpdateRequest(
+    val brand: String?,
+    val family: String?,
+    val model: String?,
+    val cores: Int?,
+    val speed: String?
+)
+
+//=============================================
+//             Registrar sistema
+//=============================================
+
+data class OSRegisterRequest(
+    val system: String,
+    val distribution: String
+)
+
+//=============================================
+//             Actualizar sistema
+//=============================================
+
+data class OSUpdateRequest(
+    val system: String?,
+    val distribution: String?
 )

@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.navigation.findNavController
 import com.example.bytestore.R
 import com.example.bytestore.databinding.ViewBottomNavBinding
 
@@ -56,22 +55,34 @@ class NavbarView @JvmOverloads constructor(
     }
 
     //habilita o deshabilita el boton de opciones
-    fun disableOptionsButton(state: Boolean) {
-        binding.itemOptions.isEnabled = state
-        if (!state) {
-            binding.itemOptionsIcon.setColorFilter(
-                ContextCompat.getColor(context, R.color.gray),
-                PorterDuff.Mode.SRC_IN
-            )
-            binding.itemOptionsLabel.setTextColor(resources.getColor(R.color.gray, null))
-        } else {
-            binding.itemOptionsIcon.setColorFilter(
-                ContextCompat.getColor(context, R.color.black),
-                PorterDuff.Mode.SRC_IN
-            )
-            binding.itemOptionsLabel.setTextColor(resources.getColor(R.color.black, null))
+    fun disableOptionsButtons(enabled: Boolean) {
+
+        binding.itemOptions.isEnabled = enabled
+        binding.itemOrders.isEnabled = enabled
+        binding.itemCart.isEnabled = enabled
+
+        val color = if (enabled) R.color.black else R.color.gray
+        val tintColor = ContextCompat.getColor(context, color)
+
+        //aplicar colores a iconos
+        listOf(
+            binding.itemOptionsIcon,
+            binding.itemCartIcon,
+            binding.itemOrdersIcon
+        ).forEach { icon ->
+            icon.setColorFilter(tintColor, PorterDuff.Mode.SRC_IN)
+        }
+
+        //aplicar colores a textos
+        listOf(
+            binding.itemOptionsLabel,
+            binding.itemCartLabel,
+            binding.itemOrdersLabel
+        ).forEach { label ->
+            label.setTextColor(tintColor)
         }
     }
+
 
     //indica cual item esta activo (gestionar desde el MainActivity)
     fun setActiveItem(index: Int) {

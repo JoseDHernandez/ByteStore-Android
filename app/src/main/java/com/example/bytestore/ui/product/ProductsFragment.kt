@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.os.Parcelable
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.util.Log
@@ -37,7 +38,7 @@ class ProductsFragment : Fragment() {
     private var _binding: FragmentProductsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ProductViewModel by viewModels()
-
+    private var recyclerState: Parcelable? = null
     //Paginación
     private var currentPage = 1;
     private var hasNextPage = true;
@@ -88,7 +89,7 @@ class ProductsFragment : Fragment() {
             clearSearch()
         }
         //congifurar datos a la UI
-        setAdapterAndRecyclerView()
+        setAdapterAndRecyclerView(savedInstanceState)
 
         //validar permiso al microfono
         if (ContextCompat.checkSelfPermission(
@@ -279,7 +280,7 @@ class ProductsFragment : Fragment() {
         }
     }
 
-    private fun setAdapterAndRecyclerView() {
+    private fun setAdapterAndRecyclerView(savedInstanceState: Bundle?) {
         //Listadapater de prodcutos
         productAdapter = ProductsListAdapter { product ->
             //Callback del onClick
@@ -290,11 +291,14 @@ class ProductsFragment : Fragment() {
             findNavController().navigate(action)
         }
         //configuracion del recycleview
-        binding.productsRecyclerView.adapter = productAdapter
+        val recyclerView = binding.productsRecyclerView
+        recyclerView.setHasFixedSize(true)
+        recyclerView.adapter = productAdapter
         val layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
-        binding.productsRecyclerView.layoutManager = layoutManager
+        recyclerView.layoutManager = layoutManager
+        recyclerView.layoutManager?.onRestoreInstanceState(savedInstanceState)
         //espaciado entre tarjetas
-        binding.productsRecyclerView.addItemDecoration(
+        recyclerView.addItemDecoration(
             GridSpacingItemDecorator(
                 2,
                 resources.getDimensionPixelSize(R.dimen.grid_spacing),
@@ -320,17 +324,16 @@ class ProductsFragment : Fragment() {
                     //paginas totales
                     totalPages = result.pages
 
-                    if (currentPage == 1) {
-                        productAdapter.submitList(result.data)
-                    } else {
-                        //agregar los productos de la pagina sigiente con la lista actual
-                        val currentList = productAdapter.currentList.toMutableList()
-                        currentList.addAll(result.data)
-                        productAdapter.submitList(currentList.toList())
-                    }
+                    val current = productAdapter.currentList
+
+                    val currentIds = current.map { it.id }.toSet()
+                    val newItems = result.data.filter { it.id !in currentIds }
+
+                    val newList = current + newItems
+                    productAdapter.submitList(newList)
+
 
                     //estado de la paginacion
-                    hasNextPage = result.next != null && result.next > currentPage
                     isLoading = false
                     binding.progressBar.visibility = View.GONE
                     binding.productsRecyclerView.visibility = View.VISIBLE
@@ -426,6 +429,19 @@ class ProductsFragment : Fragment() {
         binding.searchInput.setText("")
         viewModel.getProducts(currentPage)
     }
+
+    override fun onPause() {
+        super.onPause()
+        recyclerState = binding.productsRecyclerView.layoutManager?.onSaveInstanceState()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        recyclerState?.let {
+            binding.productsRecyclerView.layoutManager?.onRestoreInstanceState(it)
+        }
+    }
+
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()

@@ -50,7 +50,7 @@ class ProductViewModel : ViewModel() {
                 } else null
                 Log.d("ProductViewModel", "Page: $page, Sort: $sort, Order: $order.\nQuery: $query")
                 //petición
-                val response = repository.getProducts(page, 16, query, sort, order)
+                val response = repository.getProducts(page, query, sort, order)
                 //retorno de los datos
                 if (response != null) {
                     if (response.data.isEmpty()) {
