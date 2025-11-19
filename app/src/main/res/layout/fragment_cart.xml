@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -18,19 +17,18 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
             <!-- Lista de productos -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:paddingHorizontal="16dp"
                 android:paddingBottom="8dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_cart"
-                tools:itemCount="3"/>
+                tools:itemCount="3"
+                tools:listitem="@layout/item_cart" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
@@ -39,8 +37,8 @@
         android:id="@+id/emptyState"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
         android:padding="32dp"
         android:visibility="gone">
 
@@ -48,21 +46,20 @@
         <ImageView
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:src="@drawable/ic_cart_empty"
             android:layout_marginBottom="24dp"
-            android:tint="@color/gray"
-            android:contentDescription="Carrito vacío"/>
+            android:contentDescription="Carrito vacío"
+            android:src="@drawable/ic_cart_empty" />
 
         <!-- Mensaje -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tu carrito de compras está vacío"
-            android:textSize="16sp"
-            android:textColor="@color/black"
+            android:layout_marginBottom="24dp"
             android:fontFamily="@font/inter"
             android:gravity="center"
-            android:layout_marginBottom="24dp"/>
+            android:text="Tu carrito de compras está vacío"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
         <!-- Botón ver productos -->
         <Button
@@ -70,8 +67,7 @@
             style="@style/Widget.ByteStore.Button.Primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ver productos disponibles"
-            android:fontFamily="@font/inter_semibold"/>
+            android:text="Ver productos disponibles" />
     </LinearLayout>
 
     <!-- Botones fijos en la parte inferior -->
@@ -80,26 +76,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:orientation="vertical"
-        android:padding="16dp"
         android:background="@android:color/white"
-        android:elevation="8dp">
+        android:elevation="8dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="16dp">
 
         <Button
             android:id="@+id/btnCheckout"
             style="@style/Widget.ByteStore.Button.Primary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/barlow_semibold"
-            android:text="Proceder al pago"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="15dp"
+            android:text="Proceder al pago" />
 
         <Button
             android:id="@+id/btnContinue"
-            style="@style/Widget.ByteStore.Button.PrimaryOutline"
+            style="@style/Widget.ByteStore.Button.SecondaryOutline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/barlow_semibold"
-            android:text="Seguir comprando"/>
+            android:text="Seguir comprando" />
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

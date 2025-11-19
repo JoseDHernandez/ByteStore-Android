@@ -104,7 +104,9 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 is Resource.Success -> {
-                    navController.navigate(R.id.action_global_loginFragment)
+                    if (navController.currentDestination?.id != R.id.loginFragment) {
+                        navController.navigate(R.id.action_global_loginFragment)
+                    }
                     Toast.makeText(this, "Sesión cerrada", Toast.LENGTH_SHORT).show()
                 }
 
@@ -129,13 +131,12 @@ class MainActivity : AppCompatActivity() {
             R.id.productFragment, R.id.productsFragment -> 0
 
             //ordenes (cuando lo implementes)
-            // R.id.ordersFragment -> 1
+             R.id.orderFragment -> 1
 
             //carrito
             R.id.cartFragment -> 2
 
-            //perfil/opciones
-            R.id.profileFragment ,R.id.adminFragment-> 3
+            //opciones(perfil, cruds)
 
             else -> 3
         }

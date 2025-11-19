@@ -15,16 +15,20 @@ class SessionManager(private val context: Context) {
 
     @Volatile
     private var cachedToken: String? = null
-
+    //validar estado de la sesión
+    val userTokenFlow: Flow<String?> = repository.userTokenFlow
+    val isLoggedInFlow: Flow<Boolean> = repository.isLoggedInFlow
     init {
-        // Cache del token en memoria
+        startObservingToken()
+    }
+    // Observador del token
+    private fun startObservingToken() {
         CoroutineScope(Dispatchers.IO).launch {
             userTokenFlow.collect { token ->
                 cachedToken = token
             }
         }
     }
-
     //validar el acceso de la cuenta
     suspend fun checkAccess(requiredRole: String? = null): Boolean {
         val token = repository.getUserToken()
@@ -45,9 +49,6 @@ class SessionManager(private val context: Context) {
             cachedToken = it
         }
     }
-    //validar estado de la sesión
-    val userTokenFlow: Flow<String?> = repository.userTokenFlow
-    val isLoggedInFlow: Flow<Boolean> = repository.isLoggedInFlow
 
     //autenticar por token
     suspend fun authToken(): Boolean {

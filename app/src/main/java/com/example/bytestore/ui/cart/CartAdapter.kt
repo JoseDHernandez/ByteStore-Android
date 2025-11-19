@@ -39,23 +39,13 @@ class CartAdapter(
             if (!imageUrl.isNullOrEmpty()) {
                 imageUrl = imageUrl.replace("localhost", "10.0.2.2")
 
-                // Si la URL no tiene esquema, prefix con la base del ApiClient
-                try {
-                    val base = ApiClient.retrofit(ctx).baseUrl().toString()
-                    if (!imageUrl.startsWith("http")) {
-                        imageUrl = base.trimEnd('/') + "/" + imageUrl.trimStart('/')
-                    }
-                } catch (e: Exception) {
-                    Log.w("CartAdapter", "Error obteniendo baseUrl: ${e.message}")
-                }
-
                 Log.d("CartAdapter", "Cargando imagen: productId=${item.productId}")
                 Log.d("CartAdapter", "   Original: '${item.image}'")
                 Log.d("CartAdapter", "   Final: '$imageUrl'")
 
                 Glide.with(ctx)
                     .load(imageUrl)
-                    .override(200, 200)
+                    .override(150, 150)
                     .centerCrop()
                     .placeholder(R.drawable.placeholder)
                     .error(R.drawable.placeholder)

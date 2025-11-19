@@ -144,6 +144,14 @@
             app:popUpToInclusive="false" />
     </fragment>
 
+    <!-- Order fragment -->
+    <fragment
+        android:id="@+id/orderFragment"
+        android:name="com.example.bytestore.ui.order.OrderFragment"
+        android:label="Orden"
+        tools:layout="@layout/fragment_order">
+        <!--TODO: pendiente navegacion-->
+    </fragment>
     <!-- Panel de administración -->
     <fragment
         android:id="@+id/adminFragment"

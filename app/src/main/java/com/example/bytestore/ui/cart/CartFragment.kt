@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.PorterDuff
 import android.graphics.RectF
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -77,7 +77,7 @@ class CartFragment : ProtectedFragment() {
         //  SWIPE PARA ELIMINAR
         val deleteIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_eliminate)
         val backgroundPaint = Paint().apply {
-            color = ContextCompat.getColor(requireContext(), R.color.gray)
+            color = ContextCompat.getColor(requireContext(), R.color.lite_gray)
             isAntiAlias = true
         }
 
@@ -111,10 +111,9 @@ class CartFragment : ProtectedFragment() {
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
 
                 val itemView = viewHolder.itemView
-                val icon = deleteIcon
 
                 if (dX < 0) {
-                    val iconSize = dpToPx(32)
+                    val iconSize = dpToPx(38)
                     val iconMargin = (itemView.height - iconSize) / 2
 
                     val cornerRadius = dpToPx(16).toFloat()
@@ -131,9 +130,9 @@ class CartFragment : ProtectedFragment() {
                     val iconRight = itemView.right - iconMargin
                     val iconLeft = iconRight - iconSize
 
-                    icon?.setBounds(iconLeft, iconTop, iconRight, iconBottom)
-                    icon?.setTint(Color.WHITE)
-                    icon?.draw(c)
+                    deleteIcon?.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+                    deleteIcon?.setTint(requireContext().getColor(R.color.red))
+                    deleteIcon?.draw(c)
                 }
             }
         }
