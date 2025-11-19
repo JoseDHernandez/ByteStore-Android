@@ -38,6 +38,7 @@ data class DisplayInputs(
 
 
 object ProductValidator {
+    //TODO: cambiar regex 
 
     // =======================
     //        REGEX
