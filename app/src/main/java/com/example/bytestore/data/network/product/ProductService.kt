@@ -171,14 +171,14 @@ class ProductService {
     //===================================
 
     //subir imagen
-    suspend fun uploadImage(file: MultipartBody.Part): Resource<ImagenResponseModel> =
+    suspend fun uploadImage(file: MultipartBody.Part): Resource<String> =
         withContext(Dispatchers.IO) {
             try {
                 val response = api.uploadImage(file)
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {
-                        Resource.Success(body)
+                        Resource.Success(body.filepath)
                     } else {
                         Resource.Error("Cuerpo sin datos")
                     }
@@ -203,7 +203,7 @@ class ProductService {
     suspend fun changeImage(
         filename: String,
         file: MultipartBody.Part
-    ): Resource<ImagenResponseModel> = withContext(
+    ): Resource<String> = withContext(
         Dispatchers.IO
     ) {
         try {
@@ -211,7 +211,7 @@ class ProductService {
             if (response.isSuccessful) {
                 val body = response.body()
                 if (body != null) {
-                    Resource.Success(body)
+                    Resource.Success(body.filepath)
                 } else {
                     Resource.Error("Cuerpo sin datos")
                 }

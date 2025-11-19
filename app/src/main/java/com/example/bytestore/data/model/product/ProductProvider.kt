@@ -199,44 +199,68 @@ object ProductProvider {
     private fun registerSubcategories(product: ProductModel): ProductModel {
 
         //marca
-        if (brandMap.values.any { it.name == product.brand }) {
-            brandMap.entries.first { it.value.name == product.brand }.key
-        } else {
-            val id = nextTempId()
-            brandMap[id] = BrandModel(id, product.brand)
-
-        }
+        addBrand(product.brand)
 
         //procesador
-        val processor = product.processor
+        val processorId = addProcessor(product.processor)
+
+
+        //display
+        val displayId = addDisplay(product.display)
+
+        //sistema
+        val osId = addOS(product.system)
+
+        //producto
+        return product.copy(
+            processor = product.processor.copy(id = processorId),
+            display = product.display.copy(id = displayId),
+            system = product.system.copy(id = osId),
+        )
+    }
+
+    //registrar marca
+    fun addBrand(brand: String) {
+        if (brandMap.values.any { it.name == brand }) {
+            brandMap.entries.first { it.value.name == brand }.key
+        } else {
+            val id = nextTempId()
+            brandMap[id] = BrandModel(id, brand)
+        }
+    }
+
+    //agregar marca (nueva)
+    fun addBrand(brand: BrandModel) {
+        brandMap.putIfAbsent(brand.id, brand)
+    }
+
+    //registrar procesador
+    fun addProcessor(processor: ProcessorModel): Int {
         val processorId = processor.id ?: nextTempId()
         processorMap.putIfAbsent(
             processorId,
             processor.copy(id = processorId)
         )
-
-        //display
-        val display = product.display
+        return processorId
+    }
+    //registrar graficos
+    fun addDisplay(display: DisplayModel):Int{
         val displayId = display.id ?: nextTempId()
         displayMap.putIfAbsent(
             displayId,
             display.copy(id = displayId)
         )
+        return displayId
+    }
 
-        //sistema
-        val os = product.system
+    //registrar sistema operativo
+    fun addOS(os: OperatingSystemModel):Int{
         val osId = os.id ?: nextTempId()
         osMap.putIfAbsent(
             osId,
             os.copy(id = osId)
         )
-
-        //producto
-        return product.copy(
-            processor = processor.copy(id = processorId),
-            display = display.copy(id = displayId),
-            system = os.copy(id = osId),
-        )
+        return osId
     }
 
     //=====================================
@@ -276,7 +300,7 @@ object ProductProvider {
     //=====================================
 
     //asignar id para una marca
-    fun assignBrandId(real: BrandModel) {
+    fun syncBrandId(real: BrandModel) {
         // buscar marca registrada por nombre
         val tempEntry = brandMap.entries.firstOrNull { it.value.name == real.name } ?: return
 
@@ -299,7 +323,7 @@ object ProductProvider {
     }
 
     //id para procesador
-    fun assignProcessorId(real: ProcessorModel) {
+    fun syncProcessorId(real: ProcessorModel) {
         // buscar por coincidencia de datos
         val tempEntry = processorMap.entries.firstOrNull {
             it.value.family == real.family &&
@@ -325,7 +349,7 @@ object ProductProvider {
     }
 
     //id para display
-    fun assignDisplayId(real: DisplayModel) {
+    fun syncDisplayId(real: DisplayModel) {
         val tempEntry = displayMap.entries.firstOrNull {
             it.value.size == real.size &&
                     it.value.resolution == real.resolution &&
@@ -349,7 +373,7 @@ object ProductProvider {
     }
 
     //id para sistema operativo
-    fun assignOsId(real: OperatingSystemModel) {
+    fun syncOsId(real: OperatingSystemModel) {
         val tempEntry = osMap.entries.firstOrNull {
             it.value.system == real.system &&
                     it.value.distribution == real.distribution
@@ -371,6 +395,37 @@ object ProductProvider {
     }
 
     //=====================================
+    //           actulizar las subcategorias
+    //=====================================
+
+    fun updateBrand(id: Int, b: BrandModel): Boolean {
+        return if (brandMap.containsKey(id)) {
+            brandMap[id] = b
+            true
+        } else false
+    }
+
+    fun updateProcessor(id: Int, b: ProcessorModel): Boolean {
+        return if (processorMap.containsKey(id)) {
+            processorMap[id] = b
+            true
+        } else false
+    }
+
+    fun updateDisplay(id: Int, b: DisplayModel): Boolean {
+        return if (displayMap.containsKey(id)) {
+            displayMap[id] = b
+            true
+        } else false
+    }
+
+    fun updateOS(id: Int, b: OperatingSystemModel): Boolean {
+        return if (osMap.containsKey(id)) {
+            osMap[id] = b
+            true
+        } else false
+    }
+    //=====================================
     //           validar si los ids de las subcategorias no son temporales
     //=====================================
 
@@ -388,4 +443,13 @@ object ProductProvider {
     fun getBrands() = brandMap.values.toList()
     fun getDisplays() = displayMap.values.toList()
     fun getOperatingSystems() = osMap.values.toList()
+
+    //=====================================
+    //           obtener datos de los mapas de subcategorias
+    //=====================================
+
+    fun getProcessor(id:Int): ProcessorModel? = processorMap[id]
+    fun getBrand(id:Int): BrandModel? = brandMap[id]
+    fun getDisplays(id:Int): DisplayModel? = displayMap[id]
+    fun getOperatingSystem(id:Int): OperatingSystemModel? = osMap[id]
 }
