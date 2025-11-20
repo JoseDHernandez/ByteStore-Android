@@ -17,7 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class FiltersBottomSheet(
-    private val onApply: (selectedFilters: List<String>, selectedOrder: Map<String,String>) -> Unit
+    private val onApply: (selectedFilters: List<String>, selectedOrder: Map<String, String>) -> Unit,
 ) : BottomSheetDialogFragment() {
     private var _binding: ProductFiltersBottomSheetBinding? = null
     private val binding get() = _binding!!
@@ -28,7 +28,10 @@ class FiltersBottomSheet(
     private lateinit var processorsAdapter: ProductFiltersListAdapter
     private lateinit var displaysAdapter: ProductFiltersListAdapter
 
+    override fun getTheme(): Int =
+        R.style.Theme_ByteStore_BottomSheet //forzar estilo de los botones, porque el materialcomponents los sobrescribe
 
+    var onClearSelected: (() -> Unit)? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -51,10 +54,10 @@ class FiltersBottomSheet(
             dismiss()
         }
         //aplicar filtros
-        binding.appltFilters.setOnClickListener {
+        binding.applyFilters.setOnClickListener {
             val selectedFilters = listOfNotNull(
                 viewModel.selectedBrands.value?.toList(),
-               viewModel.selectedProcessors.value?.toList(),
+                viewModel.selectedProcessors.value?.toList(),
                 viewModel.selectedDisplays.value?.toList()
             ).flatten()
             onApply(
@@ -66,6 +69,8 @@ class FiltersBottomSheet(
         //limpiar filtros
         binding.clearFilters.setOnClickListener {
             viewModel.clearSelections()
+            onClearSelected?.invoke()
+            dismiss()
         }
         return binding.root
     }
@@ -81,7 +86,7 @@ class FiltersBottomSheet(
         }
         binding.orderSpinner.adapter = spinnerAdapter
         //mantener seleccion
-        binding.orderSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+        binding.orderSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,
@@ -96,9 +101,10 @@ class FiltersBottomSheet(
         }
         viewModel.selectedOrder.observe(viewLifecycleOwner) { order ->
             val position = spinnerAdapter.getPosition(order)
-            if(position>=0) binding.orderSpinner.setSelection(position)
+            if (position >= 0) binding.orderSpinner.setSelection(position)
         }
     }
+
     private fun setLiveData() {
         viewModel.productFiltersState.observe(viewLifecycleOwner) { state ->
             if (state is Resource.Success) {

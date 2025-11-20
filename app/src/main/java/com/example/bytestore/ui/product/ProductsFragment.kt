@@ -39,6 +39,7 @@ class ProductsFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: ProductViewModel by viewModels()
     private var recyclerState: Parcelable? = null
+
     //Paginación
     private var currentPage = 1;
     private var hasNextPage = true;
@@ -48,7 +49,7 @@ class ProductsFragment : Fragment() {
 
     //Variables de busuqeda
     private var query: String? = null
-    private var filtersQuery: String? = null
+    private var filtersQuery: List<String> = emptyList()
     private var orderQuery: Map<String, String> = emptyMap()
 
     //busqueda de voz
@@ -118,7 +119,7 @@ class ProductsFragment : Fragment() {
             )
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, "es")
             putExtra(RecognizerIntent.EXTRA_PROMPT, "Hablar ahora")
-            putExtra(RecognizerIntent.EXTRA_MAX_RESULTS,3)// 3 coincidencias
+            putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 3)// 3 coincidencias
         }
         //listener
         speechRecognizer.setRecognitionListener(object : android.speech.RecognitionListener {
@@ -150,10 +151,19 @@ class ProductsFragment : Fragment() {
                 when (error) {
                     SpeechRecognizer.ERROR_NO_MATCH,
                     SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> {
-                        Toast.makeText(requireContext(), "No se detectó voz, intenta de nuevo", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "No se detectó voz, intenta de nuevo",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
+
                     else -> {
-                        Toast.makeText(requireContext(), "Error al reconocer voz ($error)", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            requireContext(),
+                            "Error al reconocer voz ($error)",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
                 stopListeningSafely()
@@ -173,8 +183,8 @@ class ProductsFragment : Fragment() {
             binding.speechOptions.visibility = View.VISIBLE
         }
         //boton de hablar
-        binding.speechTextRec.setOnTouchListener { v,event ->
-            when(event.action){
+        binding.speechTextRec.setOnTouchListener { v, event ->
+            when (event.action) {
                 //al mantener presionado
                 MotionEvent.ACTION_DOWN -> {
                     if (!isListening) {
@@ -191,9 +201,9 @@ class ProductsFragment : Fragment() {
                     }
                 }
                 //al levantar o cancelar
-                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL-> {
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                     v.performClick()
-                    if(isListening){
+                    if (isListening) {
                         stopListeningSafely()
                     }
                 }
@@ -206,13 +216,14 @@ class ProductsFragment : Fragment() {
             stopListeningSafely()
         }
     }
+
     //detener escucha
     private fun stopListeningSafely() {
         if (isListening) {
             try {
                 speechRecognizer.stopListening()
-            } catch (_: Exception) {}
-            finally {
+            } catch (_: Exception) {
+            } finally {
                 isListening = false
                 //restaurar boton
                 binding.speechTextRec.setBackgroundResource(R.drawable.btn_green_filled_selector)
@@ -223,6 +234,7 @@ class ProductsFragment : Fragment() {
             }
         }
     }
+
     //logica del boton de buscar
     private fun searchButtonLogic() {
         //detectar boton enter
@@ -252,8 +264,8 @@ class ProductsFragment : Fragment() {
         }
         //mostrar limpiar
         binding.searchInput.addTextChangedListener { editable ->
-            val text = editable?.toString()?:""
-            if(text.length > 1) {
+            val text = editable?.toString() ?: ""
+            if (text.length > 1) {
                 binding.clearSearchButton.visibility = View.VISIBLE
             } else {
                 binding.clearSearchButton.visibility = View.GONE
@@ -292,6 +304,7 @@ class ProductsFragment : Fragment() {
         }
         //configuracion del recycleview
         val recyclerView = binding.productsRecyclerView
+        recyclerView.itemAnimator = null
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = productAdapter
         val layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
@@ -323,15 +336,21 @@ class ProductsFragment : Fragment() {
                     val result = state.data
                     //paginas totales
                     totalPages = result.pages
+                    val newList = if (currentPage == 1) {
+                        result.data.toMutableList()
+                    } else {
+                        (productAdapter.currentList + result.data)
+                            .distinctBy { it.id }
+                            .toMutableList()
+                    }
 
-                    val current = productAdapter.currentList
 
-                    val currentIds = current.map { it.id }.toSet()
-                    val newItems = result.data.filter { it.id !in currentIds }
-
-                    val newList = current + newItems
-                    productAdapter.submitList(newList)
-
+                    productAdapter.submitList(newList.toMutableList()) {
+                        binding.productsRecyclerView.post {
+                            (binding.productsRecyclerView.layoutManager as StaggeredGridLayoutManager)
+                                .invalidateSpanAssignments()
+                        }
+                    }
 
                     //estado de la paginacion
                     isLoading = false
@@ -347,19 +366,14 @@ class ProductsFragment : Fragment() {
                 }
 
                 is Resource.Loading -> {
-                    binding.productsRecyclerView.visibility = View.GONE
+                    binding.productsRecyclerView.visibility = View.VISIBLE
                     binding.errorLayout.visibility = View.GONE
                     if (currentPage == 1) {
                         binding.progressBar.visibility = View.VISIBLE
                     }
                 }
 
-                is Resource.ValidationError -> {
-                    //Opcion sin uso
-                    binding.progressBar.visibility = View.GONE
-                    binding.errorLayout.visibility = View.GONE
-                    binding.productsRecyclerView.visibility = View.VISIBLE
-                }
+                else -> Unit
             }
         }
     }
@@ -388,12 +402,19 @@ class ProductsFragment : Fragment() {
     }
 
     private fun loadNextPage() {
+        if (isLoading || !hasNextPage) return
         isLoading = true;
         currentPage++ //aumentar pagina
         if (currentPage > totalPages) {
             hasNextPage = false
         } else {
-            viewModel.getProducts(currentPage)
+            val fullQuery = buildQuery()
+            viewModel.getProducts(
+                currentPage,
+                fullQuery.ifBlank { null },
+                orderQuery["sort"],
+                orderQuery["order"]
+            )
         }
 
     }
@@ -403,31 +424,92 @@ class ProductsFragment : Fragment() {
         val sheet =
             FiltersBottomSheet { selectedFilters, selectedOrder ->
                 //busuqeda con filtros
-                filtersQuery = selectedFilters.joinToString(" ")
+                filtersQuery = selectedFilters
                 orderQuery = selectedOrder
                 search()
             }
         sheet.show(parentFragmentManager, "FiltersBottomSheet")
+        //limpiar
+        sheet.onClearSelected = {
+            clearSearch()
+        }
     }
+
+    private fun normalizeFilters(filters: List<String>?): String? {
+        if (filters.isNullOrEmpty()) return null
+
+        return filters
+            .flatMap { it.split("\\s+".toRegex()) }   // separar por espacios
+            .map { it.trim().lowercase() }            // limpiar + minúsculas
+            .filter { it.isNotBlank() }               // quitar vacíos
+            .distinct()                               // quitar repetidos
+            .joinToString(",")                        // unir por comas
+            .ifBlank { null }
+    }
+
+    private fun normalizeQuery(text: String?): String? {
+        if (text.isNullOrBlank()) return null
+
+        return text
+            .trim()
+            .lowercase()
+            .split("\\s+".toRegex())  // separar espacios
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+            .joinToString(",")        // unir como comas
+            .ifBlank { null }
+    }
+
+    private fun buildQuery(): String {
+        val normalizedQuery = normalizeQuery(query)
+        val normalizedFilters = normalizeFilters(filtersQuery)
+
+        val base = listOfNotNull(
+            normalizedQuery,
+            normalizedFilters
+        )
+
+        return base
+            .flatMap { it.split(",") }      // separar
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+            .distinct()                     // quitar duplicados
+            .joinToString(",")
+    }
+
 
     //aplicar filtros/busqueda
     private fun search() {
         //unir texto de busqueda con filtros
-        val fullQuery = ((query ?: "") + (filtersQuery ?: "")).lowercase().split("\\s+".toRegex())
-            .filter { it.isNotBlank() }.distinct().joinToString(",")
+        val fullQuery = buildQuery()
         currentPage = 1
-        viewModel.getProducts(currentPage, fullQuery, orderQuery["sort"], orderQuery["order"])
+        totalPages = 1
+        hasNextPage = true
+        isLoading = false
+
+        productAdapter.submitList(emptyList())
+
+        binding.searchInput.setText(fullQuery.ifBlank { "" }.replace(","," "))
+        viewModel.getProducts(
+            1,
+            fullQuery.ifBlank { null },
+            orderQuery["sort"],
+            orderQuery["order"]
+        )
         //subir scroll
         binding.productsRecyclerView.scrollToPosition(0)
     }
+
     //limpiar busuqeda
-    private fun clearSearch(){
-        query = ""
-        filtersQuery = null
+    private fun clearSearch() {
+        query = null
+        filtersQuery = emptyList()
         orderQuery = emptyMap()
         currentPage = 1
+        totalPages = 1
+        hasNextPage = true
         binding.searchInput.setText("")
-        viewModel.getProducts(currentPage)
+        viewModel.getProducts(1)
     }
 
     override fun onPause() {
@@ -435,12 +517,6 @@ class ProductsFragment : Fragment() {
         recyclerState = binding.productsRecyclerView.layoutManager?.onSaveInstanceState()
     }
 
-    override fun onResume() {
-        super.onResume()
-        recyclerState?.let {
-            binding.productsRecyclerView.layoutManager?.onRestoreInstanceState(it)
-        }
-    }
 
     override fun onDestroyView() {
         _binding = null

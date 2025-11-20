@@ -37,19 +37,15 @@ class ProductRepository {
         val cached = ProductProvider.getFetchProducts()
         val refreshInterval = 30 * 60 * 1000L //30 min
         var resetProducts = false
-        //==============================
-        //      busqueda en local
-        //==============================
-        if (cached != null && search != null) {
-            val localSearch = ProductProvider.searchProducts(search, order, sort)
-            //si la busqueda en local se puede realizar la retorno, en caso contrario sigue la solicitud normal
-            if (localSearch != null) return localSearch
+        val isSearch = !search.isNullOrBlank() ||!sort.isNullOrBlank()
+        if(isSearch){
+            Log.d("ProductRepository","Es una busqueda")
         }
         //==============================
         //      verificar cache de paginación
         //==============================
         // si ya solicte la pagina antes o si ya solicte todas las paginas
-        if (cached != null && page != null && (cached.prev != null && page <= cached.prev || cached.next == null)) {
+        if (!isSearch && cached != null && page != null && (cached.prev != null && page <= cached.prev || cached.next == null)) {
             //validar si se necesita actulizar
             if (!ProductProvider.needRefreshProducts(refreshInterval)) {
                 Log.d("ProductRepository","Productos de cache: $page ")

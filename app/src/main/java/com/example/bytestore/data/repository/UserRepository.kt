@@ -123,8 +123,7 @@ class UserRepository(private val context: Context) {
     //eliminar usuario
     suspend fun deleteUser(
         id: String,
-        request: UserDeleteRequest,
-        isAdmin: Boolean = false
+        request: UserDeleteRequest
     ): Boolean {
         val response = userService.deleteUser(id, request)
         if (response) {

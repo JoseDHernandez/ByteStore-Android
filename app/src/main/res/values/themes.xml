@@ -8,21 +8,46 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:fontFamily">@font/inter</item>
 
-        <!-- Fuente global -->
-        <item name="android:includeFontPadding">false</item>
-
-        <!-- Control del ripple -->
+        <!-- Ripple -->
         <item name="android:colorControlHighlight">@color/lite_gray</item>
 
-        <!-- IMPORTANTE: Deshabilitar tintado automático de botones -->
+        <!-- Desactivar tint automático Material -->
+        <item name="colorControlNormal">@null</item>
+        <item name="colorControlActivated">@null</item>
+        <item name="colorControlHighlight">@null</item>
+
+        <!-- IMPORTANTE: quitar buttonStyle global -->
+        <item name="buttonStyle">@null</item>
+
+        <!-- Evitar tint de MaterialButtons -->
         <item name="materialButtonStyle">@style/Widget.ByteStore.Button.NoTint</item>
 
+        <!-- Inputs -->
+        <item name="editTextStyle">@style/Widget.ByteStore.Input</item>
+
+        <!-- Checkbox / Radio -->
+        <item name="checkboxStyle">@style/Widget.ByteStore.CheckBox</item>
+        <item name="radioButtonStyle">@style/Widget.ByteStore.RadioButton</item>
+
+        <!-- Cursor -->
+        <item name="android:textCursorDrawable">@drawable/custom_cursor</item>
+
+        <!-- Progressbar -->
+        <item name="android:indeterminateTint">@color/dark_green</item>
+        <item name="android:progressTint">@color/dark_green</item>
+
     </style>
+
 
     <!-- Estilo para evitar que MaterialComponents cambie los colores de los botones -->
     <style name="Widget.ByteStore.Button.NoTint" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@null</item>
         <item name="android:backgroundTint">@null</item>
+    </style>
+    <style name="Theme.ByteStore.BottomSheet" parent="Theme.ByteStore">
+        <item name="bottomSheetStyle">@style/Widget.Design.BottomSheet.Modal</item>
+        <item name="buttonStyle">@null</item>
+        <item name="materialButtonStyle">@style/Widget.ByteStore.Button.NoTint</item>
     </style>
 
 </resources>

@@ -42,11 +42,7 @@ class ProductFiltersViewModel : ViewModel() {
             _productFiltersState.postValue(Resource.Loading)
             try {
                 val response = repository.getProductFilters()
-                if (response != null) {
-                    _productFiltersState.postValue(Resource.Success(response))
-                } else {
-                    _productFiltersState.postValue(Resource.Error("Error al obtener los filtros de productos"))
-                }
+                _productFiltersState.postValue(Resource.Success(response))
             } catch (e: Exception) {
                 e.printStackTrace()
                 _productFiltersState.postValue(Resource.Error("Error: ${e.message}"))

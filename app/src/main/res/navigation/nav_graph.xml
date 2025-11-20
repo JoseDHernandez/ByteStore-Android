@@ -161,6 +161,40 @@
         <!--TODO:pendiente acciones a los cruds-->
     </fragment>
 
+    <!-- Listado de usuarios (CRUD) -->
+    <fragment
+        android:id="@+id/adminUsersFragment"
+        android:name="com.example.bytestore.ui.admin.users.AdminUsersFragment"
+        android:label="Listado de usuarios"
+        tools:layout="@layout/fragment_admin_users">
+        <action
+            android:id="@+id/action_adminUsersFragment_to_adminUserFragment"
+            app:destination="@id/adminUserFragment" />
+        <action
+            android:id="@+id/action_adminUsersFragment_to_adminUserRegisterFragment"
+            app:destination="@id/adminUserRegisterFragment" />
+        <action
+            android:id="@+id/action_adminUsersFragment_to_adminUserUpdateFragment"
+            app:destination="@id/adminUserUpdateFragment" />
+    </fragment>
+    <!-- Gestion de usuario (CRUD) -->
+    <fragment
+        android:id="@+id/adminUserFragment"
+        android:name="com.example.bytestore.ui.admin.users.AdminUserFragment"
+        android:label="Gestión de usuario"
+        tools:layout="@layout/fragment_admin_user" />
+    <!-- Registrar usuario (CRUD) -->
+    <fragment
+        android:id="@+id/adminUserRegisterFragment"
+        android:name="com.example.bytestore.ui.admin.users.AdminUserRegisterFragment"
+        android:label="Registar usuario"
+        tools:layout="@layout/fragment_admin_user_register" />
+    <!-- Editar usuario (CRUD) -->
+    <fragment
+        android:id="@+id/adminUserUpdateFragment"
+        android:name="com.example.bytestore.ui.admin.users.AdminUserUpdateFragment"
+        android:label="Editar usuario"
+        tools:layout="@layout/fragment_admin_user_update" />
     <!-- Acciones globales -->
     <!-- login -->
     <action

@@ -70,53 +70,10 @@ object ProductProvider {
         return if (result.size == ids.size) result else emptyList()
     }
 
-    //buscar producto
-    fun searchProducts(search: String, order: String?, sort: String?): ListProductsModel? {
-        if (productMap.isEmpty()) return null
-
-        val localProducts = productMap.values.toMutableList()
-
-        val terms = search.lowercase()
-            .split("\\s+".toRegex())
-            .filter { it.isNotBlank() }
-
-        val filtered = localProducts.filter { product ->
-            terms.any { term ->
-                product.name.lowercase().contains(term) ||
-                        product.model.lowercase().contains(term) ||
-                        product.brand.lowercase().contains(term) ||
-                        product.processor.brand.lowercase().contains(term) ||
-                        product.display.brand.lowercase().contains(term)
-            }
-        }.toMutableList()
-
-        // Orden y dirección
-        val key = (order?.uppercase() ?: "REVIEW")
-        val dir = (sort?.uppercase() ?: "DESC")
-
-        when ("${key}_${dir}") {
-            "PRICE_ASC" -> filtered.sortBy { it.price }
-            "PRICE_DESC" -> filtered.sortByDescending { it.price }
-            "REVIEW_ASC" -> filtered.sortBy { it.qualification }
-            "REVIEW_DESC" -> filtered.sortByDescending { it.qualification }
-            else -> {
-
-            }
-        }
-        return ListProductsModel(
-            total = filtered.size,
-            pages = 1,
-            first = 1,
-            next = null,
-            prev = null,
-            data = filtered
-        )
-    }
 
     //agregar producto
     fun addProduct(product: ProductModel) {
         if (productMap.containsKey(product.id)) return
-        Log.d("ProductProvider", "Se añadio id: ${product.id}")
         val updated = registerSubcategories(product)
         productMap[updated.id] = updated
         lastFetchTimeProducts = System.currentTimeMillis()
@@ -243,8 +200,9 @@ object ProductProvider {
         )
         return processorId
     }
+
     //registrar graficos
-    fun addDisplay(display: DisplayModel):Int{
+    fun addDisplay(display: DisplayModel): Int {
         val displayId = display.id ?: nextTempId()
         displayMap.putIfAbsent(
             displayId,
@@ -254,7 +212,7 @@ object ProductProvider {
     }
 
     //registrar sistema operativo
-    fun addOS(os: OperatingSystemModel):Int{
+    fun addOS(os: OperatingSystemModel): Int {
         val osId = os.id ?: nextTempId()
         osMap.putIfAbsent(
             osId,
@@ -448,8 +406,8 @@ object ProductProvider {
     //           obtener datos de los mapas de subcategorias
     //=====================================
 
-    fun getProcessor(id:Int): ProcessorModel? = processorMap[id]
-    fun getBrand(id:Int): BrandModel? = brandMap[id]
-    fun getDisplays(id:Int): DisplayModel? = displayMap[id]
-    fun getOperatingSystem(id:Int): OperatingSystemModel? = osMap[id]
+    fun getProcessor(id: Int): ProcessorModel? = processorMap[id]
+    fun getBrand(id: Int): BrandModel? = brandMap[id]
+    fun getDisplays(id: Int): DisplayModel? = displayMap[id]
+    fun getOperatingSystem(id: Int): OperatingSystemModel? = osMap[id]
 }
