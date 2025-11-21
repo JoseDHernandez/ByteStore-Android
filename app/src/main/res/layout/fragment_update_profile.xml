@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".ui.account.UpdateProfileFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/card_background"
+        android:orientation="vertical">
+
+        <!-- Nombre Completo -->
+        <TextView
+            style="@style/Widget.ByteStore.InputLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombre Completo" />
+
+        <EditText
+            android:id="@+id/etName"
+            style="@style/Widget.ByteStore.Input"
+            android:hint="José David Hernández Hortúa"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/tvNameError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#E53935"
+            android:textSize="12sp"
+            android:fontFamily="@font/inter"
+            android:visibility="gone" />
+
+        <!-- Correo electrónico -->
+        <TextView
+            style="@style/Widget.ByteStore.InputLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Correo electrónico" />
+
+        <EditText
+            android:id="@+id/etEmail"
+            style="@style/Widget.ByteStore.Input"
+            android:hint="jose@examples.com"
+            android:inputType="textEmailAddress" />
+
+        <TextView
+            android:id="@+id/tvEmailError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#E53935"
+            android:textSize="12sp"
+            android:fontFamily="@font/inter"
+            android:visibility="gone" />
+
+        <!-- Dirección -->
+        <TextView
+            style="@style/Widget.ByteStore.InputLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Dirección" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <EditText
+                android:id="@+id/etAddress"
+                style="@style/Widget.ByteStore.Input"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:hint="Cll 123 # 45 - 67, Bogotá, Colombia"
+                android:inputType="textPostalAddress" />
+
+            <ImageButton
+                android:id="@+id/btnEditAddress"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:background="#007381"
+                android:src="@drawable/ic_edit"
+                app:tint="#FFFFFF"
+                android:scaleType="center"
+                android:contentDescription="Editar" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvAddressError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#E53935"
+            android:textSize="12sp"
+            android:fontFamily="@font/inter"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <!-- Botones -->
+    <Button
+        android:id="@+id/btnUpdateProfile"
+        style="@style/Widget.ByteStore.Button.Primary"
+        android:layout_width="match_parent"
+        android:layout_marginTop="24dp"
+        android:text="Actualizar datos" />
+
+    <Button
+        android:id="@+id/btnCancel"
+        style="@style/Widget.ByteStore.Button.PrimaryOutline"
+        android:layout_width="match_parent"
+        android:layout_marginTop="8dp"
+        android:text="Cancelar" />
+
+</LinearLayout>
