@@ -28,33 +28,24 @@ import java.text.NumberFormat
 import java.util.Locale
 
 class ProductFragment : Fragment() {
-    //formater
     val formatter: NumberFormat = NumberFormat.getNumberInstance(Locale("es", "CO")).apply {
-        // Mostrar precios como enteros (sin decimales) para consistencia con el resto de la app
         maximumFractionDigits = 0
         minimumFractionDigits = 0
     }
 
-    //argumentos
     private val args: ProductFragmentArgs by navArgs()
-
     private var _binding: FragmentProductBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ProductViewModel by viewModels()
-
-    // ViewModel del carrito
     private val cartViewModel: CartViewModel by activityViewModels { AppViewModelFactory(requireContext()) }
 
-    // Indica si el producto fue agregado previamente mediante el botón "Añadir al carrito"
-    // Esto nos ayuda a distinguir el comportamiento de "Comprar" dependiendo del flujo del usuario.
     private var addedViaAddButton: Boolean = false
-
-    //datos del producto
     private lateinit var product: ProductModel
 
-    // adapter de productos similares
+    // Variable para almacenar la cantidad seleccionada
+    private var selectedQuantity: Int = 1
+
     val productsAdapter = ProductsListAdapter { product ->
-        //consultar el producto seleccionado
         getAllData(product.id)
     }
 
@@ -70,12 +61,13 @@ class ProductFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         topBar().setTitle("Producto")
-        //obtener id del producto de los argumentos/parametros
         getAllData(args.productId)
-        //pintar datos
         setProductLiveData()
 
-        //botón de compra
+        // Configurar listeners para cantidad
+        setupQuantityControls()
+
+        // Botones de compra
         binding.buttonBuy.setOnClickListener {
             handleBuyNow()
         }
@@ -84,13 +76,12 @@ class ProductFragment : Fragment() {
             handleAddToCart()
         }
 
-        //productos similares
+        // Productos similares
         binding.similarProductsRecyclerView.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = productsAdapter
         }
-        //espaciado (reautilizado del grid de todos los productos)
         binding.similarProductsRecyclerView.addItemDecoration(
             HorizontalSpaceItemDecoration(
                 resources.getDimensionPixelSize(R.dimen.grid_spacing)
@@ -99,7 +90,66 @@ class ProductFragment : Fragment() {
         setSimilarProductsLiveData()
     }
 
-    // Función para comprar directamente
+    /**
+     * Configura los botones de incremento/decremento de cantidad
+     */
+    private fun setupQuantityControls() {
+        // Inicializar cantidad en 1
+        selectedQuantity = 1
+        updateQuantityDisplay()
+
+        // Botón para decrementar (buttonUnitsLess)
+        binding.buttonUnitsLess.setOnClickListener {
+            if (selectedQuantity > 1) {
+                selectedQuantity--
+                updateQuantityDisplay()
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "La cantidad mínima es 1",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        // Botón para incrementar (buttonUnitsPlus)
+        binding.buttonUnitsPlus.setOnClickListener {
+            // Validar que no exceda el stock disponible
+            if (::product.isInitialized && selectedQuantity < product.stock) {
+                selectedQuantity++
+                updateQuantityDisplay()
+            } else if (::product.isInitialized) {
+                Toast.makeText(
+                    requireContext(),
+                    "Stock máximo: ${product.stock}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        // Permitir edición directa en el campo de texto (units)
+        binding.units.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                // Cuando pierde el foco, validar el valor
+                val input = binding.units.text.toString().toIntOrNull() ?: 1
+                selectedQuantity = when {
+                    input < 1 -> 1
+                    ::product.isInitialized && input > product.stock -> product.stock
+                    else -> input
+                }
+                updateQuantityDisplay()
+            }
+        }
+    }
+
+    /**
+     * Actualiza la visualización de la cantidad
+     */
+    private fun updateQuantityDisplay() {
+        binding.units.setText(selectedQuantity.toString())
+        Log.d("ProductFragment", "Cantidad actualizada: $selectedQuantity")
+    }
+
     private fun handleBuyNow() {
         if (!::product.isInitialized) {
             Toast.makeText(requireContext(), "Producto no disponible", Toast.LENGTH_SHORT).show()
@@ -111,22 +161,15 @@ class ProductFragment : Fragment() {
             return
         }
 
-        // CORREGIDO: Calcular precio con descuento correctamente
-        // product.price está en PESOS (ej: 3299000.0)
-        // product.discount es el porcentaje (ej: 54.0)
         val discountAmount = product.price * (product.discount / 100f)
         val finalPrice = (product.price - discountAmount).toLong()
 
-
-        // No agregar al carrito: al pulsar "Comprar" se inicia un flujo de pago
-        // directo para este producto (compra puntual). Preparar estado temporal
-        // en el ViewModel del carrito y navegar al checkout.
         cartViewModel.startCheckoutWithItem(
             productId = product.id.toLong(),
             name = product.name,
             image = product.image,
             unitPricePesos = finalPrice,
-            qty = 1
+            qty = selectedQuantity  // Usar la cantidad seleccionada
         )
 
         binding.root.postDelayed({
@@ -138,7 +181,6 @@ class ProductFragment : Fragment() {
         }, 200)
     }
 
-    // Función para añadir al carrito
     private fun handleAddToCart() {
         if (!::product.isInitialized) {
             Toast.makeText(requireContext(), "Producto no disponible", Toast.LENGTH_SHORT).show()
@@ -150,9 +192,6 @@ class ProductFragment : Fragment() {
             return
         }
 
-        // CORREGIDO: Calcular precio con descuento correctamente
-        // product.price está en PESOS (ej: 3299000.0)
-        // product.discount es el porcentaje (ej: 54.0)
         val discountAmount = product.price * (product.discount / 100f)
         val finalPrice = (product.price - discountAmount).toLong()
 
@@ -161,24 +200,26 @@ class ProductFragment : Fragment() {
         Log.d("ProductFragment", "  - Precio original: $${product.price}")
         Log.d("ProductFragment", "  - Descuento: ${product.discount}%")
         Log.d("ProductFragment", "  - Precio final: $${finalPrice}")
+        Log.d("ProductFragment", "  - Cantidad: $selectedQuantity")
 
-        // Agregar al carrito
+        // Agregar al carrito con la cantidad seleccionada
         cartViewModel.add(
             productId = product.id.toLong(),
             name = product.name,
             image = product.image,
-            unitPrice = finalPrice,  // Ya está en PESOS
-            qty = 1
+            unitPrice = finalPrice,
+            qty = selectedQuantity  // Usar la cantidad seleccionada
         )
 
-        // Marcamos que el usuario añadió el producto mediante el botón "Añadir al carrito"
         addedViaAddButton = true
 
-        // Mostrar confirmación
-        Snackbar.make(binding.root, "✓ ${product.name} agregado al carrito", Snackbar.LENGTH_LONG)
+        Snackbar.make(
+            binding.root,
+            "✓ ${product.name} x$selectedQuantity agregado al carrito",
+            Snackbar.LENGTH_LONG
+        )
             .setAction("VER CARRITO") {
                 try {
-                    // Navega directamente al cartFragment por ID
                     findNavController().navigate(R.id.cartFragment)
                 } catch (e: Exception) {
                     Toast.makeText(
@@ -189,28 +230,27 @@ class ProductFragment : Fragment() {
                 }
             }
             .show()
+
+        // Resetear cantidad a 1 después de agregar
+        selectedQuantity = 1
+        updateQuantityDisplay()
     }
 
-    //solicitar informacion de producto
     private fun getAllData(id: Int) {
         if (id < 0) {
             findNavController().navigate(R.id.action_productFragment_to_productsFragment)
         }
         viewModel.getProduct(id)
         viewModel.getSimilarProducts(id)
-        binding.scrollView.smoothScrollTo(0,0)
+        binding.scrollView.smoothScrollTo(0, 0)
     }
 
-    //Datos del producto
     private fun setProductLiveData() {
         viewModel.productState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is Resource.Success -> {
-                    //variables del producto
                     product = state.data
                     var url = product.image.replace("localhost", "10.0.2.2")
-                    // Asegurar URL absoluta: si el servidor devuelve rutas relativas (p.ej. /uploads/xxx),
-                    // prefix con la base configurada en ApiClient.
                     try {
                         val base = com.example.bytestore.core.ApiClient.retrofit(binding.image.context).baseUrl().toString()
                         if (!url.startsWith("http")) {
@@ -220,7 +260,6 @@ class ProductFragment : Fragment() {
                         // si no se puede obtener la base, continuar con la cadena tal cual
                     }
                     val countScore = 10
-                    //asignacion de la información
                     binding.title.text = product.name
                     Glide.with(binding.image.context)
                         .load(url)
@@ -247,12 +286,10 @@ class ProductFragment : Fragment() {
                         else -> getString(R.string.stock_multiple, product.stock)
                     }
                     binding.description.text = product.description
-                    //caracteristicas
                     binding.brand.text = product.brand
                     binding.model.text = product.brand
                     binding.operatingSystem.text = product.system.system
                     binding.distribution.text = product.system.distribution
-                    //almacenamiento y procesamiento
                     binding.processorBrand.text = product.processor.brand
                     binding.processorSeries.text = product.processor.family
                     binding.processorModel.text = product.processor.model
@@ -264,7 +301,6 @@ class ProductFragment : Fragment() {
                         getString(R.string.storage_gb, product.diskCapacity.toFloat())
                     }
                     binding.ramCapacity.text = product.ramCapacity.toString()
-                    //pantalla
                     binding.displaySize.text = product.display.size.toString()
                     binding.displayResolution.text = product.display.resolution
                     binding.displayGraphics.text = product.display.graphics
@@ -279,7 +315,6 @@ class ProductFragment : Fragment() {
         }
     }
 
-    //Productos similares
     private fun setSimilarProductsLiveData() {
         viewModel.similarProductsState.observe(viewLifecycleOwner) { state ->
             when (state) {
@@ -288,12 +323,10 @@ class ProductFragment : Fragment() {
                 is Resource.Loading -> Unit
                 is Resource.Success -> {
                     productsAdapter.submitList(state.data)
-
                 }
 
                 is Resource.ValidationError -> Unit
             }
-
         }
     }
 
