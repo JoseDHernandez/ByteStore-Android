@@ -49,7 +49,7 @@ interface UserApiService {
     @PUT("/users/{id}/")
     suspend fun updateUser(
         @Path("id") id: String,
-        @Body request: UserUpdateRequest?
+        @Body request: UserUpdateRequest
     ): Response<UserModel>
 
     //cambiar constraseña
@@ -70,7 +70,7 @@ interface UserApiService {
     @DELETE("/users/{id}/")
     suspend fun deleteUser(
         @Path("id") id: String,
-        @Body request: UserDeleteRequest
+        @Body request: UserDeleteRequest?
     ): Response<Any> //validar status code
 }
 

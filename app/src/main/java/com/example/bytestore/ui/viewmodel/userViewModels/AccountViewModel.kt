@@ -10,12 +10,12 @@ import com.example.bytestore.data.model.user.UserDeleteRequest
 import com.example.bytestore.data.model.user.UserUpdateInputs
 import com.example.bytestore.data.model.user.UserUpdateRequest
 import com.example.bytestore.data.model.user.UserValidator
-import com.example.bytestore.data.repository.UserRepository
+import com.example.bytestore.data.repository.AccountRepository
 import com.example.bytestore.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class AccountViewModel(private val repository: UserRepository) : ViewModel() {
+class AccountViewModel(private val repository: AccountRepository) : ViewModel() {
     //livedata (usuario)
     private val _userData = MutableLiveData<Resource<AccountModel?>>()
     val userData: LiveData<Resource<AccountModel?>> get() = _userData

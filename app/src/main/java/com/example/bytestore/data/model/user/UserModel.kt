@@ -12,7 +12,7 @@ data class AccountModel(
 )
 
 data class UserModel(
-    val id: String?,
+    val id: String,
     val name: String,
     val email: String,
     @SerializedName("physical_address") val physicalAddress: String,
@@ -23,12 +23,23 @@ data class UserModel(
 //conversor de Usermodel a AccountModel
 fun UserModel.toAccountModel(): AccountModel {
     return AccountModel(
-        id = this.id ?: "",
+        id = this.id,
         name = this.name,
         email = this.email,
         physicalAddress = this.physicalAddress,
         role = this.role,
         token = this.token ?: ""
+    )
+}
+//conversor de AccountModel a Usermodel
+fun AccountModel.toUserModel(): UserModel {
+    return UserModel(
+        id = this.id,
+        name = this.name,
+        email = this.email,
+        physicalAddress = this.physicalAddress,
+        role = this.role,
+        token = this.token
     )
 }
 

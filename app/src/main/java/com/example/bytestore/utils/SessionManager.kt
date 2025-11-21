@@ -2,8 +2,7 @@ package com.example.bytestore.utils
 
 import android.content.Context
 import com.example.bytestore.data.model.user.AccountModel
-import com.example.bytestore.data.model.user.UserModel
-import com.example.bytestore.data.repository.UserRepository
+import com.example.bytestore.data.repository.AccountRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +10,7 @@ import kotlinx.coroutines.launch
 
 
 class SessionManager(private val context: Context) {
-    private val repository = UserRepository(context)
+    private val repository = AccountRepository(context)
 
     @Volatile
     private var cachedToken: String? = null

@@ -144,31 +144,10 @@ class UserService {
         }
 
     //actualizar cuenta (cliente)
-    suspend fun updateUser(id: String, request: UserUpdateRequest): Resource<AccountModel> =
+    suspend fun updateUser(id: String, request: UserUpdateRequest): Resource<UserModel> =
         withContext(Dispatchers.IO) {
             try {
                 val response = api.updateUser(id, request)
-                if (response.isSuccessful) {
-                    val body = response.body()
-                    if (body != null) {
-                        Resource.Success(body.toAccountModel())
-                    } else {
-                        Resource.Error("Cuerpo sin datos.")
-                    }
-                } else {
-                    Resource.Error("Error al actulizar el usuario con el id: $id")
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Resource.Error("Error de conexión: ${e.localizedMessage}")
-            }
-        }
-
-    //actualizar usuario (admin)
-    suspend fun updateUser(id: String ): Resource<UserModel> =
-        withContext(Dispatchers.IO) {
-            try {
-                val response = api.updateUser(id, null)
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (body != null) {
@@ -184,6 +163,7 @@ class UserService {
                 Resource.Error("Error de conexión: ${e.localizedMessage}")
             }
         }
+
 
     //cambiar contraseña
     suspend fun changePassword(id: String, request: UserChangePasswordRequest): Boolean =
@@ -221,8 +201,8 @@ class UserService {
             }
         }
 
-    //eliminar usuario (admin)
-    suspend fun deleteUser(id: String, request: UserDeleteRequest): Boolean =
+    //eliminar usuario
+    suspend fun deleteUser(id: String, request: UserDeleteRequest?): Boolean =
         withContext(Dispatchers.IO) {
             try {
                 val response = api.deleteUser(id, request)

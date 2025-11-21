@@ -10,7 +10,6 @@
     <!-- Barra de busqueda -->
     <LinearLayout
         android:id="@+id/searchBar"
-        style="@style/Widget.ByteStore.Input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"
@@ -22,41 +21,62 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-            android:id="@+id/searchInput"
+        <LinearLayout
             style="@style/Widget.ByteStore.Input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
             android:layout_weight="1"
-            android:autofillHints="@null"
-            android:background="@null"
-            android:hint="Buscar usuario"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            tools:ignore="NestedWeights" />
+            android:clickable="false"
+            android:focusable="false"
+            android:orientation="horizontal"
+            android:padding="0dp">
 
-        <ImageView
-            android:id="@+id/clearSearchButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:clickable="true"
-            android:contentDescription="Limpiar busqueda"
-            android:scaleType="centerInside"
-            android:scaleX="1.4"
-            android:scaleY="1.4"
-            android:src="@drawable/ic_close"
-            android:visibility="gone"
-            app:tint="@color/black" />
+            <EditText
+                android:id="@+id/searchInput"
+                style="@style/Widget.ByteStore.Input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:autofillHints="@null"
+                android:background="@null"
+                android:hint="Buscar usuario"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                tools:ignore="NestedWeights" />
 
-        <ImageView
-            android:id="@+id/searchButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:clickable="true"
-            android:contentDescription="Buscar usuario"
-            android:scaleType="center"
-            android:src="@drawable/ic_search"
-            app:tint="@color/gray" />
+            <ImageView
+                android:id="@+id/clearSearchButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:contentDescription="Limpiar busqueda"
+                android:scaleType="centerInside"
+                android:scaleX="1.4"
+                android:scaleY="1.4"
+                android:src="@drawable/ic_close"
+                android:visibility="gone"
+                app:tint="@color/black" />
+
+            <ImageView
+                android:id="@+id/searchButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:contentDescription="Buscar usuario"
+                android:scaleType="center"
+                android:src="@drawable/ic_search"
+                app:tint="@color/gray" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/newUserButton"
+            android:layout_marginStart="10dp"
+            style="@style/Widget.ByteStore.Button.Primary"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Crear" />
+
     </LinearLayout>
     <!-- Carga -->
     <ProgressBar
@@ -77,6 +97,7 @@
         android:clipToPadding="false"
         android:paddingTop="20dp"
         android:paddingBottom="90dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

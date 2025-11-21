@@ -1,14 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/scrollView"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:clipToPadding="false"
+android:maxWidth="488dp"
+android:paddingHorizontal="16dp"
+android:paddingVertical="30dp"
+tools:context=".ui.admin.users.AdminUserUpdateFragment">
+
+<LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.admin.users.AdminUserUpdateFragment">
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/inputNameLabel"
+        style="@style/Widget.ByteStore.InputLabel"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:labelFor="@id/inputName"
+        android:text="Nombre completo" />
 
-</FrameLayout>
+    <EditText
+        android:id="@+id/inputName"
+        style="@style/Widget.ByteStore.Input"
+        android:autofillHints="name"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/inputNameMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:text=""
+        android:textColor="@color/red" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="30dp" />
+
+    <TextView
+        android:id="@+id/inputEmailLabel"
+        style="@style/Widget.ByteStore.InputLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:labelFor="@id/inputEmail"
+        android:text="Correo electrónico" />
+
+    <EditText
+        android:id="@+id/inputEmail"
+        style="@style/Widget.ByteStore.Input"
+        android:autofillHints="emailAddress"
+        android:inputType="textEmailAddress" />
+
+    <TextView
+        android:id="@+id/inputEmailMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:text=""
+        android:textColor="@color/red" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="30dp" />
+
+
+    <TextView
+        android:id="@+id/inputAddressLabel"
+        style="@style/Widget.ByteStore.InputLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:labelFor="@id/inputAddress"
+        android:text="Dirección de entrega" />
+
+    <EditText
+        android:id="@+id/inputAddress"
+        style="@style/Widget.ByteStore.Input"
+        android:autofillHints="postalAddress"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/inputAddressMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:text=""
+        android:textColor="@color/red" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="30dp" />
+    <TextView
+        android:id="@+id/spinnerRoleLabel"
+        style="@style/Widget.ByteStore.InputLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:labelFor="@id/spinnerRole"
+        android:text="Cambiar rol" />
+    <Spinner
+        style="@style/Widget.ByteStore.Spinner"
+        android:id="@+id/spinnerRole"
+        android:layout_width="match_parent"
+        android:spinnerMode="dropdown"
+        android:layout_height="48dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="60dp" />
+
+    <Button
+        android:id="@+id/buttonSingUp"
+        style="@style/Widget.ByteStore.Button.Primary"
+        android:text="Editar" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+
+    <Button
+        android:id="@+id/cancelButton"
+        style="@style/Widget.ByteStore.Button.SecondaryOutline"
+        android:layout_height="wrap_content"
+        android:text="Cancelar" />
+
+
+</LinearLayout>
+</ScrollView>

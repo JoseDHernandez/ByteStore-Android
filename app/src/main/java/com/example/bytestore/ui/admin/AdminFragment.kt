@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.example.bytestore.R
 import com.example.bytestore.databinding.FragmentAdminBinding
 import com.example.bytestore.ui.ProtectedFragment
@@ -29,6 +30,9 @@ class AdminFragment : ProtectedFragment() {
         super.onViewCreated(view, savedInstanceState)
         topBar().setTitle("Gestión")
         //TODO: agregar navegaciones
+        binding.btnUsers.setOnClickListener {
+            findNavController().navigate(R.id.action_adminFragment_to_adminUsersFragment)
+        }
     }
 
     override fun onDestroyView() {

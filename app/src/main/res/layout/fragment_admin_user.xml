@@ -1,14 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.admin.users.AdminUserFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="20dp">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/card_background"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="Id de la cuenta"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/accountId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/card_background"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="Nombre"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/accountName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="Rol"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/accountRol"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="Correo electrónico"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/accountEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="Dirección"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/accountAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text=""
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/card_background"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:fontFamily="@font/inter_medium"
+                    android:text="Gestionar"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/accountDeleteButton"
+                    style="@style/Widget.ByteStore.Button.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="30dp"
+                    android:text="Eliminar cuenta" />
+
+                <Button
+                    android:id="@+id/accountEditButton"
+                    style="@style/Widget.ByteStore.Button.Primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Editar cuenta" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
+

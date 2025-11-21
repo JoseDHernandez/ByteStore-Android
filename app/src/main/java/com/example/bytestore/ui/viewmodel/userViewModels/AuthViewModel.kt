@@ -6,17 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bytestore.data.model.user.AccountModel
 import com.example.bytestore.data.model.user.UserLoginRequest
-import com.example.bytestore.data.model.user.UserModel
 import com.example.bytestore.data.model.user.UserRegisterInputs
 import com.example.bytestore.data.model.user.UserRegisterRequest
 import com.example.bytestore.data.model.user.UserValidator
-import com.example.bytestore.data.repository.UserRepository
+import com.example.bytestore.data.repository.AccountRepository
 import com.example.bytestore.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class AuthViewModel(private val repository: UserRepository) : ViewModel() {
+class AuthViewModel(private val repository: AccountRepository) : ViewModel() {
 
     //livedata (peticiones)
     private val _authState = MutableLiveData<Resource<AccountModel>>(Resource.Idle)
