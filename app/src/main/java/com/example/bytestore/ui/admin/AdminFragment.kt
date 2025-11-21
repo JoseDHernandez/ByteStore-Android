@@ -12,7 +12,7 @@ import com.example.bytestore.ui.ProtectedFragment
 import com.example.bytestore.utils.topBar
 
 class AdminFragment : ProtectedFragment() {
-    override val requiredRole = "ADMINISTRADOR" //solo el administrador puede ver el fragment
+    override val requiredRole = "ADMINISTRADOR"
 
     private var _binding : FragmentAdminBinding?=null
     private val binding get() = _binding!!
@@ -29,10 +29,25 @@ class AdminFragment : ProtectedFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         topBar().setTitle("Gestión")
-        //TODO: agregar navegaciones
-        binding.btnUsers.setOnClickListener {
-            findNavController().navigate(R.id.action_adminFragment_to_adminUsersFragment)
+
+        setupNavigations()
+    }
+
+    private fun setupNavigations() {
+        // Navegación a productos
+        binding.btnProducts.setOnClickListener {
+            val action = AdminFragmentDirections.actionAdminFragmentToProductListAdminFragment()
+            findNavController().navigate(action)
         }
+
+        // TODO: Agregar navegaciones para otros módulos
+        // binding.btnComments.setOnClickListener { ... }
+        // binding.btnOrders.setOnClickListener { ... }
+        // binding.btnUsers.setOnClickListener { ... }
+        // binding.btnProcessros.setOnClickListener { ... }
+        // binding.btnGraphics.setOnClickListener { ... }
+        // binding.btnBrands.setOnClickListener { ... }
+        // binding.btnOS.setOnClickListener { ... }
     }
 
     override fun onDestroyView() {
