@@ -10,12 +10,12 @@ import com.example.bytestore.data.model.user.UserDeleteRequest
 import com.example.bytestore.data.model.user.UserUpdateInputs
 import com.example.bytestore.data.model.user.UserUpdateRequest
 import com.example.bytestore.data.model.user.UserValidator
-import com.example.bytestore.data.repository.AccountRepository
+import com.example.bytestore.data.repository.UserRepository
 import com.example.bytestore.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class AccountViewModel(private val repository: AccountRepository) : ViewModel() {
+class AccountViewModel(private val repository: UserRepository) : ViewModel() {
     //livedata (usuario)
     private val _userData = MutableLiveData<Resource<AccountModel?>>()
     val userData: LiveData<Resource<AccountModel?>> get() = _userData
@@ -44,42 +44,73 @@ class AccountViewModel(private val repository: AccountRepository) : ViewModel() 
         }
     }
 
-    //actulizar cuenta
+    //actualizar cuenta
     fun updateAccount(data: UserUpdateInputs) = viewModelScope.launch(Dispatchers.IO) {
 
-        //validaciones
-        val errors = UserValidator.validateUpdateUser(data)
+        // Validar todos los campos (el backend requiere todos)
+        val errors = mutableMapOf<String, String>()
 
-        //retornar errores si existen
+        // Validar nombre
+        val name = data.name?.trim()
+        if (name.isNullOrBlank()) {
+            errors["name"] = "El nombre es requerido"
+        } else {
+            when {
+                name.length < 3 -> errors["name"] = "El nombre debe tener al menos 3 caracteres"
+                name.length > 200 -> errors["name"] = "El nombre no puede exceder 200 caracteres"
+            }
+        }
+
+        // Validar email
+        val email = data.email?.trim()
+        if (email.isNullOrBlank()) {
+            errors["email"] = "El correo es requerido"
+        } else {
+            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                errors["email"] = "Formato de correo electrónico inválido"
+            }
+        }
+
+        // Validar dirección (opcional pero si se envía debe ser válida)
+        val address = data.address?.trim()
+        if (!address.isNullOrBlank() && address.length < 2) {
+            errors["address"] = "La dirección es muy corta"
+        }
+
+        // Retornar errores si existen
         if (errors.isNotEmpty()) {
             _userData.postValue(Resource.ValidationError(errors))
             return@launch
         }
 
-        val request = UserUpdateRequest(data.name, data.email, data.address)
+        val request = UserUpdateRequest(name, email, address)
 
         try {
-            val id = repository.getUserData()?.id ?: return@launch
-            val response = repository.updateUser(id, request )
+            val id = repository.getUserData()?.id ?: run {
+                _userData.postValue(Resource.Error("No se pudo obtener el ID del usuario"))
+                return@launch
+            }
+
+            val response = repository.updateUser(id, request)
             _userData.postValue(response)
         } catch (e: Exception) {
-            _userData.postValue(Resource.Error("Error al actulizadar los datos de la cuenta"))
+            _userData.postValue(Resource.Error("Error al actualizar los datos de la cuenta: ${e.message}"))
         }
     }
 
-    //cambiar constraseña
+    //cambiar contraseña
     fun changePassword(request: UserChangePasswordRequest) = viewModelScope.launch(Dispatchers.IO) {
         try {
             val id = repository.getUserData()?.id ?: return@launch
             val response = repository.changePassword(id, request)
-            //cerrar session si cambio la contraseña
+            //cerrar session si cambió la contraseña
             if (response) {
                 logout()
             } else {
-                _userData.postValue(Resource.Error("Error al cambiar la contrseña"))
+                _userData.postValue(Resource.Error("Error al cambiar la contraseña"))
             }
         } catch (e: Exception) {
-            _userData.postValue(Resource.Error("Error al cambiar la contrseña"))
+            _userData.postValue(Resource.Error("Error al cambiar la contraseña"))
         }
     }
 
@@ -92,11 +123,11 @@ class AccountViewModel(private val repository: AccountRepository) : ViewModel() 
                 _userData.postValue(Resource.ValidationError(mapOf("password" to "Contraseña invalida")))
             } else {
                 val response = repository.deleteUser(id, UserDeleteRequest(password))
-                //cerrar session si se elimino la cuenta
+                //cerrar session si se eliminó la cuenta
                 if (response) {
                     logout()
                 } else {
-                    _userData.postValue(Resource.Error("Error al eliminar la contrseña"))
+                    _userData.postValue(Resource.Error("Error al eliminar la contraseña"))
                 }
             }
         } catch (e: Exception) {
