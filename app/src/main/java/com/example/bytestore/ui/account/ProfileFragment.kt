@@ -14,7 +14,6 @@ import com.example.bytestore.ui.viewmodel.userViewModels.AccountViewModel
 import com.example.bytestore.utils.Resource
 import com.example.bytestore.utils.topBar
 
-
 class ProfileFragment : ProtectedFragment() {
 
     private var _binding: FragmentProfileBinding? = null
@@ -35,8 +34,24 @@ class ProfileFragment : ProtectedFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         topBar().setTitle("Cuenta")
-        //logica
-        //viewModel.getUserData()
+
+        setupNavigation()
+        observeUserData()
+    }
+
+    private fun setupNavigation() {
+        // Navegación a Cambiar contraseña
+        binding.btnChangePassword.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_changePasswordFragment)
+        }
+
+        // Navegación a Actualizar datos
+        binding.btnUpdateProfile.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_updateProfileFragment)
+        }
+    }
+
+    private fun observeUserData() {
         viewModel.userData.observe(viewLifecycleOwner) { state ->
             if (state is Resource.Success && state.data != null) {
                 val user = state.data
@@ -49,7 +64,6 @@ class ProfileFragment : ProtectedFragment() {
             }
         }
     }
-
 
     override fun onDestroyView() {
         _binding = null
