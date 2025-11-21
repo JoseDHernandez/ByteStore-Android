@@ -29,7 +29,6 @@ class UserService {
                         Resource.Success(body)
                     } else {
                         Resource.Error("Cuerpo sin datos")
-                        //TODO: Pendiente validacion de los codigos de estado
                     }
                 } else {
                     val errorMessage = response.errorBody()?.string() ?: "Error desconocido"

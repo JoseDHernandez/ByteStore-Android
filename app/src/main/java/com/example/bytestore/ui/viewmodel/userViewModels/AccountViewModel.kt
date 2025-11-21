@@ -10,12 +10,13 @@ import com.example.bytestore.data.model.user.UserDeleteRequest
 import com.example.bytestore.data.model.user.UserUpdateInputs
 import com.example.bytestore.data.model.user.UserUpdateRequest
 import com.example.bytestore.data.model.user.UserValidator
+import com.example.bytestore.data.repository.AccountRepository
 import com.example.bytestore.data.repository.UserRepository
 import com.example.bytestore.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class AccountViewModel(private val repository: UserRepository) : ViewModel() {
+class AccountViewModel(private val repository: AccountRepository) : ViewModel() {
     //livedata (usuario)
     private val _userData = MutableLiveData<Resource<AccountModel?>>()
     val userData: LiveData<Resource<AccountModel?>> get() = _userData
@@ -48,34 +49,7 @@ class AccountViewModel(private val repository: UserRepository) : ViewModel() {
     fun updateAccount(data: UserUpdateInputs) = viewModelScope.launch(Dispatchers.IO) {
 
         // Validar todos los campos (el backend requiere todos)
-        val errors = mutableMapOf<String, String>()
-
-        // Validar nombre
-        val name = data.name?.trim()
-        if (name.isNullOrBlank()) {
-            errors["name"] = "El nombre es requerido"
-        } else {
-            when {
-                name.length < 3 -> errors["name"] = "El nombre debe tener al menos 3 caracteres"
-                name.length > 200 -> errors["name"] = "El nombre no puede exceder 200 caracteres"
-            }
-        }
-
-        // Validar email
-        val email = data.email?.trim()
-        if (email.isNullOrBlank()) {
-            errors["email"] = "El correo es requerido"
-        } else {
-            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                errors["email"] = "Formato de correo electrónico inválido"
-            }
-        }
-
-        // Validar dirección (opcional pero si se envía debe ser válida)
-        val address = data.address?.trim()
-        if (!address.isNullOrBlank() && address.length < 2) {
-            errors["address"] = "La dirección es muy corta"
-        }
+        val errors = UserValidator.validateUpdateUser(data)
 
         // Retornar errores si existen
         if (errors.isNotEmpty()) {
@@ -83,7 +57,7 @@ class AccountViewModel(private val repository: UserRepository) : ViewModel() {
             return@launch
         }
 
-        val request = UserUpdateRequest(name, email, address)
+        val request = UserUpdateRequest(data.name, data.email, data.address)
 
         try {
             val id = repository.getUserData()?.id ?: run {

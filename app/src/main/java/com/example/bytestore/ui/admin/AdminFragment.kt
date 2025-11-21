@@ -39,7 +39,9 @@ class AdminFragment : ProtectedFragment() {
             val action = AdminFragmentDirections.actionAdminFragmentToProductListAdminFragment()
             findNavController().navigate(action)
         }
-
+        binding.btnUsers.setOnClickListener {
+            findNavController().navigate(R.id.action_adminFragment_to_adminUsersFragment)
+        }
         // TODO: Agregar navegaciones para otros módulos
         // binding.btnComments.setOnClickListener { ... }
         // binding.btnOrders.setOnClickListener { ... }
