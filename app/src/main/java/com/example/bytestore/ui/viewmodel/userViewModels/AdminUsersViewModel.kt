@@ -29,6 +29,10 @@ class AdminUsersViewModel() : ViewModel() {
     private val _userState = MutableLiveData<Resource<UserModel>>(Resource.Idle)
     val userSate: LiveData<Resource<UserModel>> get() = _userState
 
+    //actualizar usuario
+    private val _userUpdateState = MutableLiveData<Resource<UserModel>>(Resource.Idle)
+    val userUpdateState: LiveData<Resource<UserModel>> get() = _userUpdateState
+
     //obtener usuarios
     fun getUsers(
         page: Int? = 1,
@@ -62,7 +66,7 @@ class AdminUsersViewModel() : ViewModel() {
         }
         //peticion
         val request = UserUpdateRequest(data.name,data.email,data.address)
-        _userState.postValue(repository.updateUser(id,request))
+        _userUpdateState.postValue(repository.updateUser(id,request))
     }
     //eliminar usuario
     suspend fun deleteUser(id:String) = repository.deleteUser(id)

@@ -44,6 +44,7 @@
         <item name="backgroundTint">@null</item>
         <item name="android:backgroundTint">@null</item>
     </style>
+    <!-- Estilo del BottonSheet -->
     <style name="Theme.ByteStore.BottomSheet" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:backgroundDimAmount">0.6</item>
@@ -52,6 +53,26 @@
         <item name="editTextStyle">@style/Widget.ByteStore.Input</item>
         <item name="checkboxStyle">@style/Widget.ByteStore.CheckBox</item>
         <item name="radioButtonStyle">@style/Widget.ByteStore.RadioButton</item>
+    </style>
+    <!-- Estilo del AlertDialog -->
+    <style name="Theme.ByteStore.AlertDialog" parent="@style/ThemeOverlay.AppCompat.Dialog.Alert">
+        <!-- Fondo -->
+        <item name="android:windowBackground">@drawable/card_background</item>
+        <!-- Tipografías -->
+        <item name="android:fontFamily">@font/inter</item>
+        <item name="textColorAlertDialogListItem">@color/black</item>
+
+        <!-- Botones -->
+        <item name="buttonBarPositiveButtonStyle">@style/ByteStore.Dialog.PositiveButton</item>
+        <item name="buttonBarNegativeButtonStyle">@style/ByteStore.Dialog.NegativeButton</item>
+    </style>
+    <!-- Espaciado de los botones del AlertDialog -->
+    <style name="ByteStore.Dialog.PositiveButton" parent="Widget.ByteStore.Button.Primary">
+        <item name="android:layout_marginStart">8dp</item>
+    </style>
+
+    <style name="ByteStore.Dialog.NegativeButton" parent="Widget.ByteStore.Button.Secondary">
+        <item name="android:layout_marginEnd">8dp</item>
     </style>
 
 

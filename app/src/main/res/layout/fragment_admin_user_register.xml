@@ -154,7 +154,7 @@
         <Button
             android:id="@+id/buttonSingUp"
             style="@style/Widget.ByteStore.Button.Primary"
-            android:text="Registarse" />
+            android:text="Registar" />
 
         <View
             android:layout_width="match_parent"

@@ -35,13 +35,19 @@ object UserProvider {
         if (cachedUsers != null) {
             val current = cachedUsers!!.data
 
-            // Filtrar usuarios nuevos que no existan por id
-            val newUsers = listUsersModel.data.filter { incoming ->
-                current.none { it.id == incoming.id }
+
+            val merged = listUsersModel.data.map { incoming ->
+                current.find { it.id == incoming.id }?.let {
+                    // si existe -> reemplazar con el nuevo
+                    incoming
+                } ?: incoming
             }
 
-            // Crear lista final
-            val finalList = current + newUsers
+            val notIncluded = current.filter { old ->
+                merged.none { it.id == old.id }
+            }
+
+            val finalList = merged + notIncluded
 
             cachedUsers = cachedUsers!!.copy(
                 total = finalList.size,
@@ -51,6 +57,7 @@ object UserProvider {
             cachedUsers = listUsersModel
         }
     }
+
 
     //buscar usuario por id
     fun findUserById(id: String): UserModel? {

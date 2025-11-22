@@ -1,14 +1,11 @@
 package com.example.bytestore.data.repository
 
-import com.example.bytestore.data.model.user.AccountModel
 import com.example.bytestore.data.model.user.ListUsersModel
 import com.example.bytestore.data.model.user.UserChangeRoleRequest
-import com.example.bytestore.data.model.user.UserDeleteRequest
 import com.example.bytestore.data.model.user.UserModel
 import com.example.bytestore.data.model.user.UserProvider
 import com.example.bytestore.data.model.user.UserRegisterRequest
 import com.example.bytestore.data.model.user.UserUpdateRequest
-import com.example.bytestore.data.model.user.toAccountModel
 import com.example.bytestore.data.model.user.toUserModel
 import com.example.bytestore.data.network.user.UserService
 import com.example.bytestore.utils.Resource
@@ -97,7 +94,7 @@ class UserRepository {
     suspend fun deleteUser(
         id: String
     ): Boolean {
-        val response = userService.deleteUser(id, null)
+        val response = userService.deleteUser(id)
         if (response) {
             UserProvider.removeUser(id)
         }

@@ -30,6 +30,7 @@
                     android:layout_marginBottom="16dp"
                     android:fontFamily="@font/inter_medium"
                     android:text="Id de la cuenta"
+                    android:textColor="@color/dark_green"
                     android:textSize="16sp" />
 
                 <TextView
@@ -53,6 +54,7 @@
                     android:layout_marginBottom="16dp"
                     android:fontFamily="@font/inter_medium"
                     android:text="Nombre"
+                    android:textColor="@color/dark_blue"
                     android:textSize="16sp" />
 
                 <TextView
@@ -70,6 +72,7 @@
                     android:layout_marginBottom="16dp"
                     android:fontFamily="@font/inter_medium"
                     android:text="Rol"
+                    android:textColor="@color/dark_blue"
                     android:textSize="16sp" />
 
                 <TextView
@@ -87,6 +90,7 @@
                     android:layout_marginBottom="16dp"
                     android:fontFamily="@font/inter_medium"
                     android:text="Correo electrónico"
+                    android:textColor="@color/dark_blue"
                     android:textSize="16sp" />
 
                 <TextView
@@ -104,6 +108,7 @@
                     android:layout_marginBottom="16dp"
                     android:fontFamily="@font/inter_medium"
                     android:text="Dirección"
+                    android:textColor="@color/dark_blue"
                     android:textSize="16sp" />
 
                 <TextView

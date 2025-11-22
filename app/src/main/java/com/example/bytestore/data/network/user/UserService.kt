@@ -201,10 +201,21 @@ class UserService {
         }
 
     //eliminar usuario
-    suspend fun deleteUser(id: String, request: UserDeleteRequest?): Boolean =
+    suspend fun deleteUser(id: String, request: UserDeleteRequest): Boolean =
         withContext(Dispatchers.IO) {
             try {
                 val response = api.deleteUser(id, request)
+                //retornar verdadero si se elimino a el usuario (200), de lo contrario false
+                response.code() == 200;
+            } catch (e: Exception) {
+                e.printStackTrace()
+                false
+            }
+        }
+    suspend fun deleteUser(id: String): Boolean =
+        withContext(Dispatchers.IO) {
+            try {
+                val response = api.deleteUser(id)
                 //retornar verdadero si se elimino a el usuario (200), de lo contrario false
                 response.code() == 200;
             } catch (e: Exception) {

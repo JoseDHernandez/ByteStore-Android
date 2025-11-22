@@ -1,6 +1,7 @@
 package com.example.bytestore.ui.admin.product
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,18 +58,11 @@ class ProductListAdminFragment : ProtectedFragment() {
     }
 
     private fun setupRecyclerView() {
-        productAdapter = ProductAdminAdapter(
-            onEdit = { product ->
-                // Navegar a editar producto
-                val action = ProductListAdminFragmentDirections
-                    .actionProductListAdminFragmentToProductEditFragment(product.id)
-                findNavController().navigate(action)
-            },
-            onDelete = { product ->
-                // Confirmar eliminación
-                showDeleteConfirmation(product.id, product.image, product.name)
-            }
-        )
+        productAdapter = ProductAdminAdapter{ product ->
+            Log.d("ProductListAdminFragment","id: ${product.id}")
+            val action = ProductListAdminFragmentDirections.actionProductListAdminFragmentToAdminProductFragment(product.id)
+            findNavController().navigate(action)
+        }
 
         binding.productsRecyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -101,6 +95,7 @@ class ProductListAdminFragment : ProtectedFragment() {
                         binding.productsRecyclerView.visibility = View.GONE
                     }
                 }
+
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.GONE
                     binding.productsRecyclerView.visibility = View.VISIBLE
@@ -120,6 +115,7 @@ class ProductListAdminFragment : ProtectedFragment() {
                     productAdapter.submitList(newList)
                     isLoading = false
                 }
+
                 is Resource.Error -> {
                     binding.progressBar.visibility = View.GONE
                     binding.productsRecyclerView.visibility = View.GONE
@@ -127,6 +123,7 @@ class ProductListAdminFragment : ProtectedFragment() {
                     binding.errorMessage.text = state.message
                     isLoading = false
                 }
+
                 else -> Unit
             }
         }
@@ -138,17 +135,21 @@ class ProductListAdminFragment : ProtectedFragment() {
                     // Mostrar loading
                     binding.progressBar.visibility = View.VISIBLE
                 }
+
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    Toast.makeText(requireContext(), "Producto eliminado", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Producto eliminado", Toast.LENGTH_SHORT)
+                        .show()
                     // Recargar lista
                     currentPage = 1
                     viewModel.getProducts()
                 }
+
                 is Resource.Error -> {
                     binding.progressBar.visibility = View.GONE
                     Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
                 }
+
                 else -> Unit
             }
         }
@@ -178,17 +179,6 @@ class ProductListAdminFragment : ProtectedFragment() {
         } else {
             viewModel.getProducts(currentPage)
         }
-    }
-
-    private fun showDeleteConfirmation(productId: Int, imageUrl: String, productName: String) {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Eliminar producto")
-            .setMessage("¿Estás seguro de eliminar '$productName'?")
-            .setPositiveButton("Eliminar") { _, _ ->
-                crudViewModel.deleteProduct(productId, imageUrl)
-            }
-            .setNegativeButton("Cancelar", null)
-            .show()
     }
 
     override fun onDestroyView() {

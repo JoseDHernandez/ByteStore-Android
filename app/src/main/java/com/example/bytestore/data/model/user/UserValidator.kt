@@ -19,10 +19,10 @@ data class UserUpdateInputs(
 object UserValidator {
 
     private val nameRegex = Regex("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+$")
-    private val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")
+    val emailRegex = Regex("^[A-Za-z0-9._%+-]+@[-A-Za-z0-9._]+\\.[A-Za-z]{2,}$")
     private val passwordRegex =
-        Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#\$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]).{8,20}$")
-    private val addressRegex = Regex("^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\\s\\.,'\"#°\\-]+$")
+        Regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]).{8,20}$")
+    private val addressRegex = Regex("^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\\s.,'\"#°\\-]+$")
 
     //Getters
 
@@ -116,8 +116,8 @@ object UserValidator {
     fun validateUpdateUser(input: UserUpdateInputs): MutableMap<String, String> {
         val errors = mutableMapOf<String, String>()
         val name = input.name
-        val email = input.name
-        val address = input.name
+        val email = input.email
+        val address = input.address
 
         //validar campos
         if (name.isNullOrBlank() && email.isNullOrBlank() && address.isNullOrEmpty()) {
@@ -128,7 +128,6 @@ object UserValidator {
 
         //nombre
         if (!name.isNullOrBlank()) {
-            val nameRegex = Regex("^[A-Za-zÁÉÍÓÚáéíóúÑñ\\s]+$")
             when {
                 name.length < 6 -> errors["name"] = "Debe tener al menos 6 caracteres"
                 name.length > 200 -> errors["name"] = "No puede exceder 200 caracteres"
@@ -138,7 +137,6 @@ object UserValidator {
 
         //correo
         if (!email.isNullOrBlank()) {
-            val emailRegex = Regex("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")
             when {
                 email.length < 5 -> errors["email"] = "Debe tener al menos 5 caracteres"
                 email.length > 300 -> errors["email"] = "No puede exceder 300 caracteres"
@@ -148,7 +146,6 @@ object UserValidator {
 
         //dirección
         if (!address.isNullOrBlank()) {
-            val addressRegex = Regex("^[A-Za-z0-9ÁÉÍÓÚáéíóúÑñ\\s\\.,'\"#°\\-]+$")
             when {
                 address.length < 2 -> errors["address"] = "La dirección es muy corta"
                 address.length > 100 -> errors["address"] = "No debe exceder 100 caracteres"

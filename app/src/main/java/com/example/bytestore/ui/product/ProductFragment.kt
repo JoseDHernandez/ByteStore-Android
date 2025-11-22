@@ -53,7 +53,7 @@ class ProductFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentProductBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -250,15 +250,7 @@ class ProductFragment : Fragment() {
             when (state) {
                 is Resource.Success -> {
                     product = state.data
-                    var url = product.image.replace("localhost", "10.0.2.2")
-                    try {
-                        val base = com.example.bytestore.core.ApiClient.retrofit(binding.image.context).baseUrl().toString()
-                        if (!url.startsWith("http")) {
-                            url = base.trimEnd('/') + "/" + url.trimStart('/')
-                        }
-                    } catch (e: Exception) {
-                        // si no se puede obtener la base, continuar con la cadena tal cual
-                    }
+                    val url = product.image.replace("localhost", "10.0.2.2")
                     val countScore = 10
                     binding.title.text = product.name
                     Glide.with(binding.image.context)

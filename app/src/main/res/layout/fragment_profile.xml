@@ -27,6 +27,7 @@
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/inter_medium"
                 android:text="Id de la cuenta"
+                android:textColor="@color/dark_green"
                 android:textSize="16sp" />
 
             <TextView
@@ -50,6 +51,7 @@
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/inter_medium"
                 android:text="Nombre"
+                android:textColor="@color/dark_blue"
                 android:textSize="16sp" />
 
             <TextView
@@ -67,6 +69,7 @@
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/inter_medium"
                 android:text="Correo electrónico"
+                android:textColor="@color/dark_blue"
                 android:textSize="16sp" />
 
             <TextView
@@ -84,6 +87,7 @@
                 android:layout_marginBottom="16dp"
                 android:fontFamily="@font/inter_medium"
                 android:text="Dirección"
+                android:textColor="@color/dark_blue"
                 android:textSize="16sp" />
 
             <TextView
@@ -116,9 +120,9 @@
                 android:layout_height="48dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginBottom="10dp"
+                android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="?attr/selectableItemBackground"
                 android:gravity="center_vertical">
 
                 <TextView
@@ -145,9 +149,9 @@
                 android:layout_height="48dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginBottom="10dp"
+                android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
-                android:background="?attr/selectableItemBackground"
                 android:gravity="center_vertical">
 
                 <TextView

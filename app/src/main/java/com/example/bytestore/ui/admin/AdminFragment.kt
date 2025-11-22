@@ -28,7 +28,7 @@ class AdminFragment : ProtectedFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        topBar().setTitle("Gestión")
+        topBar().setTitle("Panel de administración")
 
         setupNavigations()
     }

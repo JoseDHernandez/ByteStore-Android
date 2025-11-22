@@ -14,8 +14,7 @@ import java.text.NumberFormat
 import java.util.Locale
 
 class ProductAdminAdapter(
-    private val onEdit: (ProductModel) -> Unit,
-    private val onDelete: (ProductModel) -> Unit
+    private val onSeleted: ((ProductModel)->Unit)
 ) : ListAdapter<ProductModel, ProductAdminAdapter.ProductViewHolder>(ProductDiff()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -50,14 +49,8 @@ class ProductAdminAdapter(
                 .load(url)
                 .placeholder(R.drawable.placeholder)
                 .into(binding.productImage)
-
-            // Botones de acción
-            binding.btnEdit.setOnClickListener {
-                onEdit(product)
-            }
-
-            binding.btnDelete.setOnClickListener {
-                onDelete(product)
+            binding.root.setOnClickListener {
+                onSeleted(product)
             }
         }
     }

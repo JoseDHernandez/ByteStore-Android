@@ -70,7 +70,12 @@ interface UserApiService {
     @DELETE("/users/{id}/")
     suspend fun deleteUser(
         @Path("id") id: String,
-        @Body request: UserDeleteRequest?
+        @Body request: UserDeleteRequest
+    ): Response<Any> //validar status code
+
+    @DELETE("/users/{id}/")
+    suspend fun deleteUser(
+        @Path("id") id: String
     ): Response<Any> //validar status code
 }
 
