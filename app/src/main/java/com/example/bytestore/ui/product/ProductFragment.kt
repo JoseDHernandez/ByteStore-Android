@@ -26,6 +26,7 @@ import com.example.bytestore.utils.topBar
 import com.google.android.material.snackbar.Snackbar
 import java.text.NumberFormat
 import java.util.Locale
+import kotlin.random.Random
 
 class ProductFragment : Fragment() {
     val formatter: NumberFormat = NumberFormat.getNumberInstance(Locale("es", "CO")).apply {
@@ -37,7 +38,11 @@ class ProductFragment : Fragment() {
     private var _binding: FragmentProductBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ProductViewModel by viewModels()
-    private val cartViewModel: CartViewModel by activityViewModels { AppViewModelFactory(requireContext()) }
+    private val cartViewModel: CartViewModel by activityViewModels {
+        AppViewModelFactory(
+            requireContext()
+        )
+    }
 
     private var addedViaAddButton: Boolean = false
     private lateinit var product: ProductModel
@@ -157,7 +162,8 @@ class ProductFragment : Fragment() {
         }
 
         if (product.stock <= 0) {
-            Toast.makeText(requireContext(), "Producto sin stock disponible", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Producto sin stock disponible", Toast.LENGTH_SHORT)
+                .show()
             return
         }
 
@@ -176,7 +182,8 @@ class ProductFragment : Fragment() {
             try {
                 findNavController().navigate(R.id.checkoutFragment)
             } catch (e: Exception) {
-                Toast.makeText(requireContext(), "Error al navegar al checkout", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Error al navegar al checkout", Toast.LENGTH_SHORT)
+                    .show()
             }
         }, 200)
     }
@@ -188,7 +195,8 @@ class ProductFragment : Fragment() {
         }
 
         if (product.stock <= 0) {
-            Toast.makeText(requireContext(), "Producto sin stock disponible", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Producto sin stock disponible", Toast.LENGTH_SHORT)
+                .show()
             return
         }
 
@@ -259,13 +267,25 @@ class ProductFragment : Fragment() {
                         .placeholder(R.drawable.placeholder)
                         .fitCenter()
                         .into(binding.image)
-                    binding.price.text = getString(R.string.price_format, formatter.format(product.price))
-                    val discountedPrice = product.price - (product.price * product.discount) / 100
-                    binding.discountPrice.text = getString(R.string.price_format, formatter.format(discountedPrice))
-                    binding.discountPrice.paintFlags = binding.discountPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                    binding.discount.text = getString(R.string.discount_percentage, product.discount)
-                    binding.score.rating = product.qualification
-
+                    val price = getString(R.string.price_format, formatter.format(product.price))
+                    val discount = product.price - (product.price * product.discount) / 100
+                    val discountedPrice =
+                        getString(R.string.price_format, formatter.format(discount))
+                    //mostra descuento
+                    binding.price.text =
+                        if (product.discount.toDouble() == 0.0) price else discountedPrice
+                    binding.discountPrice.text = price
+                    binding.discountPrice.paintFlags =
+                        binding.discountPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                    binding.discount.text =
+                        getString(R.string.discount_percentage, product.discount)
+                     binding.score.rating = product.qualification
+                   // binding.score.rating = Random.nextDouble(3.0, 5.0).toFloat()
+                    //ocultar descuento
+                    if (product.discount.toDouble() == 0.0) {
+                        binding.discount.visibility = View.INVISIBLE
+                        binding.discountPrice.visibility = View.GONE
+                    }
                     binding.scoreLabel.text = when (countScore) {
                         0 -> getString(R.string.reviews_none)
                         1 -> getString(R.string.reviews_single)

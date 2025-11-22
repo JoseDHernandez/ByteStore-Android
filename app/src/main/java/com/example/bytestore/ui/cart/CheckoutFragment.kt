@@ -86,16 +86,16 @@ class CheckoutFragment : ProtectedFragment() {
             when (checkedId) {
                 R.id.rbHomeDelivery -> {
                     // Mostrar sección de dirección
-                    binding.txtAddress.isVisible = true
-                    binding.btnEditAddress.isVisible = true
+                    binding.txtAddress.isEnabled = true
+                    binding.btnEditAddress.isEnabled = true
                     // Actualizar costo de envío
                     updateShippingCost()
                     updateTotal()
                 }
                 R.id.rbStorePickup -> {
                     // Ocultar sección de dirección
-                    binding.txtAddress.isVisible = false
-                    binding.btnEditAddress.isVisible = false
+                    binding.txtAddress.isEnabled = false
+                    binding.btnEditAddress.isEnabled = false
                     // Envío gratis
                     updateShippingCost()
                     updateTotal()
@@ -108,8 +108,8 @@ class CheckoutFragment : ProtectedFragment() {
         binding.rbHomeDelivery.setOnClickListener {
             binding.rbHomeDelivery.isChecked = true
             binding.rbStorePickup.isChecked = false
-            binding.txtAddress.isVisible = true
-            binding.btnEditAddress.isVisible = true
+            binding.txtAddress.isEnabled = true
+            binding.btnEditAddress.isEnabled = true
             updateShippingCost()
             updateTotal()
         }
@@ -117,8 +117,8 @@ class CheckoutFragment : ProtectedFragment() {
         binding.rbStorePickup.setOnClickListener {
             binding.rbHomeDelivery.isChecked = false
             binding.rbStorePickup.isChecked = true
-            binding.txtAddress.isVisible = false
-            binding.btnEditAddress.isVisible = false
+            binding.txtAddress.isEnabled = false
+            binding.btnEditAddress.isEnabled = false
             updateShippingCost()
             updateTotal()
         }

@@ -46,28 +46,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingHorizontal="20dp">
 
-                <TextView
-                    android:id="@+id/price"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/barlow_semibold"
-                    android:text="$ 0.000.000"
-                    android:textSize="22sp" />
+                    android:orientation="vertical">
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
+                    <TextView
+                        android:id="@+id/price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/barlow_semibold"
+                        android:text="$ 0.000.000"
+                        android:textSize="30sp" />
 
-                <TextView
-                    android:id="@+id/discountPrice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/barlow"
-                    android:text="$ 0.000.000" />
+                    <TextView
+                        android:id="@+id/discountPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/barlow"
+                        android:text="$ 0.000.000"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
 
                 <View
                     android:layout_width="0dp"
@@ -78,15 +81,15 @@
                     android:id="@+id/discount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginBottom="5dp"
                     android:background="@drawable/discount_background"
                     android:fontFamily="@font/inter_bold"
                     android:text="- 00%"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:layout_weight="1" />
+
             </LinearLayout>
 
             <!-- Calificación general -->
@@ -94,7 +97,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
-                android:gravity="center_vertical"
+                android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
                 <RatingBar
@@ -102,7 +105,7 @@
                     style="@style/Widget.ByteStore.RatingBar"
                     android:layout_width="wrap_content"
                     android:layout_height="30dp"
-                    android:layout_marginEnd="40dp"
+                    android:layout_marginEnd="140dp"
                     android:rating="5"
                     android:scaleX="1.1"
                     android:scaleY="1.1"
@@ -112,7 +115,8 @@
                 <TextView
                     android:id="@+id/scoreLabel"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
                     android:labelFor="@id/score"
                     android:text="(00 reseñas)" />
             </LinearLayout>
@@ -122,7 +126,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingHorizontal="20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -169,13 +174,13 @@
 
                 <EditText
                     android:id="@+id/units"
-                    android:text="1"
                     style="@style/Widget.ByteStore.Input"
                     android:layout_width="200dp"
                     android:layout_height="match_parent"
                     android:autofillHints="@null"
                     android:background="@color/white"
                     android:inputType="number"
+                    android:text="1"
                     android:textAlignment="center" />
 
                 <View
@@ -708,14 +713,15 @@
                 android:fontFamily="@font/inter_bold"
                 android:text="Productos similares"
                 android:textSize="25sp" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/similarProductsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scrollbars="none"
                 android:clipToPadding="false"
-                tools:listitem="@layout/item_product_card"
                 android:orientation="horizontal"
+                android:scrollbars="none"
+                tools:listitem="@layout/item_product_card"
 
                 />
         </LinearLayout>
