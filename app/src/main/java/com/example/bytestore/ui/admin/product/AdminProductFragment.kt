@@ -53,7 +53,7 @@ class AdminProductFragment : ProtectedFragment() {
         //botones
         binding.updateButton.setOnClickListener {
             val action =
-                AdminProductFragmentDirections.actionProductListAdminFragmentToProductEditFragment(
+                AdminProductFragmentDirections.actionAdminProductFragmentToProductEditFragment(
                     product.id
                 )
             findNavController().navigate(action)
@@ -131,7 +131,7 @@ class AdminProductFragment : ProtectedFragment() {
                 binding.displayGraphics.text = product.display.graphics
                 binding.displayBrand.text = product.display.brand
             } else if (state is Resource.Error) {
-                findNavController().navigate(R.id.action_adminProductFragment_to_productsListAdminFragment)
+                findNavController().navigate(R.id.action_adminProductFragment_to_productListAdminFragment)
             }
 
         }

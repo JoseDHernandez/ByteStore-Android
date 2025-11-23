@@ -53,6 +53,9 @@ class ProductFragment : Fragment() {
         getAllData(product.id)
     }
 
+    // Adapter para mostrar reseñas usando item_review.xml
+    private val reviewsAdapter = ReviewsAdapter()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -79,6 +82,21 @@ class ProductFragment : Fragment() {
         binding.buttonAddCart.setOnClickListener {
             handleAddToCart()
         }
+
+        // Configurar RecyclerView de reseñas (usa item_review.xml)
+        binding.reviewsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = reviewsAdapter
+            isNestedScrollingEnabled = false
+        }
+
+        // Datos de ejemplo para que se vean las reseñas en la UI
+        val sampleReviews = listOf(
+            Review(1, "Avery", "12 Oct 2025", 5, "Excelente calidad y envío rápido"),
+            Review(2, "Jose", "12 Oct 2025", 5, "Excelente calidad y envío rápido"),
+            Review(3, "Daniel", "12 Oct 2025", 5, "Excelente calidad y envío rápido")
+        )
+        reviewsAdapter.submitList(sampleReviews)
 
         // Productos similares
         binding.similarProductsRecyclerView.apply {

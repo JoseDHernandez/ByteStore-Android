@@ -3,10 +3,7 @@ package com.example.bytestore.ui.order
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
-import android.location.Address
-import android.location.Geocoder
 import android.location.Location
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,12 +12,12 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.bytestore.utils.location.reverseGeocode
 import com.example.bytestore.databinding.FragmentOrderBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
-import java.util.Locale
 
 class OrderFragment : Fragment() {
     private var _binding: FragmentOrderBinding? = null
@@ -59,6 +56,23 @@ class OrderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         binding.addressButton.setOnClickListener { onAddressButtonClick() }
+
+        // Read orderId argument and populate UI (sample data)
+        val orderId = arguments?.getString("orderId")
+        if (!orderId.isNullOrEmpty()) {
+            // For demo, we'll set the id and other sample values; in real app, fetch order by id
+            binding.tvOrderId.text = "Id: $orderId"
+            binding.tvOrderDate.text = "Fecha: 08 Oct 2025"
+            binding.tvOrderDeliveredDate.text = "Fecha de entrega: 10 Oct 2025"
+            binding.tvPaymentMethod.text = "Método de pago: Tarjeta visa (***** 4235)"
+            binding.subtotalPrice.text = "$ 7.991.480"
+            binding.deliveryPriceText.text = "$ 15.000"
+            val total = "$ 8.006.480"
+            binding.totalPrice.text = total
+            // fill the top summary total too (tvSummaryTotal)
+            binding.tvSummaryTotal.text = total
+            binding.addressInput.setText("Calle 45 # 22 - 16")
+        }
     }
 
     private fun onAddressButtonClick() {
@@ -134,81 +148,11 @@ class OrderFragment : Fragment() {
         val isApprox =
             !isFineGranted() || (location.hasAccuracy() && location.accuracy > approxThresholdMeters)
 
-        reverseGeocodeAndFill(location.latitude, location.longitude, isApprox)
-    }
-
-    private fun reverseGeocodeAndFill(lat: Double, lon: Double, isApprox: Boolean) {
-        try {
-            val geocoder = Geocoder(requireContext(), Locale.getDefault())
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                geocoder.getFromLocation(lat, lon, 1) { addresses ->
-                    val address = addresses.firstOrNull()
-                    val text = buildAddressText(address, lat, lon, isApprox)
-                    binding.addressInput.setText(text)
-                    binding.addressInput.setSelection(text.length)
-                }
-            } else {
-                @Suppress("DEPRECATION")
-                val addresses = geocoder.getFromLocation(lat, lon, 1)
-                val address = addresses?.firstOrNull()
-                val text = buildAddressText(address, lat, lon, isApprox)
-                binding.addressInput.setText(text)
-                binding.addressInput.setSelection(text.length)
-            }
-        } catch (e: Exception) {
-            val text =
-                if (isApprox) String.format(Locale.getDefault(), "Aprox: %.5f, %.5f", lat, lon)
-                else String.format(Locale.getDefault(), "%.6f, %.6f", lat, lon)
+        // Use centralized reverseGeocode helper to format addresses (Colombian style when possible)
+        requireContext().reverseGeocode(location.latitude, location.longitude, isApprox) { text ->
             binding.addressInput.setText(text)
             binding.addressInput.setSelection(text.length)
         }
-    }
-
-    private fun buildAddressText(
-        address: Address?,
-        lat: Double,
-        lon: Double,
-        isApprox: Boolean
-    ): String {
-        if (address == null) {
-            return if (isApprox) String.format(Locale.getDefault(), "Aprox: %.5f, %.5f", lat, lon)
-            else String.format(Locale.getDefault(), "%.6f, %.6f", lat, lon)
-        }
-
-        // 1) Si hay una línea completa, úsala (suele venir ya bien formateada por país)
-        val line0 = address.getAddressLine(0)
-        if (!line0.isNullOrBlank()) {
-            // Asegurar que incluimos país si no viene
-            val country = address.countryName
-            return if (!country.isNullOrBlank() && !line0.contains(country)) "$line0, $country" else line0
-        }
-
-        // 2) Formato manual Latino (ej. Colombia): "Calle X # Y, Ciudad - Depto, País"
-        val street = when {
-            !address.thoroughfare.isNullOrBlank() && !address.subThoroughfare.isNullOrBlank() ->
-                "${address.thoroughfare} # ${address.subThoroughfare}"
-
-            !address.thoroughfare.isNullOrBlank() -> address.thoroughfare
-            else -> null
-        }
-        val city = address.locality
-        val admin = address.adminArea
-        val country = address.countryName
-
-        val region = when {
-            !city.isNullOrBlank() && !admin.isNullOrBlank() && !country.isNullOrBlank() -> "$city - $admin, $country"
-            !city.isNullOrBlank() && !admin.isNullOrBlank() -> "$city - $admin"
-            !city.isNullOrBlank() && !country.isNullOrBlank() -> "$city, $country"
-            !admin.isNullOrBlank() && !country.isNullOrBlank() -> "$admin, $country"
-            else -> listOfNotNull(city, admin, country).joinToString(", ")
-        }
-
-        val combined = listOfNotNull(street, region).joinToString(", ")
-        if (combined.isNotBlank()) return combined
-
-        // 3) Último recurso: coordenadas
-        return if (isApprox) String.format(Locale.getDefault(), "Aprox: %.5f, %.5f", lat, lon)
-        else String.format(Locale.getDefault(), "%.6f, %.6f", lat, lon)
     }
 
     override fun onDestroyView() {

@@ -21,4 +21,83 @@
     <string name="credit_card">Tarjeta de crédito / débito</string>
     <string name="pse_transfer">Transferencia (PSE)</string>
     <string name="cash_payment">Pago en efectivo</string>
+
+    <!-- Location formatter strings (used by LocationFormatter.kt) -->
+    <!-- Precise coordinates (6 decimal places) -->
+    <string name="location_coordinates_precise">Coordenadas: %1$.6f, %2$.6f</string>
+
+    <!-- Approximate coordinates (4 decimal places, prefixed with ~) -->
+    <string name="location_coordinates_approx">~%1$.4f, %2$.4f</string>
+
+    <!-- Orders strings -->
+    <string name="orders_title">Mis órdenes</string>
+    <string name="orders_empty_text">No tienes órdenes aún</string>
+    <string name="order_in_process">En proceso</string>
+    <string name="view_details">Ver detalles</string>
+    <string name="item_in_order">+1 producto en la orden</string>
+    <string name="producto_desc">producto</string>
+    <string name="order_date_sample">08 Oct 2025</string>
+    <string name="order_date_sample2">10 Oct 2025</string>
+    <string name="order_id_sample">LEXGLh0</string>
+    <string name="product_title_sample">Lenovo IdeaPad AMD R5 - 16GB</string>
+    <string name="product_subtitle_sample">Amd Ryzen 5 • 512 GB</string>
+    <string name="price_sample">$ 2.125.980</string>
+    <string name="product2_title">HP Pavilion i7 - 16GB</string>
+    <string name="product2_subtitle">Intel Core i7 • 1TB</string>
+    <string name="product2_price">$ 3.200.000</string>
+    <string name="quantity_x">x1</string>
+    <string name="address_sample">Calle 45 # 22 - 16</string>
+    <string name="subtotal_value">$7.991.480</string>
+    <string name="shipping_value">$15.000</string>
+    <string name="total_value">$8.006.480</string>
+    <string name="view_desc">ver</string>
+
+    <!-- Location UI strings for CheckoutFragment -->
+    <string name="location_permission_denied">Permiso de ubicación denegado</string>
+    <string name="location_fetching">Obteniendo ubicación…</string>
+    <string name="location_not_available">Ubicación no disponible</string>
+
+    <!-- New strings used in Products fragment and reviews -->
+    <string name="search_hint">Buscar productos</string>
+    <string name="clear_search_desc">Limpiar búsqueda</string>
+    <string name="voice_search_desc">Búsqueda por voz</string>
+    <string name="search_desc">Buscar</string>
+    <string name="filters_desc">Filtros</string>
+    <string name="error_message">Mensaje de error</string>
+    <string name="reset_search">Limpiar búsqueda</string>
+    <string name="speech_title">Busqueda por voz</string>
+    <string name="speech_cancel_desc">Cancelar búsqueda por voz</string>
+    <string name="speech_instructions">Manten el botón del micrófono y menciona el nombre del producto que estás buscando, sueltalo para realizar la búsqueda.</string>
+    <string name="speech_example">Ejemplo: “Lenovo Intel i5” o “Ryzen 3 Asus”.</string>
+    <string name="speech_rec_desc">Iniciar búsqueda por voz</string>
+    <string name="reviews_header">Reseñas</string>
+
+    <!-- Review item strings -->
+    <string name="avatar_desc">Avatar</string>
+    <string name="default_reviewer_name">Nombre</string>
+    <string name="sample_review_date">12 Oct 2025</string>
+    <string name="star_desc">Estrella</string>
+    <string name="sample_review_text">Comentario de ejemplo: Excelente calidad y envío rápido</string>
+
+    <!-- Order detail strings -->
+    <string name="order_state_title">Estado</string>
+    <string name="order_progress_steps">Pedido recibido → En preparación → En envío → Recibido</string>
+    <string name="order_summary_title">Resumen del pedido</string>
+    <string name="order_id_default">Id: -</string>
+    <string name="order_date_default">Fecha: -</string>
+    <string name="order_delivered_default">Fecha de entrega: -</string>
+    <string name="payment_method_default">Método de pago: -</string>
+    <string name="total_label">Total:</string>
+    <string name="summary_total_default">$ 0</string>
+    <string name="delivery_method_title">Método de entrega</string>
+    <string name="delivery_type_home">Tipo: Envío a domicilio</string>
+    <string name="address_label">Dirección:</string>
+    <string name="address_hint">Dirección de entrega</string>
+    <string name="shipping_cost_label">Costo de envío: %1$s</string>
+    <string name="products_title">Productos</string>
+    <string name="product_content_desc">Producto</string>
+    <string name="quantity_x">x1</string>
+    <string name="subtotal_label">Subtotal</string>
+    <string name="shipping_label">Envío</string>
+    <string name="order_sum_title">Resumen del pedido</string>
 </resources>

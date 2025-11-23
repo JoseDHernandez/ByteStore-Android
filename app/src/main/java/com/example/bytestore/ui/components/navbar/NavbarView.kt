@@ -32,10 +32,9 @@ class NavbarView @JvmOverloads constructor(
             onItemSelected?.invoke(R.id.cartFragment)
         }
 
-        // Botón de órdenes (deshabilitado por ahora)
+        // Botón de órdenes (habilitado)
         binding.itemOrders.setOnClickListener {
-            // TODO: Navegar a órdenes cuando esté disponible
-            // onItemSelected?.invoke(R.id.ordersFragment)
+            onItemSelected?.invoke(R.id.ordersFragment)
         }
 
         // Botón de opciones
