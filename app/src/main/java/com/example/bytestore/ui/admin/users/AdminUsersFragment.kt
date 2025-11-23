@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.bytestore.R
 import com.example.bytestore.databinding.FragmentAdminUsersBinding
 import com.example.bytestore.ui.ProtectedFragment
 import com.example.bytestore.ui.viewmodel.userViewModels.AdminUsersViewModel
@@ -44,6 +46,49 @@ class AdminUsersFragment : ProtectedFragment() {
         topBar().setTitle("Usuarios")
         viewModel.getUsers()
         setAdapterAndRecyclerView(savedInstanceState)
+        //nuevo usuario
+        binding.newUserButton.setOnClickListener {
+            findNavController().navigate(R.id.action_adminUsersFragment_to_adminUserRegisterFragment)
+        }
+        //buscar usuario
+        binding.searchButton.setOnClickListener {
+            val q = binding.searchInput.toString().trim()
+            val regex = Regex("^[0-9A-Za-zÁÉÍÓÚáéíóúÑñ\\s@.]+$")
+            if (q.matches(regex)) {
+                Toast.makeText(requireContext(), "Busqueda invalida", Toast.LENGTH_SHORT).show()
+            } else {
+                query = q
+                currentPage = 1
+                totalPages = 1
+                hasNextPage = true
+                isLoading = false
+                usersAdapter.submitList(emptyList())
+                viewModel.getUsers(1, query)
+                binding.recyclerView.scrollToPosition(0)
+            }
+        }
+        //mostrar limpiar
+        binding.searchInput.addTextChangedListener { editable ->
+            val text = editable?.toString() ?: ""
+            if (text.length > 1) {
+                binding.clearSearchButton.visibility = View.VISIBLE
+            } else {
+                binding.clearSearchButton.visibility = View.GONE
+            }
+
+        }
+        //limpiar
+        binding.clearSearchButton.setOnClickListener { clearSearch() }
+    }
+
+    private fun clearSearch() {
+        query = null
+        currentPage = 1
+        totalPages = 1
+        hasNextPage = true
+        binding.searchInput.setText("")
+        usersAdapter.submitList(emptyList())
+        viewModel.getUsers(1)
     }
 
     private fun setAdapterAndRecyclerView(savedInstanceState: Bundle?) {
@@ -95,20 +140,20 @@ class AdminUsersFragment : ProtectedFragment() {
                     binding.errorLayout.visibility = View.VISIBLE
                 }
 
-                is Resource.ValidationError ->{
+                is Resource.ValidationError -> {
                     binding.recyclerView.visibility = View.GONE
                     binding.progressBar.visibility = View.GONE
                     binding.errorLayout.visibility = View.GONE
-                   val errors =state.errors
+                    val errors = state.errors
                     errors["search"]?.let { binding.errorSearchMessage.text = it }
                     binding.errorSearchLayout.visibility = View.VISIBLE
                 }
 
-                is Resource.Loading ->{
+                is Resource.Loading -> {
                     binding.recyclerView.visibility = View.VISIBLE
                     binding.errorLayout.visibility = View.GONE
                     binding.errorSearchLayout.visibility = View.GONE
-                    if(currentPage==1){
+                    if (currentPage == 1) {
                         binding.progressBar.visibility = View.VISIBLE
                     }
                 }

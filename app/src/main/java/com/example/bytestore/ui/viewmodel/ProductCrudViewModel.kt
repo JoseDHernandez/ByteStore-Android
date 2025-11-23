@@ -6,7 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.bytestore.data.model.product.*
+import com.example.bytestore.data.model.product.DisplayModel
+import com.example.bytestore.data.model.product.OperatingSystemModel
+import com.example.bytestore.data.model.product.ProcessorModel
+import com.example.bytestore.data.model.product.ProductInputs
+import com.example.bytestore.data.model.product.ProductModel
+import com.example.bytestore.data.model.product.ProductRegisterRequest
+import com.example.bytestore.data.model.product.ProductUpdateRequest
+import com.example.bytestore.data.model.product.ProductValidator
 import com.example.bytestore.data.repository.ProductRepository
 import com.example.bytestore.utils.Resource
 import kotlinx.coroutines.Dispatchers
@@ -58,10 +65,12 @@ class ProductCrudViewModel : ViewModel() {
                             _registerProductState.postValue(Resource.Error("Error al subir imagen: ${imageResult.message}"))
                             return@launch
                         }
+
                         is Resource.ValidationError -> {
                             _registerProductState.postValue(Resource.Error("Error de validación de imagen"))
                             return@launch
                         }
+
                         else -> {}
                     }
                 }
@@ -113,7 +122,13 @@ class ProductCrudViewModel : ViewModel() {
     }
 
     // Actualizar producto
-    fun updateProduct(id: Int, input: ProductInputs, context: Context, imageUri: Uri?, oldImageUrl: String?) {
+    fun updateProduct(
+        id: Int,
+        input: ProductInputs,
+        context: Context,
+        imageUri: Uri?,
+        oldImageUrl: String?
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
             _updateProductState.postValue(Resource.Loading)
 
@@ -132,12 +147,14 @@ class ProductCrudViewModel : ViewModel() {
                     // Si hay una imagen anterior, reemplazarla
                     if (!oldImageUrl.isNullOrBlank()) {
                         val filename = oldImageUrl.substringAfterLast("/")
-                        when (val imageResult = repository.changeImage(context, imageUri, filename)) {
+                        when (val imageResult =
+                            repository.changeImage(context, imageUri, filename)) {
                             is Resource.Success -> imageUrl = imageResult.data
                             is Resource.Error -> {
                                 _updateProductState.postValue(Resource.Error("Error al actualizar imagen: ${imageResult.message}"))
                                 return@launch
                             }
+
                             else -> {}
                         }
                     } else {
@@ -148,6 +165,7 @@ class ProductCrudViewModel : ViewModel() {
                                 _updateProductState.postValue(Resource.Error("Error al subir imagen: ${imageResult.message}"))
                                 return@launch
                             }
+
                             else -> {}
                         }
                     }

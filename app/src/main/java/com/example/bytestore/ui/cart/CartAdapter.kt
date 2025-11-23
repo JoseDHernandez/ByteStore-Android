@@ -1,16 +1,16 @@
 package com.example.bytestore.ui.cart
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bytestore.data.model.cart.CartItemModel
-import com.example.bytestore.databinding.ItemCartBinding
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.bytestore.R
-import android.util.Log
+import com.example.bytestore.data.model.cart.CartItemModel
+import com.example.bytestore.databinding.ItemCartBinding
 
 class CartAdapter(
     private val onInc: (CartItemModel) -> Unit,
@@ -19,7 +19,10 @@ class CartAdapter(
 
     inner class VH(val b: ItemCartBinding) : RecyclerView.ViewHolder(b.root) {
         fun bind(item: CartItemModel) {
-            Log.d("CartAdapter", "Binding item: id=${item.id}, productId=${item.productId}, name='${item.name}', image='${item.image}'")
+            Log.d(
+                "CartAdapter",
+                "Binding item: id=${item.id}, productId=${item.productId}, name='${item.name}', image='${item.image}'"
+            )
 
             // Mostrar nombre completo del producto
             b.txtName.text = item.name.ifEmpty { "Producto sin nombre" }

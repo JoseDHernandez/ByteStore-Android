@@ -7,7 +7,6 @@ import com.example.bytestore.data.model.product.BrandModel
 import com.example.bytestore.data.model.product.DisplayModel
 import com.example.bytestore.data.model.product.DisplayRegisterRequest
 import com.example.bytestore.data.model.product.DisplayUpdateRequest
-import com.example.bytestore.data.model.product.ImagenResponseModel
 import com.example.bytestore.data.model.product.ListProductsModel
 import com.example.bytestore.data.model.product.OSRegisterRequest
 import com.example.bytestore.data.model.product.OSUpdateRequest
@@ -37,9 +36,9 @@ class ProductRepository {
         val cached = ProductProvider.getFetchProducts()
         val refreshInterval = 30 * 60 * 1000L //30 min
         var resetProducts = false
-        val isSearch = !search.isNullOrBlank() ||!sort.isNullOrBlank()
-        if(isSearch){
-            Log.d("ProductRepository","Es una busqueda")
+        val isSearch = !search.isNullOrBlank() || !sort.isNullOrBlank()
+        if (isSearch) {
+            Log.d("ProductRepository", "Es una busqueda")
         }
         //==============================
         //      verificar cache de paginación
@@ -48,7 +47,7 @@ class ProductRepository {
         if (!isSearch && cached != null && page != null && (cached.prev != null && page <= cached.prev || cached.next == null)) {
             //validar si se necesita actulizar
             if (!ProductProvider.needRefreshProducts(refreshInterval)) {
-                Log.d("ProductRepository","Productos de cache: $page ")
+                Log.d("ProductRepository", "Productos de cache: $page ")
                 return cached
             }
             // si ya tengo todas las paginas las borro para solicitar los productos de nuevo
@@ -71,7 +70,8 @@ class ProductRepository {
 
         //Almaceno en el provider
         if (response != null) {
-            ProductProvider.setProducts(response)
+            if (isSearch) ProductProvider.addProducts(response.data) else
+                ProductProvider.setProducts(response)
         }
         return response
     }
@@ -91,7 +91,7 @@ class ProductRepository {
 
     //obtener productos similares
     suspend fun getSimilarProducts(id: Int): List<ProductModel>? {
-       val cachedProducts = ProductProvider.getFetchProducts()
+        val cachedProducts = ProductProvider.getFetchProducts()
         if (cachedProducts !== null && cachedProducts.next == null) {
             return ProductProvider.getSimilarProducts(id)
         }
@@ -144,23 +144,25 @@ class ProductRepository {
     }
 
     //registrar un producto
-    suspend fun registerProduct(request: ProductRegisterRequest): Resource<ProductModel>{
+    suspend fun registerProduct(request: ProductRegisterRequest): Resource<ProductModel> {
         val response = productService.registerProduct(request)
-        if(response is Resource.Success){
+        if (response is Resource.Success) {
             ProductProvider.addProduct(response.data)
         }
         return response
     }
+
     //actuzlizar un producto
-    suspend fun updateProduct(id:Int,request: ProductUpdateRequest): Resource<ProductModel>{
-        val response = productService.updateProduct(id,request)
-        if(response is Resource.Success) {
+    suspend fun updateProduct(id: Int, request: ProductUpdateRequest): Resource<ProductModel> {
+        val response = productService.updateProduct(id, request)
+        if (response is Resource.Success) {
             ProductProvider.addProduct(response.data)
         }
         return response
     }
+
     //remover producto (true = ok, false = error)
-    suspend fun deleteProduct(id:Int): Boolean {
+    suspend fun deleteProduct(id: Int): Boolean {
         return productService.deleteProduct(id)
     }
 
@@ -178,8 +180,8 @@ class ProductRepository {
      * @param uri URI de la imagen seleccionada (camara / galeria).
      * @return URL de la imagen subida en el servidor.
      */
-    suspend fun uploadImage(context: Context, uri: Uri): Resource<String>{
-        val multipart = ImageTools.adapterToWebp(context,uri)
+    suspend fun uploadImage(context: Context, uri: Uri): Resource<String> {
+        val multipart = ImageTools.adapterToWebp(context, uri)
         return productService.uploadImage(multipart)
     }
 
@@ -193,10 +195,11 @@ class ProductRepository {
      * @param filename Nombre del archivo que se sobrescribirá en el servidor.
      * @return URL de la imagen reemplazada en el servidor.
      */
-    suspend fun changeImage(context: Context,uri: Uri,filename:String): Resource<String> {
-        val multipart = ImageTools.adapterToWebp(context,uri,filename)
-        return productService.changeImage(filename,multipart)
+    suspend fun changeImage(context: Context, uri: Uri, filename: String): Resource<String> {
+        val multipart = ImageTools.adapterToWebp(context, uri, filename)
+        return productService.changeImage(filename, multipart)
     }
+
     /**
      *
      * **Eliminar imagen**
@@ -218,39 +221,45 @@ class ProductRepository {
     //obtener marcas de los productos
     suspend fun getBrands(): Resource<List<BrandModel>> {
         //validar cache (ids no temporales)
-        if(ProductProvider.checkAllBrandsIds()) return Resource.Success(ProductProvider.getBrands())
-        val response= productService.getBrands()
+        if (ProductProvider.checkAllBrandsIds()) return Resource.Success(ProductProvider.getBrands())
+        val response = productService.getBrands()
         //sincronizar ids
-        if(response is Resource.Success) {
+        if (response is Resource.Success) {
             val brands = response.data
             brands.forEach { ProductProvider.syncBrandId(it) }
         }
         return response
     }
+
     //obtener marca por id
-    suspend fun getBrand(id:Int): Resource<BrandModel> {
+    suspend fun getBrand(id: Int): Resource<BrandModel> {
         val cachedBrand = ProductProvider.getBrand(id)
-        if(ProductProvider.checkAllBrandsIds() && cachedBrand !=null) return Resource.Success(cachedBrand)
+        if (ProductProvider.checkAllBrandsIds() && cachedBrand != null) return Resource.Success(
+            cachedBrand
+        )
         return productService.getBrand(id)
     }
+
     //registrar
     suspend fun registerBrand(request: ProductBrandRequest): Resource<BrandModel> {
         val response = productService.registerBrand(request)
-        if(response is Resource.Success){
+        if (response is Resource.Success) {
             ProductProvider.addBrand(response.data)
         }
         return response
     }
+
     //eliminar marca
-    suspend fun deleteBrand(id:Int): Boolean{
+    suspend fun deleteBrand(id: Int): Boolean {
         val response = productService.deleteBrand(id)
-        if(response) ProductProvider.removeBrand(id)
+        if (response) ProductProvider.removeBrand(id)
         return response
     }
+
     //actulizar marca
-    suspend fun updateBrand(id:Int, request: ProductBrandRequest): Resource<BrandModel>{
-        val response = productService.updateBrand(id,request)
-        if(response is Resource.Success) ProductProvider.updateBrand(id,response.data)
+    suspend fun updateBrand(id: Int, request: ProductBrandRequest): Resource<BrandModel> {
+        val response = productService.updateBrand(id, request)
+        if (response is Resource.Success) ProductProvider.updateBrand(id, response.data)
         return response
     }
 
@@ -259,36 +268,40 @@ class ProductRepository {
     //==========================================
 
     //obtener graficos
-    suspend fun getDisplays(): Resource<List<DisplayModel>>{
+    suspend fun getDisplays(): Resource<List<DisplayModel>> {
         //validar cache
-        if(ProductProvider.checkAllDisplaysIds()) return Resource.Success(ProductProvider.getDisplays())
+        if (ProductProvider.checkAllDisplaysIds()) return Resource.Success(ProductProvider.getDisplays())
         val response = productService.getDisplays()
         //sincronizar ids
-        if(response is Resource.Success) response.data.forEach { ProductProvider.syncDisplayId(it) }
+        if (response is Resource.Success) response.data.forEach { ProductProvider.syncDisplayId(it) }
         return response
     }
+
     //obtener grafico
-    suspend fun getDisplay(id:Int) : Resource<DisplayModel> {
+    suspend fun getDisplay(id: Int): Resource<DisplayModel> {
         val cachedDisplay = ProductProvider.getDisplays(id)
-        if(cachedDisplay!= null) return Resource.Success(cachedDisplay)
+        if (cachedDisplay != null) return Resource.Success(cachedDisplay)
         return productService.getDisplay(id)
     }
+
     //registrar grafico
     suspend fun registerDisplay(request: DisplayRegisterRequest): Resource<DisplayModel> {
         val response = productService.registerDisplay(request)
-        if(response is Resource.Success) ProductProvider.addDisplay(response.data)
+        if (response is Resource.Success) ProductProvider.addDisplay(response.data)
         return response
     }
+
     //actulizar grafico
-    suspend fun updateDisplay(id:Int, request: DisplayUpdateRequest): Resource<DisplayModel> {
-        val response = productService.updateDisplay(id,request)
-        if(response is Resource.Success) ProductProvider.updateDisplay(id,response.data)
+    suspend fun updateDisplay(id: Int, request: DisplayUpdateRequest): Resource<DisplayModel> {
+        val response = productService.updateDisplay(id, request)
+        if (response is Resource.Success) ProductProvider.updateDisplay(id, response.data)
         return response
     }
+
     //eliminar
-    suspend fun deleteDisplay(id:Int): Boolean {
+    suspend fun deleteDisplay(id: Int): Boolean {
         val response = productService.deleteDisplay(id)
-        if(response) ProductProvider.removeDisplay(id)
+        if (response) ProductProvider.removeDisplay(id)
         return response
     }
 
@@ -298,33 +311,40 @@ class ProductRepository {
 
     //obtener procesadores
     suspend fun getProcessors(): Resource<List<ProcessorModel>> {
-        if(ProductProvider.checkAllProcessorsIds()) return Resource.Success(ProductProvider.getProcessors())
+        if (ProductProvider.checkAllProcessorsIds()) return Resource.Success(ProductProvider.getProcessors())
         val response = productService.getProcessors()
-        if(response is Resource.Success) response.data.forEach { ProductProvider.syncProcessorId(it) }
+        if (response is Resource.Success) response.data.forEach { ProductProvider.syncProcessorId(it) }
         return response
     }
+
     //obtener procesador
-    suspend fun getProcessor(id:Int): Resource<ProcessorModel> {
+    suspend fun getProcessor(id: Int): Resource<ProcessorModel> {
         val cachedProcessor = ProductProvider.getProcessor(id)
-        if(cachedProcessor!=null)return Resource.Success(cachedProcessor)
+        if (cachedProcessor != null) return Resource.Success(cachedProcessor)
         return productService.getProcessor(id)
     }
+
     //registrar procesador
     suspend fun registerProcessor(request: ProcessorRegisterRequest): Resource<ProcessorModel> {
         val response = productService.registerProcessor(request)
-        if(response is Resource.Success) ProductProvider.addProcessor(response.data)
+        if (response is Resource.Success) ProductProvider.addProcessor(response.data)
         return response
     }
+
     //actulizar
-    suspend fun updateProcessor(id:Int,request: ProcessorUpdateRequest): Resource<ProcessorModel> {
-        val response = productService.updateProcessor(id,request)
-        if(response is Resource.Success) ProductProvider.updateProcessor(id,response.data)
+    suspend fun updateProcessor(
+        id: Int,
+        request: ProcessorUpdateRequest
+    ): Resource<ProcessorModel> {
+        val response = productService.updateProcessor(id, request)
+        if (response is Resource.Success) ProductProvider.updateProcessor(id, response.data)
         return response
     }
+
     //eliminar
-    suspend fun deleteProcessor(id:Int): Boolean {
+    suspend fun deleteProcessor(id: Int): Boolean {
         val response = productService.deleteProcessor(id)
-        if(response) ProductProvider.removeProcessor(id)
+        if (response) ProductProvider.removeProcessor(id)
         return response
     }
 
@@ -333,31 +353,36 @@ class ProductRepository {
     //==========================================
 
     suspend fun getOperatingSystems(): Resource<List<OperatingSystemModel>> {
-        if(ProductProvider.checkAllOSIds()) return Resource.Success(ProductProvider.getOperatingSystems())
+        if (ProductProvider.checkAllOSIds()) return Resource.Success(ProductProvider.getOperatingSystems())
         val response = productService.getAllOS()
-        if(response is Resource.Success) response.data.forEach { ProductProvider.syncOsId(it) }
+        if (response is Resource.Success) response.data.forEach { ProductProvider.syncOsId(it) }
         return response
     }
 
-    suspend fun getOperatingSystem(id:Int): Resource<OperatingSystemModel> {
+    suspend fun getOperatingSystem(id: Int): Resource<OperatingSystemModel> {
         val cachedOS = ProductProvider.getOperatingSystem(id)
-        if(cachedOS!=null) return Resource.Success(cachedOS)
+        if (cachedOS != null) return Resource.Success(cachedOS)
         return productService.getOS(id)
     }
 
     suspend fun registerOperatingSystem(request: OSRegisterRequest): Resource<OperatingSystemModel> {
         val response = productService.registerOS(request)
-        if(response is Resource.Success) ProductProvider.addOS(response.data)
+        if (response is Resource.Success) ProductProvider.addOS(response.data)
         return response
     }
-    suspend fun updateOperatingSystem(id:Int, request: OSUpdateRequest): Resource<OperatingSystemModel> {
-        val response = productService.updateOS(id,request)
-        if(response is Resource.Success) ProductProvider.updateOS(id,response.data)
+
+    suspend fun updateOperatingSystem(
+        id: Int,
+        request: OSUpdateRequest
+    ): Resource<OperatingSystemModel> {
+        val response = productService.updateOS(id, request)
+        if (response is Resource.Success) ProductProvider.updateOS(id, response.data)
         return response
     }
-    suspend fun deleteOperatingSystem(id:Int): Boolean {
+
+    suspend fun deleteOperatingSystem(id: Int): Boolean {
         val response = productService.deleteOS(id)
-        if(response) ProductProvider.removeOperatingSystem(id)
+        if (response) ProductProvider.removeOperatingSystem(id)
         return response
     }
 }

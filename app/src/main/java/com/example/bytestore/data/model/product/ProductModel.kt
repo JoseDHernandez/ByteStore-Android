@@ -52,10 +52,12 @@ data class DisplayModel(
     val graphics: String,
     val brand: String
 )
-data class BrandModel (
+
+data class BrandModel(
     val id: Int,
     val name: String
 )
+
 data class ProductFilters(
     val brands: List<ProductFilterItem>,
     val processors: List<ProductFilterItem>,
@@ -105,7 +107,7 @@ data class ProductUpdateRequest(
     @SerializedName("brand_id") val brand: Int?,
     @SerializedName("processor_id") val processorId: Int?,
     @SerializedName("system_id") val systemId: Int?,
-    @SerializedName("display_id")  val displayId: Int?
+    @SerializedName("display_id") val displayId: Int?
 )
 
 //=============================================
@@ -113,8 +115,8 @@ data class ProductUpdateRequest(
 //=============================================
 
 data class ImagenResponseModel(
-    val message:String,
-    val filepath:String
+    val message: String,
+    val filepath: String
 )
 
 //=============================================

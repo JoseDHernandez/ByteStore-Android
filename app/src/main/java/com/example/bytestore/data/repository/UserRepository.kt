@@ -16,7 +16,7 @@ class UserRepository {
     //registro
     suspend fun registerUser(user: UserRegisterRequest): Resource<UserModel> {
 
-        return when(val response = userService.registerUser(user)){
+        return when (val response = userService.registerUser(user)) {
             is Resource.Success -> {
                 val account = response.data.toUserModel()
                 Resource.Success(account)

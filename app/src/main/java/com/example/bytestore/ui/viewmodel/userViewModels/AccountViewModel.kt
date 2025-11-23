@@ -11,7 +11,6 @@ import com.example.bytestore.data.model.user.UserUpdateInputs
 import com.example.bytestore.data.model.user.UserUpdateRequest
 import com.example.bytestore.data.model.user.UserValidator
 import com.example.bytestore.data.repository.AccountRepository
-import com.example.bytestore.data.repository.UserRepository
 import com.example.bytestore.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

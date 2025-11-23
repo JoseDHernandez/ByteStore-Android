@@ -76,6 +76,7 @@ class UpdateProfileFragment : ProtectedFragment() {
                             ).show()
                             findNavController().navigateUp()
                         }
+
                         is Resource.Error -> {
                             isUpdating = false
                             Toast.makeText(
@@ -84,6 +85,7 @@ class UpdateProfileFragment : ProtectedFragment() {
                                 Toast.LENGTH_LONG
                             ).show()
                         }
+
                         is Resource.ValidationError -> {
                             isUpdating = false
                             state.errors["name"]?.let {
@@ -96,6 +98,7 @@ class UpdateProfileFragment : ProtectedFragment() {
                                 showError(binding.tvAddressError, it)
                             }
                         }
+
                         else -> Unit
                     }
                 }

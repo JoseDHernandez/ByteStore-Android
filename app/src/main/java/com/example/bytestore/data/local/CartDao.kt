@@ -2,11 +2,12 @@ package com.example.bytestore.data.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
-import androidx.room.Query
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import androidx.room.Update
-import androidx.room.Delete
+
 @Dao
 interface CartDao {
     @Query("SELECT * FROM cart_items ORDER BY id DESC")
@@ -27,9 +28,13 @@ interface CartDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertIgnore(item: CartEntity): Long
 
-    @Update suspend fun update(item: CartEntity)
-    @Delete suspend fun delete(item: CartEntity)
+    @Update
+    suspend fun update(item: CartEntity)
+    @Delete
+    suspend fun delete(item: CartEntity)
 
-    @Query("DELETE FROM cart_items") suspend fun clear()
-    @Query("SELECT * FROM cart_items") suspend fun getAll(): List<CartEntity>
+    @Query("DELETE FROM cart_items")
+    suspend fun clear()
+    @Query("SELECT * FROM cart_items")
+    suspend fun getAll(): List<CartEntity>
 }

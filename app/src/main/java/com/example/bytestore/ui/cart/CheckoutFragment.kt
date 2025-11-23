@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.bytestore.R
@@ -65,6 +64,7 @@ class CheckoutFragment : ProtectedFragment() {
                     updateShippingCost()
                     updateTotal()
                 }
+
                 is Resource.Error -> {
                     Toast.makeText(
                         requireContext(),
@@ -72,9 +72,11 @@ class CheckoutFragment : ProtectedFragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+
                 is Resource.Loading -> {
                     // Mostrar loading si es necesario
                 }
+
                 else -> {}
             }
         }
@@ -92,6 +94,7 @@ class CheckoutFragment : ProtectedFragment() {
                     updateShippingCost()
                     updateTotal()
                 }
+
                 R.id.rbStorePickup -> {
                     // Ocultar sección de dirección
                     binding.txtAddress.isEnabled = false
@@ -132,6 +135,7 @@ class CheckoutFragment : ProtectedFragment() {
                     // Mostrar "Contra entrega" solo con pago en efectivo
                     binding.txtPaymentLink.isVisible = true
                 }
+
                 R.id.rbCreditCard, R.id.rbPSE -> {
                     // Ocultar "Contra entrega" con otros métodos
                     binding.txtPaymentLink.isVisible = false
@@ -242,14 +246,19 @@ class CheckoutFragment : ProtectedFragment() {
 
         Toast.makeText(
             requireContext(),
-            "Compra confirmada\nEntrega: $deliveryMethod\nPago: $paymentMethod\nTotal: ${centsToMoney(finalTotal, showCents = false)}",
+            "Compra confirmada\nEntrega: $deliveryMethod\nPago: $paymentMethod\nTotal: ${
+                centsToMoney(
+                    finalTotal,
+                    showCents = false
+                )
+            }",
             Toast.LENGTH_LONG
         ).show()
 
         // Limpiar el carrito después de la compra
-    vm.clear()
-    // Si estábamos en un checkout temporal, finalizarlo para que el estado real se recalcule
-    vm.finishTemporaryCheckout()
+        vm.clear()
+        // Si estábamos en un checkout temporal, finalizarlo para que el estado real se recalcule
+        vm.finishTemporaryCheckout()
 
         // Navegar a productos después de la compra
         findNavController().navigate(R.id.action_checkout_to_products)

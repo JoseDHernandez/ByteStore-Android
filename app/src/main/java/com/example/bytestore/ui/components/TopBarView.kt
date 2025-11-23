@@ -1,22 +1,13 @@
 package com.example.bytestore.ui.components
 
-import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
-import androidx.activity.ComponentActivity
-import androidx.activity.OnBackPressedCallback
-import androidx.lifecycle.setViewTreeLifecycleOwner
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
-import com.example.bytestore.R
 import com.example.bytestore.databinding.ViewTopBarBinding
-import com.example.bytestore.utils.SessionManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class TopBarView @JvmOverloads constructor(
     context: Context,
@@ -59,12 +50,20 @@ class TopBarView @JvmOverloads constructor(
     }
 
     private fun runDefaultBackAction() {
-        navController?.let {
-            if (!it.navigateUp()) {
-                (context as? Activity)?.onBackPressed()
+        val nav = navController
+
+        if (nav != null) {
+            // Intentar volver un nivel en Navigation
+            if (!nav.popBackStack()) {
+                // Si no hay más backstack, cerrar
+                (context as? AppCompatActivity)
+                    ?.onBackPressedDispatcher
+                    ?.onBackPressed()
             }
-        } ?: run {
-            (context as? Activity)?.onBackPressed()
+        } else {
+            (context as? AppCompatActivity)
+                ?.onBackPressedDispatcher
+                ?.onBackPressed()
         }
     }
 

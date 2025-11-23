@@ -87,43 +87,52 @@ class AdminUserUpdateFragment : ProtectedFragment() {
                             .lowercase()
                             .replaceFirstChar { it.titlecase(Locale.getDefault()) }
                     )
-                    if (position >= 0) binding.spinnerRole.setSelection(position,false)
+                    if (position >= 0) binding.spinnerRole.setSelection(position, false)
                     //eventos del spinner
-                    binding.spinnerRole.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                        override fun onItemSelected(
-                            parent: AdapterView<*>?,
-                            view: View?,
-                            position: Int,
-                            id: Long
-                        ) {
-                            val selected = parent?.getItemAtPosition(position).toString().uppercase()
+                    binding.spinnerRole.onItemSelectedListener =
+                        object : AdapterView.OnItemSelectedListener {
+                            override fun onItemSelected(
+                                parent: AdapterView<*>?,
+                                view: View?,
+                                position: Int,
+                                id: Long
+                            ) {
+                                val selected =
+                                    parent?.getItemAtPosition(position).toString().uppercase()
 
-                            if (selected != "SELECCIONAR" && selected != user.role) {
-                                viewModel.changeRol(user.id, selected)
+                                if (selected != "SELECCIONAR" && selected != user.role) {
+                                    viewModel.changeRol(user.id, selected)
+                                }
                             }
-                        }
 
-                        override fun onNothingSelected(parent: AdapterView<*>?) = Unit
-                    }
+                            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+                        }
                 }
 
                 else -> Unit
             }
         }
         //respuesta de actulizacion
-        viewModel.userUpdateState.observe(viewLifecycleOwner){state->
-            when(state){
+        viewModel.userUpdateState.observe(viewLifecycleOwner) { state ->
+            when (state) {
                 is Resource.Success -> {
-                    Toast.makeText(requireContext(),"Usuario actulizado", Toast.LENGTH_SHORT).show()
-                    val action = AdminUserUpdateFragmentDirections.actionAdminUserUpdateFragmentToAdminUserFragment(user.id)
+                    Toast.makeText(requireContext(), "Usuario actulizado", Toast.LENGTH_SHORT)
+                        .show()
+                    val action =
+                        AdminUserUpdateFragmentDirections.actionAdminUserUpdateFragmentToAdminUserFragment(
+                            user.id
+                        )
                     //findNavController().navigate(action)
                     findNavController().navigateUp()
                 }
+
                 is Resource.ValidationError -> showValidationErrors(state.errors)
                 is Resource.Error -> {
-                    Toast.makeText(requireContext(),"Error al actulizar", Toast.LENGTH_SHORT).show()
-                    Log.d("AdminUserUpdateFragment",state.message)
+                    Toast.makeText(requireContext(), "Error al actulizar", Toast.LENGTH_SHORT)
+                        .show()
+                    Log.d("AdminUserUpdateFragment", state.message)
                 }
+
                 else -> Unit
             }
 

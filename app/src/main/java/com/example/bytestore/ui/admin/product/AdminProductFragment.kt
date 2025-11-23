@@ -1,6 +1,5 @@
 package com.example.bytestore.ui.admin.product
 
-import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -53,15 +52,19 @@ class AdminProductFragment : ProtectedFragment() {
         setProductLiveData()
         //botones
         binding.updateButton.setOnClickListener {
-            val action = AdminProductFragmentDirections.actionProductListAdminFragmentToProductEditFragment(product.id)
+            val action =
+                AdminProductFragmentDirections.actionProductListAdminFragmentToProductEditFragment(
+                    product.id
+                )
             findNavController().navigate(action)
         }
         binding.deleteButton.setOnClickListener {
             showDeleteConfirmation(product.id, product.image, product.name)
         }
     }
+
     private fun showDeleteConfirmation(productId: Int, imageUrl: String, productName: String) {
-        AlertDialog.Builder(requireContext(),R.style.Theme_ByteStore_AlertDialog)
+        AlertDialog.Builder(requireContext(), R.style.Theme_ByteStore_AlertDialog)
             .setTitle("Eliminar producto")
             .setMessage("¿Estás seguro de eliminar '$productName'?")
             .setPositiveButton("Eliminar") { _, _ ->
@@ -70,6 +73,7 @@ class AdminProductFragment : ProtectedFragment() {
             .setNegativeButton("Cancelar", null)
             .show()
     }
+
     private fun setProductLiveData() {
         viewModel.productState.observe(viewLifecycleOwner) { state ->
             if (state is Resource.Success) {

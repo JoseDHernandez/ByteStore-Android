@@ -5,7 +5,6 @@ import com.example.bytestore.data.model.product.BrandModel
 import com.example.bytestore.data.model.product.DisplayModel
 import com.example.bytestore.data.model.product.DisplayRegisterRequest
 import com.example.bytestore.data.model.product.DisplayUpdateRequest
-import com.example.bytestore.data.model.product.ImagenResponseModel
 import com.example.bytestore.data.model.product.ListProductsModel
 import com.example.bytestore.data.model.product.OSRegisterRequest
 import com.example.bytestore.data.model.product.OSUpdateRequest

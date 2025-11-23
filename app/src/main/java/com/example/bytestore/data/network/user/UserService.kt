@@ -10,7 +10,6 @@ import com.example.bytestore.data.model.user.UserLoginRequest
 import com.example.bytestore.data.model.user.UserModel
 import com.example.bytestore.data.model.user.UserRegisterRequest
 import com.example.bytestore.data.model.user.UserUpdateRequest
-import com.example.bytestore.data.model.user.toAccountModel
 import com.example.bytestore.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -212,6 +211,7 @@ class UserService {
                 false
             }
         }
+
     suspend fun deleteUser(id: String): Boolean =
         withContext(Dispatchers.IO) {
             try {

@@ -23,33 +23,34 @@ class AuthViewModel(private val repository: AccountRepository) : ViewModel() {
 
 
     //funcion de registro
-    fun registerUser(userRegisterInputs: UserRegisterInputs) = viewModelScope.launch(Dispatchers.IO) {
-        //validaciones
-        val errors = UserValidator.validateRegister(userRegisterInputs)
+    fun registerUser(userRegisterInputs: UserRegisterInputs) =
+        viewModelScope.launch(Dispatchers.IO) {
+            //validaciones
+            val errors = UserValidator.validateRegister(userRegisterInputs)
 
-        //retornar errores si existen
-        if (errors.isNotEmpty()) {
-            _authState.postValue(Resource.ValidationError(errors))
-            return@launch
+            //retornar errores si existen
+            if (errors.isNotEmpty()) {
+                _authState.postValue(Resource.ValidationError(errors))
+                return@launch
+            }
+
+            //paso de userInput a UserRegisterRequest
+            val request = UserRegisterRequest(
+                name = userRegisterInputs.name,
+                email = userRegisterInputs.email,
+                password = userRegisterInputs.password,
+                physicalAddress = userRegisterInputs.address
+            )
+
+            val response = repository.registerUser(request)
+
+            _authState.postValue(response)
         }
-
-        //paso de userInput a UserRegisterRequest
-        val request = UserRegisterRequest(
-            name = userRegisterInputs.name,
-            email = userRegisterInputs.email,
-            password = userRegisterInputs.password,
-            physicalAddress = userRegisterInputs.address
-        )
-
-        val response = repository.registerUser(request)
-
-        _authState.postValue(response)
-    }
 
     //login
     fun loginUser(email: String, password: String) = viewModelScope.launch(Dispatchers.IO) {
 
-        val errors = UserValidator.validateLogin(email,password)
+        val errors = UserValidator.validateLogin(email, password)
 
         if (errors.isNotEmpty()) {
             _authState.postValue(Resource.ValidationError(errors))

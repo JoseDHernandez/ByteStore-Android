@@ -1,8 +1,10 @@
 package com.example.bytestore.data.repository
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
+import androidx.room.withTransaction
 import com.example.bytestore.core.DBProvider
 import com.example.bytestore.data.local.CartEntity
 import com.example.bytestore.data.model.cart.CartItemModel
@@ -12,8 +14,6 @@ import com.example.bytestore.data.network.cart.CartService
 import com.example.bytestore.data.network.cart.CreateCartItemDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import androidx.room.withTransaction
-import android.util.Log
 
 class CartRepository(private val context: Context) {
 
@@ -76,7 +76,10 @@ class CartRepository(private val context: Context) {
             // unitPrice viene en PESOS, convertir a centavos
             val unitPriceCents = unitPrice * 100
 
-            Log.d("CartRepository", "🛒 add() productId=$productId, name=$name, image=$image, qty=$qty")
+            Log.d(
+                "CartRepository",
+                "🛒 add() productId=$productId, name=$name, image=$image, qty=$qty"
+            )
 
             // 1) Persistir localmente primero para que la UI lo muestre inmediatamente.
             val prev = dao.findByProduct(productId)
@@ -94,11 +97,13 @@ class CartRepository(private val context: Context) {
                 Log.d("CartRepository", "Producto nuevo insertado con imagen: $image")
             } else {
                 // Si ya existe, actualizar cantidad pero PRESERVAR la imagen
-                dao.update(prev.copy(
-                    quantity = prev.quantity + qty,
-                    imageUrl = image ?: prev.imageUrl, // Preservar imagen si viene null
-                    synced = false
-                ))
+                dao.update(
+                    prev.copy(
+                        quantity = prev.quantity + qty,
+                        imageUrl = image ?: prev.imageUrl, // Preservar imagen si viene null
+                        synced = false
+                    )
+                )
                 Log.d("CartRepository", "Producto actualizado, imagen preservada: ${prev.imageUrl}")
             }
 
@@ -132,10 +137,16 @@ class CartRepository(private val context: Context) {
                         }
                         Log.d("CartRepository", "Sincronizado con servidor, ${entities.size} items")
                     } else {
-                        Log.w("CartRepository", "Servidor devolvió carrito incorrecto, manteniendo datos locales")
+                        Log.w(
+                            "CartRepository",
+                            "Servidor devolvió carrito incorrecto, manteniendo datos locales"
+                        )
                     }
                 } else {
-                    Log.d("CartRepository", "Servidor sin respuesta válida, manteniendo datos locales")
+                    Log.d(
+                        "CartRepository",
+                        "Servidor sin respuesta válida, manteniendo datos locales"
+                    )
                 }
             } catch (e: Exception) {
                 Log.e("CartRepository", "Error sincronizando: ${e.message}")
@@ -159,11 +170,11 @@ class CartRepository(private val context: Context) {
                     imageUrl = localItem?.imageUrl ?: serverItem.image
                 )
             }
-                        val db = DBProvider.get(context)
-                        // Insertar/actualizar items del servidor sin eliminar el resto.
-                        db.withTransaction {
-                            dao.insertAll(entities)
-                        }
+            val db = DBProvider.get(context)
+            // Insertar/actualizar items del servidor sin eliminar el resto.
+            db.withTransaction {
+                dao.insertAll(entities)
+            }
         } else {
             // Actualizar solo localmente
             dao.update(item.copy(quantity = newQty, synced = false))

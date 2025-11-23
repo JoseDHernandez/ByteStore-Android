@@ -3,12 +3,9 @@ package com.example.bytestore.data.repository
 import android.content.Context
 import com.example.bytestore.data.local.UserPreferences
 import com.example.bytestore.data.model.user.AccountModel
-import com.example.bytestore.data.model.user.ListUsersModel
 import com.example.bytestore.data.model.user.UserChangePasswordRequest
-import com.example.bytestore.data.model.user.UserChangeRoleRequest
 import com.example.bytestore.data.model.user.UserDeleteRequest
 import com.example.bytestore.data.model.user.UserLoginRequest
-import com.example.bytestore.data.model.user.UserModel
 import com.example.bytestore.data.model.user.UserProvider
 import com.example.bytestore.data.model.user.UserRegisterRequest
 import com.example.bytestore.data.model.user.UserUpdateRequest
@@ -25,7 +22,7 @@ class AccountRepository(private val context: Context) {
     suspend fun registerUser(user: UserRegisterRequest): Resource<AccountModel> {
         val response = userService.registerUser(user)
         //Almacenar en local
-        if(response is Resource.Success) saveUser(response.data)
+        if (response is Resource.Success) saveUser(response.data)
         return response
     }
 
@@ -37,7 +34,7 @@ class AccountRepository(private val context: Context) {
         val currentUser = prefs.getUser()
         if (currentUser["email"] != credentials.email) prefs.clearData()
         //almacenar datos
-        if(response is Resource.Success) saveUser(response.data)
+        if (response is Resource.Success) saveUser(response.data)
         return response
     }
 
@@ -50,7 +47,6 @@ class AccountRepository(private val context: Context) {
         }
         return false
     }
-
 
 
     //actualizar cuenta (cuenta local)

@@ -6,12 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.bytestore.R
 import com.example.bytestore.databinding.FragmentProductListAdminBinding
 import com.example.bytestore.ui.ProtectedFragment
 import com.example.bytestore.ui.viewmodel.productViewModels.ProductCrudViewModel
@@ -58,9 +56,12 @@ class ProductListAdminFragment : ProtectedFragment() {
     }
 
     private fun setupRecyclerView() {
-        productAdapter = ProductAdminAdapter{ product ->
-            Log.d("ProductListAdminFragment","id: ${product.id}")
-            val action = ProductListAdminFragmentDirections.actionProductListAdminFragmentToAdminProductFragment(product.id)
+        productAdapter = ProductAdminAdapter { product ->
+            Log.d("ProductListAdminFragment", "id: ${product.id}")
+            val action =
+                ProductListAdminFragmentDirections.actionProductListAdminFragmentToAdminProductFragment(
+                    product.id
+                )
             findNavController().navigate(action)
         }
 

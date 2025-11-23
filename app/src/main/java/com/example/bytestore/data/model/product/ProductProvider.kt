@@ -1,7 +1,5 @@
 package com.example.bytestore.data.model.product
 
-import android.util.Log
-
 object ProductProvider {
 
     //=====================================
@@ -66,7 +64,7 @@ object ProductProvider {
 
         val result = ids.mapNotNull { id -> productMap[id] }
 
-//si la lista es diferente retornal vacia (lanzar peticion en el repository)
+        //si la lista es diferente retornal vacia (lanzar peticion en el repository)
         return if (result.size == ids.size) result else emptyList()
     }
 

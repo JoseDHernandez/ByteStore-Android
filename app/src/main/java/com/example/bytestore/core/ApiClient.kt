@@ -1,6 +1,5 @@
 package com.example.bytestore.core
 
-import android.annotation.SuppressLint
 import android.content.Context
 import com.example.bytestore.utils.SessionManager
 import okhttp3.OkHttpClient
@@ -13,7 +12,7 @@ object ApiClient {
     private var retrofit: Retrofit? = null
 
     fun retrofit(context: Context? = null): Retrofit {
-     //retornar si ya existe
+        //retornar si ya existe
         if (retrofit != null) return retrofit!!
 
         //validar contexto

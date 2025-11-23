@@ -57,46 +57,51 @@ class AdminUsersViewModel() : ViewModel() {
         _userState.postValue(Resource.Loading)
         _userState.postValue(repository.getUser(id))
     }
+
     //actulizar usuario
-    fun updateUser(id:String,data: UserUpdateInputs) = viewModelScope.launch(Dispatchers.IO){
+    fun updateUser(id: String, data: UserUpdateInputs) = viewModelScope.launch(Dispatchers.IO) {
         val errors = UserValidator.validateUpdateUser(data)
         if (errors.isNotEmpty()) {
             _userState.postValue(Resource.ValidationError(errors))
             return@launch
         }
         //peticion
-        val request = UserUpdateRequest(data.name,data.email,data.address)
-        _userUpdateState.postValue(repository.updateUser(id,request))
+        val request = UserUpdateRequest(data.name, data.email, data.address)
+        _userUpdateState.postValue(repository.updateUser(id, request))
     }
+
     //eliminar usuario
-    suspend fun deleteUser(id:String) = repository.deleteUser(id)
+    suspend fun deleteUser(id: String) = repository.deleteUser(id)
+
     //cambiar rol
-    fun changeRol(id: String,role: String) = viewModelScope.launch(Dispatchers.IO){
-        if(!role.contentEquals("ADMISNISTRADOR") || !role.contentEquals("CLIENTE")) {
+    fun changeRol(id: String, role: String) = viewModelScope.launch(Dispatchers.IO) {
+        if (!role.contentEquals("ADMISNISTRADOR") || !role.contentEquals("CLIENTE")) {
             _userState.postValue(Resource.ValidationError(mapOf("rol" to "Rol invalido")))
         }
         _userState.postValue(repository.changeRole(id, UserChangeRoleRequest(role)))
     }
+
     //registrar usuario
-    fun registerUser(userRegisterInputs: UserRegisterInputs) = viewModelScope.launch(Dispatchers.IO) {
-        val errors = UserValidator.validateRegister(userRegisterInputs)
+    fun registerUser(userRegisterInputs: UserRegisterInputs) =
+        viewModelScope.launch(Dispatchers.IO) {
+            val errors = UserValidator.validateRegister(userRegisterInputs)
 
-        //retornar errores si existen
-        if (errors.isNotEmpty()) {
-            _userState.postValue(Resource.ValidationError(errors))
-            return@launch
+            //retornar errores si existen
+            if (errors.isNotEmpty()) {
+                _userState.postValue(Resource.ValidationError(errors))
+                return@launch
+            }
+
+            //paso de userInput a UserRegisterRequest
+            val request = UserRegisterRequest(
+                name = userRegisterInputs.name,
+                email = userRegisterInputs.email,
+                password = userRegisterInputs.password,
+                physicalAddress = userRegisterInputs.address
+            )
+
+            val response = repository.registerUser(request)
+
+            _userState.postValue(response)
         }
-
-        //paso de userInput a UserRegisterRequest
-        val request = UserRegisterRequest(
-            name = userRegisterInputs.name,
-            email = userRegisterInputs.email,
-            password = userRegisterInputs.password,
-            physicalAddress = userRegisterInputs.address
-        )
-
-        val response = repository.registerUser(request)
-
-        _userState.postValue(response)
-    }
 }

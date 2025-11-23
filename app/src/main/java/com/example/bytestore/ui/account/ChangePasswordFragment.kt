@@ -119,11 +119,13 @@ class ChangePasswordFragment : ProtectedFragment() {
                             .build()
                     )
                 }
+
                 is Resource.Error -> {
                     isChangingPassword = false
                     binding.btnChangePassword.isEnabled = true
                     Toast.makeText(context, state.message, Toast.LENGTH_LONG).show()
                 }
+
                 else -> Unit
             }
         }
@@ -138,6 +140,7 @@ class ChangePasswordFragment : ProtectedFragment() {
                     binding.btnChangePassword.isEnabled = true
                     Toast.makeText(context, state.message, Toast.LENGTH_LONG).show()
                 }
+
                 is Resource.ValidationError -> {
                     isChangingPassword = false
                     binding.btnChangePassword.isEnabled = true
@@ -145,6 +148,7 @@ class ChangePasswordFragment : ProtectedFragment() {
                         showError(binding.tvNewPasswordError, it)
                     }
                 }
+
                 else -> Unit
             }
         }

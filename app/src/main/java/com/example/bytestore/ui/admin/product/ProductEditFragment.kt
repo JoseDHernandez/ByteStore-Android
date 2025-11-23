@@ -15,7 +15,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.bytestore.R
-import com.example.bytestore.data.model.product.*
+import com.example.bytestore.data.model.product.DisplayInputs
+import com.example.bytestore.data.model.product.ProcessorInputs
+import com.example.bytestore.data.model.product.ProductInputs
+import com.example.bytestore.data.model.product.ProductModel
+import com.example.bytestore.data.model.product.SystemInputs
 import com.example.bytestore.databinding.FragmentProductEditBinding
 import com.example.bytestore.ui.ProtectedFragment
 import com.example.bytestore.ui.viewmodel.productViewModels.ProductCrudViewModel
@@ -96,15 +100,18 @@ class ProductEditFragment : ProtectedFragment() {
                 is Resource.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
                 }
+
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.GONE
                     currentProduct = state.data
                     fillFormWithProductData(state.data)
                 }
+
                 is Resource.Error -> {
                     binding.progressBar.visibility = View.GONE
                     Toast.makeText(requireContext(), state.message, Toast.LENGTH_SHORT).show()
                 }
+
                 else -> Unit
             }
         }
@@ -116,21 +123,26 @@ class ProductEditFragment : ProtectedFragment() {
                     binding.progressBar.visibility = View.VISIBLE
                     binding.btnSave.isEnabled = false
                 }
+
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    Toast.makeText(requireContext(), "Producto actualizado", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Producto actualizado", Toast.LENGTH_SHORT)
+                        .show()
                     findNavController().navigateUp()
                 }
+
                 is Resource.Error -> {
                     binding.progressBar.visibility = View.GONE
                     binding.btnSave.isEnabled = true
                     Toast.makeText(requireContext(), state.message, Toast.LENGTH_LONG).show()
                 }
+
                 is Resource.ValidationError -> {
                     binding.progressBar.visibility = View.GONE
                     binding.btnSave.isEnabled = true
                     showValidationErrors(state.errors)
                 }
+
                 else -> Unit
             }
         }

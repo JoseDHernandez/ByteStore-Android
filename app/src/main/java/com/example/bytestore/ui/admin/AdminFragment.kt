@@ -1,7 +1,6 @@
 package com.example.bytestore.ui.admin
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,7 @@ import com.example.bytestore.utils.topBar
 class AdminFragment : ProtectedFragment() {
     override val requiredRole = "ADMINISTRADOR"
 
-    private var _binding : FragmentAdminBinding?=null
+    private var _binding: FragmentAdminBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -22,7 +21,7 @@ class AdminFragment : ProtectedFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentAdminBinding.inflate(inflater,container,false)
+        _binding = FragmentAdminBinding.inflate(inflater, container, false)
         return binding.root
     }
 

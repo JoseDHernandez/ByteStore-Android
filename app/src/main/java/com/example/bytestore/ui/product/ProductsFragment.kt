@@ -261,14 +261,17 @@ class ProductsFragment : Fragment() {
         //limpiar busqueda
         binding.clearSearchButton.setOnClickListener {
             clearSearch()
+            binding.voiceButton.visibility = View.VISIBLE
         }
         //mostrar limpiar
         binding.searchInput.addTextChangedListener { editable ->
             val text = editable?.toString() ?: ""
             if (text.length > 1) {
                 binding.clearSearchButton.visibility = View.VISIBLE
+                binding.voiceButton.visibility = View.GONE
             } else {
                 binding.clearSearchButton.visibility = View.GONE
+                binding.voiceButton.visibility = View.VISIBLE
             }
 
         }
@@ -489,7 +492,7 @@ class ProductsFragment : Fragment() {
 
         productAdapter.submitList(emptyList())
 
-        binding.searchInput.setText(fullQuery.ifBlank { "" }.replace(","," "))
+        binding.searchInput.setText(fullQuery.ifBlank { "" }.replace(",", " "))
         viewModel.getProducts(
             1,
             fullQuery.ifBlank { null },
@@ -509,6 +512,7 @@ class ProductsFragment : Fragment() {
         totalPages = 1
         hasNextPage = true
         binding.searchInput.setText("")
+        productAdapter.submitList(emptyList())
         viewModel.getProducts(1)
     }
 

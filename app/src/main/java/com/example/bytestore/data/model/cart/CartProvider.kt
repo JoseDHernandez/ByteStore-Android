@@ -18,7 +18,9 @@ object CartProvider {
         cart?.data?.fold(0f) { acc, item -> acc + item.lineTotal } ?: 0f
 
     // Limpia el carrito en memoria
-    fun clear() { cart = null }
+    fun clear() {
+        cart = null
+    }
 
     // Inserta/actualiza una línea en memoria (no DB). Mantiene el wrapper como ProductProvider.
     fun upsert(item: CartItemModel) {

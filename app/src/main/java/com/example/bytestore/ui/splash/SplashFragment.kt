@@ -1,7 +1,6 @@
 package com.example.bytestore.ui.splash
 
 import android.os.Bundle
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,12 +47,12 @@ class SplashFragment : Fragment() {
                 sessionManager.authToken()
             }
             //cerrar sesion y enviar al login
-            if(authResult ==null || !authResult) {
+            if (authResult == null || !authResult) {
                 sessionManager.logout()
                 if (isAdded) navController.navigate(R.id.action_splashFragment_to_loginFragment)
                 return
             }
-            if(isAdded)navController.navigate(R.id.action_splashFragment_to_productsFragment)
+            if (isAdded) navController.navigate(R.id.action_splashFragment_to_productsFragment)
         } else {
             //retardo normal de 3s
             delay(3000)

@@ -8,7 +8,6 @@ import com.example.bytestore.data.model.cart.CartItemModel
 import com.example.bytestore.data.repository.CartRepository
 import com.example.bytestore.utils.Resource
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.roundToLong
 
@@ -44,7 +43,8 @@ class CartViewModel(private val repo: CartRepository) : ViewModel() {
                     if (tempCheckoutActive) return@observeForever
 
                     // Calcular subtotal (evitar truncamiento por conversión float->long)
-                    val subtotal = items.sumOf { ((it.unitPrice * 100).roundToLong() * it.quantity).toLong() }
+                    val subtotal =
+                        items.sumOf { ((it.unitPrice * 100).roundToLong() * it.quantity).toLong() }
 
                     // CORREGIDO: Shipping es $16.000 = 1,600,000 centavos
                     val shipping = if (items.isEmpty()) 0L else 1600000L
@@ -139,7 +139,13 @@ class CartViewModel(private val repo: CartRepository) : ViewModel() {
      * comprar directamente sin persistir en la base local.
      * unitPricePesos: precio por unidad en PESOS (no en centavos).
      */
-    fun startCheckoutWithItem(productId: Long, name: String, image: String?, unitPricePesos: Long, qty: Int = 1) {
+    fun startCheckoutWithItem(
+        productId: Long,
+        name: String,
+        image: String?,
+        unitPricePesos: Long,
+        qty: Int = 1
+    ) {
         // Construir un CartItemModel temporal
         val item = CartItemModel(
             id = 0,
@@ -175,7 +181,8 @@ class CartViewModel(private val repo: CartRepository) : ViewModel() {
         // después de liberar, forzar recálculo desde la BD
         viewModelScope.launch(Dispatchers.Main) {
             repo.cart.value?.let { items ->
-                val subtotal = items.sumOf { ((it.unitPrice * 100).roundToLong() * it.quantity).toLong() }
+                val subtotal =
+                    items.sumOf { ((it.unitPrice * 100).roundToLong() * it.quantity).toLong() }
                 // CORREGIDO: Shipping es $16.000 = 1,600,000 centavos
                 val shipping = if (items.isEmpty()) 0L else 1600000L
                 val total = subtotal + shipping
@@ -193,11 +200,17 @@ class CartViewModel(private val repo: CartRepository) : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val local = repo.getLocalItems()
-                val subtotal = local.sumOf { ((it.unitPrice * 100).roundToLong() * it.quantity).toLong() }
+                val subtotal =
+                    local.sumOf { ((it.unitPrice * 100).roundToLong() * it.quantity).toLong() }
                 // CORREGIDO: Shipping es $16.000 = 1,600,000 centavos
                 val shipping = if (local.isEmpty()) 0L else 1600000L
                 val total = subtotal + shipping
-                val cartState = CartState(items = local, subtotal = subtotal, shipping = shipping, total = total)
+                val cartState = CartState(
+                    items = local,
+                    subtotal = subtotal,
+                    shipping = shipping,
+                    total = total
+                )
                 _state.postValue(Resource.Success(cartState))
             } catch (e: Exception) {
                 e.printStackTrace()

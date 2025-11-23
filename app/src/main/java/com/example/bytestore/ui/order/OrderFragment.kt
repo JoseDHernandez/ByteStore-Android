@@ -41,7 +41,8 @@ class OrderFragment : Fragment() {
         if (fineGranted || coarseGranted) {
             captureLocation()
         } else {
-            Toast.makeText(requireContext(), "Permisos de ubicación denegados", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Permisos de ubicación denegados", Toast.LENGTH_SHORT)
+                .show()
         }
     }
 
@@ -70,18 +71,25 @@ class OrderFragment : Fragment() {
 
     private fun hasLocationPermission(): Boolean {
         return locationPermissions.any {
-            ContextCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                it
+            ) == PackageManager.PERMISSION_GRANTED
         }
     }
 
     private fun isFineGranted(): Boolean =
-        ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
 
     @SuppressLint("MissingPermission")
     private fun captureLocation() {
         if (!hasLocationPermission()) return
 
-        val priority = if (isFineGranted()) Priority.PRIORITY_HIGH_ACCURACY else Priority.PRIORITY_BALANCED_POWER_ACCURACY
+        val priority =
+            if (isFineGranted()) Priority.PRIORITY_HIGH_ACCURACY else Priority.PRIORITY_BALANCED_POWER_ACCURACY
         val cts = CancellationTokenSource()
 
         fusedLocationClient.getCurrentLocation(priority, cts.token)
@@ -95,23 +103,36 @@ class OrderFragment : Fragment() {
                             if (lastLocation != null) {
                                 handleLocation(lastLocation)
                             } else {
-                                Toast.makeText(requireContext(), "Ubicación no disponible", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Ubicación no disponible",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                         .addOnFailureListener {
-                            Toast.makeText(requireContext(), "Error obteniendo la ubicación", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                requireContext(),
+                                "Error obteniendo la ubicación",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                 }
             }
             .addOnFailureListener {
-                Toast.makeText(requireContext(), "Error obteniendo la ubicación", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Error obteniendo la ubicación",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
     }
 
     private fun handleLocation(location: Location) {
         // Consideramos aproximada si no hay permiso fino o la accuracy es grande
         val approxThresholdMeters = 500f
-        val isApprox = !isFineGranted() || (location.hasAccuracy() && location.accuracy > approxThresholdMeters)
+        val isApprox =
+            !isFineGranted() || (location.hasAccuracy() && location.accuracy > approxThresholdMeters)
 
         reverseGeocodeAndFill(location.latitude, location.longitude, isApprox)
     }
@@ -135,14 +156,20 @@ class OrderFragment : Fragment() {
                 binding.addressInput.setSelection(text.length)
             }
         } catch (e: Exception) {
-            val text = if (isApprox) String.format(Locale.getDefault(), "Aprox: %.5f, %.5f", lat, lon)
-            else String.format(Locale.getDefault(), "%.6f, %.6f", lat, lon)
+            val text =
+                if (isApprox) String.format(Locale.getDefault(), "Aprox: %.5f, %.5f", lat, lon)
+                else String.format(Locale.getDefault(), "%.6f, %.6f", lat, lon)
             binding.addressInput.setText(text)
             binding.addressInput.setSelection(text.length)
         }
     }
 
-    private fun buildAddressText(address: Address?, lat: Double, lon: Double, isApprox: Boolean): String {
+    private fun buildAddressText(
+        address: Address?,
+        lat: Double,
+        lon: Double,
+        isApprox: Boolean
+    ): String {
         if (address == null) {
             return if (isApprox) String.format(Locale.getDefault(), "Aprox: %.5f, %.5f", lat, lon)
             else String.format(Locale.getDefault(), "%.6f, %.6f", lat, lon)
@@ -160,6 +187,7 @@ class OrderFragment : Fragment() {
         val street = when {
             !address.thoroughfare.isNullOrBlank() && !address.subThoroughfare.isNullOrBlank() ->
                 "${address.thoroughfare} # ${address.subThoroughfare}"
+
             !address.thoroughfare.isNullOrBlank() -> address.thoroughfare
             else -> null
         }

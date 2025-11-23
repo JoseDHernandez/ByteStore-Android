@@ -95,7 +95,7 @@ object UserProvider {
         }
 
         //si no existe el id
-        if(newUsers.size == current.size) return
+        if (newUsers.size == current.size) return
 
         cachedUsers = cachedUsers!!.copy(
             total = newUsers.size,

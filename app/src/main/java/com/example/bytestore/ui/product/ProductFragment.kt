@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +26,6 @@ import com.example.bytestore.utils.topBar
 import com.google.android.material.snackbar.Snackbar
 import java.text.NumberFormat
 import java.util.Locale
-import kotlin.random.Random
 
 class ProductFragment : Fragment() {
     val formatter: NumberFormat = NumberFormat.getNumberInstance(Locale("es", "CO")).apply {
@@ -223,10 +222,10 @@ class ProductFragment : Fragment() {
 
         Snackbar.make(
             binding.root,
-            "✓ ${product.name} x$selectedQuantity agregado al carrito",
+            "${product.name} se añadio al carrito",
             Snackbar.LENGTH_LONG
         )
-            .setAction("VER CARRITO") {
+            .setAction("Ver carrito") {
                 try {
                     findNavController().navigate(R.id.cartFragment)
                 } catch (e: Exception) {
@@ -279,8 +278,8 @@ class ProductFragment : Fragment() {
                         binding.discountPrice.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                     binding.discount.text =
                         getString(R.string.discount_percentage, product.discount)
-                     binding.score.rating = product.qualification
-                   // binding.score.rating = Random.nextDouble(3.0, 5.0).toFloat()
+                    binding.score.rating = product.qualification
+                    // binding.score.rating = Random.nextDouble(3.0, 5.0).toFloat()
                     //ocultar descuento
                     if (product.discount.toDouble() == 0.0) {
                         binding.discount.visibility = View.INVISIBLE
@@ -328,6 +327,7 @@ class ProductFragment : Fragment() {
     }
 
     private fun setSimilarProductsLiveData() {
+        binding.similarProductsRecyclerView.scrollToPosition(0)
         viewModel.similarProductsState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is Resource.Idle -> Unit

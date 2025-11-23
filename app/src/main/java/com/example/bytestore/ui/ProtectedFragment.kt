@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 abstract class ProtectedFragment : Fragment() {
     open val requiredRole: String? =
         null // agregar, si se necita que sea administrador:   override val requiredRole = "ADMINISTRADOR"
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val sessionManager = sessionManager()

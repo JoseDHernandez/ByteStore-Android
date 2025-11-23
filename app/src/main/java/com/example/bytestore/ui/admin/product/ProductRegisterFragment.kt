@@ -13,8 +13,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.example.bytestore.R
-import com.example.bytestore.data.model.product.*
+import com.example.bytestore.data.model.product.DisplayInputs
+import com.example.bytestore.data.model.product.ProcessorInputs
+import com.example.bytestore.data.model.product.ProductInputs
+import com.example.bytestore.data.model.product.SystemInputs
 import com.example.bytestore.databinding.FragmentProductRegisterBinding
 import com.example.bytestore.ui.ProtectedFragment
 import com.example.bytestore.ui.viewmodel.productViewModels.ProductCrudViewModel
@@ -110,21 +112,26 @@ class ProductRegisterFragment : ProtectedFragment() {
                     binding.progressBar.visibility = View.VISIBLE
                     binding.btnSave.isEnabled = false
                 }
+
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.GONE
-                    Toast.makeText(requireContext(), "Producto registrado", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Producto registrado", Toast.LENGTH_SHORT)
+                        .show()
                     findNavController().navigateUp()
                 }
+
                 is Resource.Error -> {
                     binding.progressBar.visibility = View.GONE
                     binding.btnSave.isEnabled = true
                     Toast.makeText(requireContext(), state.message, Toast.LENGTH_LONG).show()
                 }
+
                 is Resource.ValidationError -> {
                     binding.progressBar.visibility = View.GONE
                     binding.btnSave.isEnabled = true
                     showValidationErrors(state.errors)
                 }
+
                 else -> Unit
             }
         }
@@ -143,7 +150,8 @@ class ProductRegisterFragment : ProtectedFragment() {
 
         // Validar que haya imagen seleccionada
         if (selectedImageUri == null) {
-            Toast.makeText(requireContext(), "Debe seleccionar una imagen", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Debe seleccionar una imagen", Toast.LENGTH_SHORT)
+                .show()
             return
         }
 

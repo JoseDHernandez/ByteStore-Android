@@ -51,8 +51,6 @@
                 android:clickable="true"
                 android:contentDescription="Limpiar busqueda"
                 android:scaleType="centerInside"
-                android:scaleY="1.4"
-                android:scaleX="1.4"
                 android:src="@drawable/ic_close"
                 app:tint="@color/black" />
             <ImageView

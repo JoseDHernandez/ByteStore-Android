@@ -15,9 +15,8 @@ import com.example.bytestore.data.model.product.ProductModel
 import com.example.bytestore.databinding.ItemProductCardBinding
 import java.text.NumberFormat
 import java.util.Locale
-import kotlin.random.Random
 
-class ProductsListAdapter (private val onItemClick: (ProductModel)->Unit):
+class ProductsListAdapter(private val onItemClick: (ProductModel) -> Unit) :
     ListAdapter<ProductModel, ProductsListAdapter.ProductViewHolder>(ProductDiff()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -40,12 +39,13 @@ class ProductsListAdapter (private val onItemClick: (ProductModel)->Unit):
             //formater
             val formatter = NumberFormat.getNumberInstance(Locale("es", "CO"))
             binding.title.text = product.name
-          binding.score.rating = product.qualification
-           // binding.score.rating = Random.nextDouble(3.0,5.0).toFloat()
-            val price =  "$${formatter.format(product.price)}"
-            val discount = "$${formatter.format(product.price - (product.price * product.discount) / 100)}"
-            binding.price.text = if(product.discount.toDouble() == 0.0) price else discount
-            if(product.discount.toDouble() == 0.0) binding.discount.visibility = View.INVISIBLE
+            binding.score.rating = product.qualification
+            // binding.score.rating = Random.nextDouble(3.0,5.0).toFloat()
+            val price = "$${formatter.format(product.price)}"
+            val discount =
+                "$${formatter.format(product.price - (product.price * product.discount) / 100)}"
+            binding.price.text = if (product.discount.toDouble() == 0.0) price else discount
+            if (product.discount.toDouble() == 0.0) binding.discount.visibility = View.INVISIBLE
             binding.discount.text = price
             binding.discount.paintFlags = binding.discount.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
             //TODO: Cambiar Url cuando este

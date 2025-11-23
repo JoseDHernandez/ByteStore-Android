@@ -1,20 +1,19 @@
 package com.example.bytestore.ui.cart
 
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.RectF
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.PorterDuff
-import android.graphics.RectF
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.example.bytestore.R
 import com.example.bytestore.databinding.FragmentCartBinding
 import com.example.bytestore.ui.ProtectedFragment
@@ -108,7 +107,15 @@ class CartFragment : ProtectedFragment() {
                 actionState: Int,
                 isCurrentlyActive: Boolean
             ) {
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                super.onChildDraw(
+                    c,
+                    recyclerView,
+                    viewHolder,
+                    dX,
+                    dY,
+                    actionState,
+                    isCurrentlyActive
+                )
 
                 val itemView = viewHolder.itemView
 
@@ -149,7 +156,10 @@ class CartFragment : ProtectedFragment() {
 
                     Log.d("CartFragment", "Carrito actualizado - Items: ${cartState.items.size}")
                     cartState.items.forEachIndexed { index, item ->
-                        Log.d("CartFragment", "  [$index] id=${item.id} productId=${item.productId} ${item.name} - Qty: ${item.quantity}")
+                        Log.d(
+                            "CartFragment",
+                            "  [$index] id=${item.id} productId=${item.productId} ${item.name} - Qty: ${item.quantity}"
+                        )
                     }
 
                     // Mostrar/ocultar vistas según si hay items
@@ -172,6 +182,7 @@ class CartFragment : ProtectedFragment() {
                         }
                     }
                 }
+
                 is Resource.Error -> {
                     Log.e("CartFragment", "Error al cargar carrito: ${resource.message}")
                     // En caso de error, mostrar estado vacío
@@ -179,9 +190,11 @@ class CartFragment : ProtectedFragment() {
                     binding.bottomButtons.isVisible = false
                     binding.emptyState.isVisible = true
                 }
+
                 is Resource.Loading -> {
                     Log.d("CartFragment", "Cargando carrito...")
                 }
+
                 else -> {}
             }
         }

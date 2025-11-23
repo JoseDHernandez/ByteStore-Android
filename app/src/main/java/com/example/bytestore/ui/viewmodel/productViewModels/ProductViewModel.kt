@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bytestore.data.model.product.ListProductsModel
-import com.example.bytestore.data.model.product.ProductFilters
 import com.example.bytestore.data.model.product.ProductModel
 import com.example.bytestore.data.repository.ProductRepository
 import com.example.bytestore.utils.Resource

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
     android:orientation="vertical"
     android:paddingHorizontal="16dp"
     tools:context=".ui.admin.users.AdminUsersFragment">
@@ -71,10 +72,10 @@
 
         <Button
             android:id="@+id/newUserButton"
-            android:layout_marginStart="10dp"
             style="@style/Widget.ByteStore.Button.Primary"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
             android:text="Crear" />
 
     </LinearLayout>
