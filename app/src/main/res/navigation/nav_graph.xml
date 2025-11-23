@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation
+    android:id="@+id/nav_graph_host"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph_host"
     app:startDestination="@id/splashFragment">
 
     <!-- Splash fragment -->
@@ -25,7 +26,8 @@
             android:id="@+id/action_splashFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true"
+            />
     </fragment>
 
     <!-- Main fragment -->
@@ -56,7 +58,9 @@
             app:destination="@id/registerFragment" />
         <action
             android:id="@+id/action_loginFragment_to_productsFragment"
-            app:destination="@id/productsFragment" />
+            app:destination="@id/productsFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <!-- Register fragment -->
@@ -66,17 +70,16 @@
         android:label="Register"
         tools:layout="@layout/fragment_register">
         <action
-            android:id="@+id/action_registerFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
-        <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
         <action
             android:id="@+id/action_registerFragment_to_productsFragment"
-            app:destination="@id/productsFragment" />
+            app:destination="@id/productsFragment"
+            app:popUpTo="@id/registerFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
-    <!-- Profile fragment (MODIFICADO) -->
+    <!-- Profile fragment -->
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.bytestore.ui.account.ProfileFragment"
@@ -93,21 +96,22 @@
             app:destination="@id/updateProfileFragment" />
     </fragment>
 
-    <!-- Cambiar contraseña (NUEVO) -->
+    <!-- Change Password fragment -->
     <fragment
         android:id="@+id/changePasswordFragment"
         android:name="com.example.bytestore.ui.account.ChangePasswordFragment"
         android:label="Cambiar contraseña"
         tools:layout="@layout/fragment_change_password" />
 
-    <!-- Actualizar datos de perfil (NUEVO) -->
+    <!-- Update Profile fragment -->
     <fragment
         android:id="@+id/updateProfileFragment"
         android:name="com.example.bytestore.ui.account.UpdateProfileFragment"
-        android:label="Actualizar datos"
+        android:label="Actualizar perfil"
         tools:layout="@layout/fragment_update_profile" />
 
     <!-- Products fragment -->
+
     <fragment
         android:id="@+id/productsFragment"
         android:name="com.example.bytestore.ui.product.ProductsFragment"
@@ -124,21 +128,19 @@
         android:name="com.example.bytestore.ui.product.ProductFragment"
         android:label="Product"
         tools:layout="@layout/fragment_product">
+        <action
+            android:id="@+id/action_productFragment_to_productsFragment"
+            app:destination="@id/productsFragment"/>
         <argument
             android:name="productId"
             app:argType="integer" />
-        <action
-            android:id="@+id/action_productFragment_to_productsFragment"
-            app:destination="@id/productsFragment"
-            app:popUpTo="@id/productFragment"
-            app:popUpToInclusive="true" />
     </fragment>
 
     <!-- Cart fragment -->
     <fragment
         android:id="@+id/cartFragment"
         android:name="com.example.bytestore.ui.cart.CartFragment"
-        android:label="Cart"
+        android:label="Carrito"
         tools:layout="@layout/fragment_cart">
         <action
             android:id="@+id/action_cart_to_checkout"
@@ -149,7 +151,7 @@
     <fragment
         android:id="@+id/checkoutFragment"
         android:name="com.example.bytestore.ui.cart.CheckoutFragment"
-        android:label="Confirmar Compra"
+        android:label="Checkout"
         tools:layout="@layout/fragment_checkout">
         <action
             android:id="@+id/action_checkout_to_products"
@@ -158,21 +160,37 @@
             app:popUpToInclusive="false" />
     </fragment>
 
-    <!-- Order fragment -->
+    <!-- Orders fragment (list) -->
+    <fragment
+        android:id="@+id/ordersFragment"
+        android:name="com.example.bytestore.ui.order.OrdersFragment"
+        android:label="Órdenes"
+        tools:layout="@layout/fragment_orders">
+        <action
+            android:id="@+id/action_orders_to_order_detail"
+            app:destination="@id/orderFragment">
+            <argument
+                android:name="orderId"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <!-- Order detail fragment -->
     <fragment
         android:id="@+id/orderFragment"
         android:name="com.example.bytestore.ui.order.OrderFragment"
-        android:label="Orden"
-        tools:layout="@layout/fragment_order" />
+        android:label="Detalle de orden"
+        tools:layout="@layout/fragment_order">
+        <argument
+            android:name="orderId"
+            app:argType="string" />
+    </fragment>
 
-    <!-- ========================================== -->
-    <!--        PANEL DE ADMINISTRACIÓN             -->
-    <!-- ========================================== -->
-
+    <!-- Admin fragments -->
     <fragment
         android:id="@+id/adminFragment"
         android:name="com.example.bytestore.ui.admin.AdminFragment"
-        android:label="Panel de administración"
+        android:label="Admin"
         tools:layout="@layout/fragment_admin">
         <action
             android:id="@+id/action_adminFragment_to_productListAdminFragment"
@@ -187,30 +205,28 @@
         <!-- TODO: Pendiente acciones de navegación de los otrs cruds -->
     </fragment>
 
-    <!-- ========================================== -->
-    <!--        CRUD DE PRODUCTOS                   -->
-    <!-- ========================================== -->
-
-    <!-- Listado de productos -->
     <fragment
         android:id="@+id/productListAdminFragment"
         android:name="com.example.bytestore.ui.admin.product.ProductListAdminFragment"
-        android:label="Gestión de Productos"
+        android:label="Productos Admin"
         tools:layout="@layout/fragment_product_list_admin">
         <action
             android:id="@+id/action_productListAdminFragment_to_productRegisterFragment"
             app:destination="@id/productRegisterFragment" />
         <action
+            android:id="@+id/action_productListAdminFragment_to_productEditFragment"
+            app:destination="@id/productEditFragment" />
+        <action
             android:id="@+id/action_productListAdminFragment_to_adminProductFragment"
             app:destination="@id/adminProductFragment" />
     </fragment>
-    <!-- Registro de producto -->
+
     <fragment
         android:id="@+id/productRegisterFragment"
         android:name="com.example.bytestore.ui.admin.product.ProductRegisterFragment"
         android:label="Registrar Producto"
         tools:layout="@layout/fragment_product_register" />
-    <!-- Edición de producto -->
+
     <fragment
         android:id="@+id/productEditFragment"
         android:name="com.example.bytestore.ui.admin.product.ProductEditFragment"
@@ -220,32 +236,27 @@
             android:name="productId"
             app:argType="integer" />
     </fragment>
-    <!-- vista del producto -->
+
     <fragment
         android:id="@+id/adminProductFragment"
         android:name="com.example.bytestore.ui.admin.product.AdminProductFragment"
-        android:label="Información de un producto"
+        android:label="Detalle Producto Admin"
         tools:layout="@layout/fragment_admin_product">
         <argument
             android:name="productId"
             app:argType="integer" />
         <action
-            android:id="@+id/action_productListAdminFragment_to_productEditFragment"
+            android:id="@+id/action_adminProductFragment_to_productEditFragment"
             app:destination="@id/productEditFragment" />
         <action
-            android:id="@+id/action_adminProductFragment_to_productsListAdminFragment"
+            android:id="@+id/action_adminProductFragment_to_productListAdminFragment"
             app:destination="@id/productListAdminFragment" />
     </fragment>
 
-    <!-- ========================================== -->
-    <!--        CRUD DE USUARIOS                    -->
-    <!-- ========================================== -->
-
-    <!-- Listado de usuarios -->
     <fragment
         android:id="@+id/adminUsersFragment"
         android:name="com.example.bytestore.ui.admin.users.AdminUsersFragment"
-        android:label="Listado de usuarios"
+        android:label="Usuarios Admin"
         tools:layout="@layout/fragment_admin_users">
         <action
             android:id="@+id/action_adminUsersFragment_to_adminUserFragment"
@@ -254,11 +265,11 @@
             android:id="@+id/action_adminUsersFragment_to_adminUserRegisterFragment"
             app:destination="@id/adminUserRegisterFragment" />
     </fragment>
-    <!-- Informacion de un usuario -->
+
     <fragment
         android:id="@+id/adminUserFragment"
         android:name="com.example.bytestore.ui.admin.users.AdminUserFragment"
-        android:label="Gestión de usuario"
+        android:label="Detalle Usuario Admin"
         tools:layout="@layout/fragment_admin_user">
         <argument
             android:name="userId"
@@ -270,21 +281,21 @@
             android:id="@+id/action_adminUserFragment_to_adminUsersFragment"
             app:destination="@id/adminUsersFragment" />
     </fragment>
-    <!-- Registro de usuario (crud) -->
+
     <fragment
         android:id="@+id/adminUserRegisterFragment"
         android:name="com.example.bytestore.ui.admin.users.AdminUserRegisterFragment"
-        android:label="Registrar usuario"
+        android:label="Registrar Usuario"
         tools:layout="@layout/fragment_admin_user_register">
         <action
             android:id="@+id/action_adminUserRegisterFragment_to_adminUserFragment"
             app:destination="@id/adminUserFragment" />
     </fragment>
-    <!-- actulizar usuario (crud) -->
+
     <fragment
         android:id="@+id/adminUserUpdateFragment"
         android:name="com.example.bytestore.ui.admin.users.AdminUserUpdateFragment"
-        android:label="Editar usuario"
+        android:label="Actualizar Usuario"
         tools:layout="@layout/fragment_admin_user_update">
         <argument
             android:name="userId"
@@ -355,28 +366,19 @@
             app:destination="@id/adminProcessorUpdateFragment" />
     </fragment>
 
-    <!-- ========================================== -->
-    <!--        ACCIONES GLOBALES                   -->
-    <!-- ========================================== -->
-
+    <!-- Acciones globales -->
+    <!-- login -->
     <action
         android:id="@+id/action_global_loginFragment"
         app:destination="@id/loginFragment" />
-
+    <!-- productos -->
     <action
         android:id="@+id/action_global_productsFragment"
         app:destination="@id/productsFragment" />
-    <!--TODO: se deberia de remover la acción global de profileFragment  -->
+    <!-- perfil -->
     <action
         android:id="@+id/action_global_profileFragment"
         app:destination="@id/profileFragment" />
 
-    <action
-        android:id="@+id/action_global_cartFragment"
-        app:destination="@id/cartFragment" />
-
-    <action
-        android:id="@+id/action_global_adminFragment"
-        app:destination="@id/adminFragment" />
 
 </navigation>

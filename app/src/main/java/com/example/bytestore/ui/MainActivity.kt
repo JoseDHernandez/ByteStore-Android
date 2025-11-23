@@ -130,8 +130,8 @@ class MainActivity : AppCompatActivity() {
             //productos
             R.id.productFragment, R.id.productsFragment -> 0
 
-            //ordenes (cuando lo implementes)
-            R.id.orderFragment -> 1
+            //ordenes
+            R.id.ordersFragment, R.id.orderFragment -> 1
 
             //carrito
             R.id.cartFragment -> 2

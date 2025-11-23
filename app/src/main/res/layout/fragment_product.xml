@@ -704,6 +704,29 @@
                 android:layout_height="1dp"
                 android:background="@color/lite_gray" />
 
+            <!-- ========== Reseñas (comentarios) ========== -->
+            <TextView
+                android:id="@+id/reviewsHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/inter_semibold"
+                android:text="@string/reviews_header"
+                android:textColor="@color/dark_green"
+                android:textSize="18sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/reviewsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingBottom="8dp"
+                android:nestedScrollingEnabled="false"
+                tools:listitem="@layout/item_review" />
+
+            <!-- ========== end reseñas ========== -->
+
             <!-- Productos simulares -->
             <TextView
                 android:layout_width="match_parent"

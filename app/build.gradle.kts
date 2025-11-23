@@ -69,6 +69,9 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
 
+    // RecyclerView (ensure layout editor recognizes RecyclerView)
+    implementation("androidx.recyclerview:recyclerview:1.3.0")
+
     // Retrofit / OkHttp
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
@@ -85,4 +88,3 @@ dependencies {
     // Google Play Services Location
     implementation(libs.play.services.location)
 }
-
