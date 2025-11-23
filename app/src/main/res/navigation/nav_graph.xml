@@ -180,6 +180,10 @@
         <action
             android:id="@+id/action_adminFragment_to_adminUsersFragment"
             app:destination="@id/adminUsersFragment" />
+        <action
+            android:id="@+id/action_adminFragment_to_adminProcessorsFragment"
+            app:destination="@id/adminProcessorsFragment"
+            />
         <!-- TODO: Pendiente acciones de navegación de los otrs cruds -->
     </fragment>
 
@@ -264,8 +268,7 @@
             app:destination="@id/adminUserUpdateFragment" />
         <action
             android:id="@+id/action_adminUserFragment_to_adminUsersFragment"
-            app:destination="@id/adminUsersFragment"
-            />
+            app:destination="@id/adminUsersFragment" />
     </fragment>
     <!-- Registro de usuario (crud) -->
     <fragment
@@ -288,16 +291,68 @@
             app:argType="string" />
         <action
             android:id="@+id/action_adminUserUpdateFragment_to_adminUsersFragment"
-            app:destination="@id/adminUsersFragment"
-            />
+            app:destination="@id/adminUsersFragment" />
         <action
             android:id="@+id/action_adminUserUpdateFragment_to_profileFragment"
-            app:destination="@id/profileFragment"
-            />
+            app:destination="@id/profileFragment" />
         <action
             android:id="@+id/action_adminUserUpdateFragment_to_adminUserFragment"
-            app:destination="@id/adminUserFragment"
+            app:destination="@id/adminUserFragment" />
+    </fragment>
+
+    <!-- ========================================== -->
+    <!--        CRUD DE PROCESADORES                    -->
+    <!-- ========================================== -->
+
+    <!-- lista de procesadores -->
+    <fragment
+        android:id="@+id/adminProcessorsFragment"
+        android:name="com.example.bytestore.ui.admin.product.processor.AdminProcessorsFragment"
+        android:label="Listado de procesadores"
+        tools:layout="@layout/fragment_admin_processors">
+        <action
+            android:id="@+id/action_adminProcessorsFragment_to_adminProcessorRegisterFragment"
+            app:destination="@id/adminProcessorRegisterFragment" />
+        <action android:id="@+id/action_adminProcessorsFragment_to_adminProcessorFragment"
+            app:destination="@id/adminProcessorFragment"/>
+    </fragment>
+
+    <!-- registrar procesador -->
+    <fragment
+        android:id="@+id/adminProcessorRegisterFragment"
+        android:name="com.example.bytestore.ui.admin.product.processor.AdminProcessorRegisterFragment"
+        android:label="Registrar procesador"
+        tools:layout="@layout/fragment_admin_processor_register">
+        <action
+            android:id="@+id/action_adminProcessorRegisterFragment_to_adminProcessorFragment"
+            app:destination="@id/adminProcessorFragment" />
+    </fragment>
+    <!-- Actualizar porcesador -->
+    <fragment
+        android:id="@+id/adminProcessorUpdateFragment"
+        android:name="com.example.bytestore.ui.admin.product.processor.AdminProcessorUpdateFragment"
+        android:label="Actulizar procesador"
+        tools:layout="@layout/fragment_admin_processor_update">
+        <argument
+            android:name="processorId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_adminProcessorUpdateFragment_to_adminProcessorFragment"
+            app:destination="@id/adminProcessorFragment"
             />
+    </fragment>
+    <!-- Informacion del procesador -->
+    <fragment
+        android:id="@+id/adminProcessorFragment"
+        android:name="com.example.bytestore.ui.admin.product.processor.AdminProcessorFragment"
+        android:label="Informacion del proceasdor"
+        tools:layout="@layout/fragment_admin_processor">
+        <argument
+            android:name="processorId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_adminProcessorFragment_to_adminProcessorUpdateFragment"
+            app:destination="@id/adminProcessorUpdateFragment" />
     </fragment>
 
     <!-- ========================================== -->

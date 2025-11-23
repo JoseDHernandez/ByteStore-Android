@@ -14,7 +14,7 @@ import com.example.bytestore.R
 import com.example.bytestore.data.model.user.UserModel
 import com.example.bytestore.databinding.FragmentAdminUserBinding
 import com.example.bytestore.ui.ProtectedFragment
-import com.example.bytestore.ui.viewmodel.userViewModels.AdminUsersViewModel
+import com.example.bytestore.ui.viewmodel.adminViewModels.AdminUsersViewModel
 import com.example.bytestore.utils.Resource
 import com.example.bytestore.utils.topBar
 import kotlinx.coroutines.launch

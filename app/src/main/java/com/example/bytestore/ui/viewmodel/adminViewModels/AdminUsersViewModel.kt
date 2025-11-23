@@ -1,5 +1,4 @@
-package com.example.bytestore.ui.viewmodel.userViewModels
-
+package com.example.bytestore.ui.viewmodel.adminViewModels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -62,7 +61,7 @@ class AdminUsersViewModel() : ViewModel() {
     fun updateUser(id: String, data: UserUpdateInputs) = viewModelScope.launch(Dispatchers.IO) {
         val errors = UserValidator.validateUpdateUser(data)
         if (errors.isNotEmpty()) {
-            _userState.postValue(Resource.ValidationError(errors))
+            _userUpdateState.postValue(Resource.ValidationError(errors))
             return@launch
         }
         //peticion

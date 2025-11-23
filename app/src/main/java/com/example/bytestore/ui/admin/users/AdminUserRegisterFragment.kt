@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.bytestore.data.model.user.UserRegisterInputs
 import com.example.bytestore.databinding.FragmentAdminUserRegisterBinding
 import com.example.bytestore.ui.ProtectedFragment
-import com.example.bytestore.ui.viewmodel.userViewModels.AdminUsersViewModel
+import com.example.bytestore.ui.viewmodel.adminViewModels.AdminUsersViewModel
 import com.example.bytestore.utils.Resource
 import com.example.bytestore.utils.topBar
 import com.google.android.material.snackbar.Snackbar

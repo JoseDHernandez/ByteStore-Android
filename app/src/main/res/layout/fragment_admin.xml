@@ -144,7 +144,7 @@
 
     <!-- Item -->
     <LinearLayout
-        android:id="@+id/btnProcessros"
+        android:id="@+id/btnProcessors"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"

@@ -22,7 +22,7 @@ import com.example.bytestore.data.model.product.ProductModel
 import com.example.bytestore.data.model.product.SystemInputs
 import com.example.bytestore.databinding.FragmentProductEditBinding
 import com.example.bytestore.ui.ProtectedFragment
-import com.example.bytestore.ui.viewmodel.productViewModels.ProductCrudViewModel
+import com.example.bytestore.ui.viewmodel.adminViewModels.ProductCrudViewModel
 import com.example.bytestore.ui.viewmodel.productViewModels.ProductViewModel
 import com.example.bytestore.utils.Resource
 import com.example.bytestore.utils.topBar

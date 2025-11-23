@@ -44,8 +44,9 @@ class AdminFragment : ProtectedFragment() {
         // TODO: Agregar navegaciones para otros módulos
         // binding.btnComments.setOnClickListener { ... }
         // binding.btnOrders.setOnClickListener { ... }
-        // binding.btnUsers.setOnClickListener { ... }
-        // binding.btnProcessros.setOnClickListener { ... }
+        binding.btnProcessors.setOnClickListener {
+            findNavController().navigate(R.id.action_adminFragment_to_adminProcessorsFragment)
+        }
         // binding.btnGraphics.setOnClickListener { ... }
         // binding.btnBrands.setOnClickListener { ... }
         // binding.btnOS.setOnClickListener { ... }

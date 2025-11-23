@@ -78,7 +78,7 @@
         android:layout_margin="16dp"
         android:contentDescription="Agregar producto"
         android:src="@drawable/ic_plus"
-        app:backgroundTint="@color/dark_green"
+        app:backgroundTint="@color/green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="@color/white" />

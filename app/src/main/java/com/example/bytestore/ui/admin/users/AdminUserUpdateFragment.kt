@@ -17,7 +17,7 @@ import com.example.bytestore.data.model.user.UserModel
 import com.example.bytestore.data.model.user.UserUpdateInputs
 import com.example.bytestore.databinding.FragmentAdminUserUpdateBinding
 import com.example.bytestore.ui.ProtectedFragment
-import com.example.bytestore.ui.viewmodel.userViewModels.AdminUsersViewModel
+import com.example.bytestore.ui.viewmodel.adminViewModels.AdminUsersViewModel
 import com.example.bytestore.utils.Resource
 import com.example.bytestore.utils.sessionManager
 import com.example.bytestore.utils.topBar
