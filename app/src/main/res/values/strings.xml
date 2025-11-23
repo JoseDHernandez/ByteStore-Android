@@ -96,7 +96,6 @@
     <string name="shipping_cost_label">Costo de envío: %1$s</string>
     <string name="products_title">Productos</string>
     <string name="product_content_desc">Producto</string>
-    <string name="quantity_x">x1</string>
     <string name="subtotal_label">Subtotal</string>
     <string name="shipping_label">Envío</string>
     <string name="order_sum_title">Resumen del pedido</string>

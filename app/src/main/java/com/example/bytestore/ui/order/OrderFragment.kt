@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.bytestore.utils.location.reverseGeocode
 import com.example.bytestore.databinding.FragmentOrderBinding
+import com.example.bytestore.utils.topBar
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
@@ -54,8 +55,9 @@ class OrderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        topBar().setTitle("Orden")
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        binding.addressButton.setOnClickListener { onAddressButtonClick() }
+        //binding.addressButton.setOnClickListener { onAddressButtonClick() }
 
         // Read orderId argument and populate UI (sample data)
         val orderId = arguments?.getString("orderId")

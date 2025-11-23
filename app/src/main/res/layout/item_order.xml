@@ -1,170 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="2dp">
+    android:background="@drawable/card_background"
+    android:orientation="vertical"
+    android:padding="12dp">
 
+    <!-- Header: order id + status -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="12dp">
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-        <!-- Header: order id + status -->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvOrderId"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_weight="1"
+            android:text="@string/order_id_sample"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/tvOrderId"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/order_id_sample"
-                android:textStyle="bold"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/tvStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:background="@drawable/badge_background"
-                android:text="@string/order_in_process"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-        <!-- Dates row -->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="8dp">
+            android:background="@drawable/badge_background"
+            android:paddingLeft="10dp"
+            android:paddingTop="4dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="4dp"
+            android:text="@string/order_in_process"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/tvCreatedDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/order_date_sample"
-                android:textSize="12sp"
-                android:textColor="@color/gray" />
+    <!-- Dates row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <TextView
-                android:id="@+id/tvDeliveredDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/order_date_sample2"
-                android:textSize="12sp"
-                android:textColor="@color/gray" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tvCreatedDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/order_date_sample"
+            android:textColor="@color/gray"
+            android:textSize="12sp" />
 
         <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/lite_gray" />
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-        <!-- Product info row -->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvDeliveredDate"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="12dp"
-            android:gravity="center_vertical">
+            android:text="@string/order_date_sample2"
+            android:textColor="@color/gray"
+            android:textSize="12sp" />
+    </LinearLayout>
 
-            <ImageView
-                android:id="@+id/ivProduct"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:src="@drawable/placeholder"
-                android:contentDescription="@string/producto_desc" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/lite_gray" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:paddingStart="12dp">
+    <!-- Product info row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tvProductTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/product_title_sample"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+        <ImageView
+            android:id="@+id/ivProduct"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:contentDescription="@string/producto_desc"
+            android:src="@drawable/placeholder" />
 
-                <TextView
-                    android:id="@+id/tvProductSubtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/product_subtitle_sample"
-                    android:textSize="12sp"
-                    android:textColor="@color/gray"
-                    android:layout_marginTop="4dp" />
-
-                <TextView
-                    android:id="@+id/tvPrice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/price_sample"
-                    android:textSize="14sp"
-                    android:layout_marginTop="6dp"
-                    android:textColor="@color/black" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <!-- Footer: items count + link -->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="12dp"
-            android:gravity="center_vertical">
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingStart="12dp">
 
             <TextView
-                android:id="@+id/tvItemCount"
+                android:id="@+id/tvProductTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/item_in_order"
+                android:text="@string/product_title_sample"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvProductSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/product_subtitle_sample"
                 android:textColor="@color/gray"
                 android:textSize="12sp" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
             <TextView
-                android:id="@+id/tvDetails"
+                android:id="@+id/tvPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/view_details"
-                android:textColor="@color/dark_green"
+                android:layout_marginTop="6dp"
+                android:text="@string/price_sample"
+                android:textColor="@color/black"
                 android:textSize="14sp" />
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_chevron_right"
-                app:tint="@color/dark_green"
-                android:contentDescription="@string/view_desc" />
         </LinearLayout>
-
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+    <!-- Footer: items count + link -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvItemCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/item_in_order"
+            android:textColor="@color/gray"
+            android:textSize="12sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/tvDetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/view_details"
+            android:textColor="@color/dark_green"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:contentDescription="@string/view_desc"
+            android:src="@drawable/ic_chevron_right"
+            app:tint="@color/dark_green" />
+    </LinearLayout>
+
+</LinearLayout>

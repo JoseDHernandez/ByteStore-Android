@@ -8,6 +8,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.bytestore.databinding.FragmentOrdersBinding
 import com.example.bytestore.ui.ProtectedFragment
+import com.example.bytestore.utils.topBar
 
 class OrdersFragment : ProtectedFragment() {
     private var _binding: FragmentOrdersBinding? = null
@@ -34,6 +35,7 @@ class OrdersFragment : ProtectedFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        topBar().setTitle("Ordenes")
         setupUI()
     }
 
