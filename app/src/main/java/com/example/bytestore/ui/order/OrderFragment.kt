@@ -20,6 +20,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
+import com.example.bytestore.utils.LocationFormatter
 import java.util.Locale
 
 class OrderFragment : Fragment() {
@@ -156,9 +157,7 @@ class OrderFragment : Fragment() {
                 binding.addressInput.setSelection(text.length)
             }
         } catch (e: Exception) {
-            val text =
-                if (isApprox) String.format(Locale.getDefault(), "Aprox: %.5f, %.5f", lat, lon)
-                else String.format(Locale.getDefault(), "%.6f, %.6f", lat, lon)
+            val text = LocationFormatter.format(requireContext(), lat, lon, precise = !isApprox)
             binding.addressInput.setText(text)
             binding.addressInput.setSelection(text.length)
         }
@@ -171,8 +170,7 @@ class OrderFragment : Fragment() {
         isApprox: Boolean
     ): String {
         if (address == null) {
-            return if (isApprox) String.format(Locale.getDefault(), "Aprox: %.5f, %.5f", lat, lon)
-            else String.format(Locale.getDefault(), "%.6f, %.6f", lat, lon)
+            return LocationFormatter.format(requireContext(), lat, lon, precise = !isApprox)
         }
 
         // 1) Si hay una línea completa, úsala (suele venir ya bien formateada por país)
@@ -207,8 +205,7 @@ class OrderFragment : Fragment() {
         if (combined.isNotBlank()) return combined
 
         // 3) Último recurso: coordenadas
-        return if (isApprox) String.format(Locale.getDefault(), "Aprox: %.5f, %.5f", lat, lon)
-        else String.format(Locale.getDefault(), "%.6f, %.6f", lat, lon)
+        return LocationFormatter.format(requireContext(), lat, lon, precise = !isApprox)
     }
 
     override fun onDestroyView() {
